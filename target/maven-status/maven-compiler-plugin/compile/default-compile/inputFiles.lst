@@ -1,8 +1,8 @@
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\logging\SimulatorLogger.java
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\model\PCB.java
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\ProcessSimulator.java
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\scheduler\FCFS.java
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\scheduler\Scheduler.java
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\scheduler\SimulationEngine.java
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\util\LogTest.java
-C:\Users\Fredy\Documents\NetBeansProjects\Process-Simulator\src\main\java\com\simulator\util\ProcessGenerator.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/ProcessSimulator.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/logging/SimulatorLogger.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/model/PCB.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/scheduler/FCFS.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/scheduler/Scheduler.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/scheduler/SimulationEngine.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/util/LogTest.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/util/ProcessGenerator.java

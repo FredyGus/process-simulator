@@ -1,5 +1,6 @@
 package com.simulator.scheduler;
 
+import com.simulator.logging.SimulatorLogger;
 import com.simulator.model.PCB;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -14,15 +15,17 @@ public class FCFS implements Scheduler {
     public void addProcess(PCB pcb) {
         // El proceso pasa a estado READY al añadirse
         pcb.setState(PCB.State.READY);
+        SimulatorLogger.logEvent("ADD_PROCESS", "PID=" + pcb.getPid() + " | Arrival=" + pcb.getArrivalTime());
         queue.add(pcb);
     }
-
+    
     @Override
     public PCB getNextProcess() {
         // Toma el siguiente de la cola FIFO
         PCB pcb = queue.poll();
         if (pcb != null) {
             pcb.setState(PCB.State.RUNNING);
+            SimulatorLogger.logEvent("DISPATCH", "PID=" + pcb.getPid());
         }
         return pcb;
     }

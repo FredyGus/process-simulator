@@ -19,7 +19,14 @@ public class SimulatorLogger {
     static {
         try {
             // Archivo de log (append = true)
-            Handler fileHandler = new FileHandler("simulation.log", true);
+            // Handler fileHandler = new FileHandler("simulation.log", true);
+            
+            // append = false -> Limpia el log al iniciar
+            // Handler fileHandler = new FileHandler("simulation.log", false); 
+            
+            // maximo 1 MB por archivo, hasta 5 archivos de backup y append = true
+            Handler fileHandler = new FileHandler("simulation.log", 1024*1024, 5, true);
+            
             fileHandler.setFormatter(new Formatter() {
                 private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
                 @Override
@@ -32,7 +39,11 @@ public class SimulatorLogger {
             // Evitar mensajes en consola además del archivo
             logger.setUseParentHandlers(false);
         } catch (IOException e) {
+            // Mensaje sencillo para el usuario 
             System.err.println("Error configurando SimulatorLogger: " + e.getMessage());
+            
+            // Stack trace completo para debug
+            e.printStackTrace();
         }
     }
 

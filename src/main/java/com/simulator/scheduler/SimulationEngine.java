@@ -1,5 +1,6 @@
 package com.simulator.scheduler;
 
+import com.simulator.logging.SimulatorLogger;
 import com.simulator.model.PCB;
 
 /**
@@ -52,6 +53,12 @@ public class SimulationEngine {
             currentProcess.setRemainingTime(currentProcess.getRemainingTime() - 1);
         }
         currentTime++;
+        
+        //Log del tick
+        SimulatorLogger.logEvent("TICK", 
+                "t=" + currentTime + 
+                " | PID=" + (currentProcess != null ? currentProcess.getPid() : "idle") + 
+                " | rem" + (currentProcess != null ? currentProcess.getRemainingTime() : "-"));
     }
 
     /**
