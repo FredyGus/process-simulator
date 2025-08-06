@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: com.simulator.model.PCBTest
+Test set: com.simulator.scheduler.SJFTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s - in com.simulator.model.PCBTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.132 s - in com.simulator.scheduler.SJFTest

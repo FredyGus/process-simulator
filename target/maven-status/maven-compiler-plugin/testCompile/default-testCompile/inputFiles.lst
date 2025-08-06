@@ -1,4 +1,5 @@
 /home/fredy/NetBeansProjects/process-simulator/src/test/java/com/simulator/model/PCBTest.java
+/home/fredy/NetBeansProjects/process-simulator/src/test/java/com/simulator/scheduler/SJFTest.java
 /home/fredy/NetBeansProjects/process-simulator/src/test/java/com/simulator/scheduler/SchedulerTest.java
 /home/fredy/NetBeansProjects/process-simulator/src/test/java/com/simulator/scheduler/SimulationEngineTest.java
 /home/fredy/NetBeansProjects/process-simulator/src/test/java/com/simulator/util/ProcessGeneratorTest.java
