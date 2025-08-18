@@ -1,0 +1,16 @@
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\LoggerQuickDemo.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\FileLogWriter.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\format\LogFormatter.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\format\TablaAnchos.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\format\TablaFijaFormatter.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\LogConfig.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\LogDatos.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\LogEvento.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\LoggerSistema.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\LogMeta.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\LogNivel.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\LogWriter.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\rotate\PoliticaRotacion.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\logging\rotate\RotacionPorTamano.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\time\Reloj.java
+C:\Users\Fredy\Documents\ProyectoSO\process-simulator\src\main\java\com\simulator\time\RelojDelSistema.java

@@ -1,0 +1,7 @@
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-08-16 01:08:59.579 | INICIO_SIMULACION  |      - | READY        |       - |         - | FCFS         |        - | tickMs=500, probNuevo=0.35
+2025-08-16 01:08:59.579 | CREAR_PROCESO      |      1 | NEW          |     12% |      45MB | FCFS         |        - | rafaga=8, prioridad=3
+2025-08-16 01:08:59.580 | CAMBIO_ESTADO      |      1 | RUNNING      |     56% |     120MB | FCFS         |        - | READY→RUNNING
+2025-08-16 01:08:59.580 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+

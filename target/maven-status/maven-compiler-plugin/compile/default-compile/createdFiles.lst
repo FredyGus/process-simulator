@@ -1,0 +1,16 @@
+com\simulator\logging\LogDatos.class
+com\simulator\logging\LoggerSistema.class
+com\simulator\LoggerQuickDemo.class
+com\simulator\logging\LogWriter.class
+com\simulator\logging\format\TablaFijaFormatter.class
+com\simulator\logging\LogNivel.class
+com\simulator\logging\rotate\PoliticaRotacion.class
+com\simulator\time\RelojDelSistema.class
+com\simulator\logging\FileLogWriter.class
+com\simulator\logging\format\TablaAnchos.class
+com\simulator\time\Reloj.class
+com\simulator\logging\format\LogFormatter.class
+com\simulator\logging\LogMeta.class
+com\simulator\logging\rotate\RotacionPorTamano.class
+com\simulator\logging\LogConfig.class
+com\simulator\logging\LogEvento.class
