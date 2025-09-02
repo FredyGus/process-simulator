@@ -1,1 +1,3 @@
-com\simulator\logging\format\TablaFijaFormatterTest.class
+com/simulator/logging/format/TablaFijaFormatterTest.class
+com/simulator/schedule/PlanificadorFCFSTest.class
+com/simulator/core/ProcesoTest.class

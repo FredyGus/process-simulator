@@ -5,3 +5,21 @@ TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |
 2025-08-16 01:08:59.580 | CAMBIO_ESTADO      |      1 | RUNNING      |     56% |     120MB | FCFS         |        - | READY→RUNNING
 2025-08-16 01:08:59.580 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
 
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-08-25 08:01:50.631 | INICIO_SIMULACION  |      - | READY        |       - |         - | FCFS         |        - | tickMs=500, probNuevo=0.35
+2025-08-25 08:01:50.634 | EJECUTAR_TICK      |      1 | RUNNING      |     80% |     361MB | FCFS         |        - | rafagaRestante=7
+2025-08-25 08:01:50.635 | EJECUTAR_TICK      |      1 | RUNNING      |     72% |     367MB | FCFS         |        - | rafagaRestante=6
+2025-08-25 08:01:50.635 | EJECUTAR_TICK      |      1 | RUNNING      |     88% |     381MB | FCFS         |        - | rafagaRestante=5
+2025-08-25 08:01:50.636 | EJECUTAR_TICK      |      1 | RUNNING      |     71% |     220MB | FCFS         |        - | rafagaRestante=4
+2025-08-25 08:01:50.636 | EJECUTAR_TICK      |      1 | RUNNING      |     23% |     375MB | FCFS         |        - | rafagaRestante=3
+2025-08-25 08:01:50.636 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-08-25 08:02:08.341 | INICIO_SIMULACION  |      - | READY        |       - |         - | FCFS         |        - | tickMs=500, probNuevo=0.35
+2025-08-25 08:02:08.345 | EJECUTAR_TICK      |      1 | RUNNING      |     45% |     263MB | FCFS         |        - | rafagaRestante=7
+2025-08-25 08:02:08.346 | EJECUTAR_TICK      |      1 | RUNNING      |     61% |     179MB | FCFS         |        - | rafagaRestante=6
+2025-08-25 08:02:08.346 | EJECUTAR_TICK      |      1 | RUNNING      |     77% |     299MB | FCFS         |        - | rafagaRestante=5
+2025-08-25 08:02:08.346 | EJECUTAR_TICK      |      1 | RUNNING      |     30% |     362MB | FCFS         |        - | rafagaRestante=4
+2025-08-25 08:02:08.347 | EJECUTAR_TICK      |      1 | RUNNING      |     99% |     280MB | FCFS         |        - | rafagaRestante=3
+2025-08-25 08:02:08.347 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural

@@ -16,15 +16,20 @@ public class LoggerQuickDemo {
 
         logger.iniciar(config, writer, formatter, new RelojDelSistema());
 
+        // Inicio de simulación
         logger.registrar(LogEvento.INICIO_SIMULACION, LogNivel.INFO,
                 new LogDatos(null, "READY", null, null, "FCFS", null, "tickMs=500, probNuevo=0.35"));
 
-        logger.registrar(LogEvento.CREAR_PROCESO, LogNivel.INFO,
-                new LogDatos(1, "NEW", 12, 45, "FCFS", null, "rafaga=8, prioridad=3"));
+        // --- Aquí reemplazamos las líneas fijas por un bucle con variación ---
+        var rnd = new java.util.Random();
+        for (int i = 0; i < 5; i++) {
+            int cpu = 10 + rnd.nextInt(90);    // CPU entre 10 y 99
+            int mem = 20 + rnd.nextInt(400);   // Memoria entre 20 y 419
+            logger.registrar(LogEvento.EJECUTAR_TICK, LogNivel.INFO,
+                    new LogDatos(1, "RUNNING", cpu, mem, "FCFS", null, "rafagaRestante=" + (7 - i)));
+        }
 
-        logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
-                new LogDatos(1, "RUNNING", 56, 120, "FCFS", null, "READY→RUNNING"));
-
+        // Fin de simulación
         logger.registrar(LogEvento.TERMINAR_PROCESO, LogNivel.INFO,
                 new LogDatos(1, "TERMINATED", 0, 0, "FCFS", null, "fin_natural"));
 
