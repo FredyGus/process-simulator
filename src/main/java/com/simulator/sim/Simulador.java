@@ -15,6 +15,11 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public final class Simulador {
+
+    public enum ModoGeneracion {
+        AUTOGENERADO, COORDINADO
+    }
+
     private final ParametrosSimulacion params;
     private final Planificador planificador;
     private final LoggerSistema logger;
@@ -26,17 +31,26 @@ public final class Simulador {
     private volatile boolean corriendo = false;
     private int tick = 0;
     private int nextPid = 1;
+    private final ModoGeneracion modo;
 
     public interface Oyente {
+
         void onModeloActualizado(VistaModelo vm);
     }
     private Oyente oyente;
+    private VistaModelo ultimoSnapshot;
 
+    // Constructor sigle-run (AUTOGENERADO)
     public Simulador(ParametrosSimulacion params, Path logPath) {
+        this(params, logPath, ModoGeneracion.AUTOGENERADO);
+    }
+
+    public Simulador(ParametrosSimulacion params, Path logPath, ModoGeneracion modo) {
         this.params = params;
         this.planificador = PlanificadorFactory.crear(params.algoritmo);
         this.logger = new LoggerSistema(); // instancia independiente
         this.rng = new Random(params.seed);
+        this.modo = modo;
 
         // inicia logger
         var config = LogConfig.basica(logPath, new RotacionPorTamano(5 * 1024 * 1024, 3));
@@ -52,12 +66,20 @@ public final class Simulador {
     }
 
     public void iniciar() {
-        if (corriendo) return;
+        if (modo != ModoGeneracion.AUTOGENERADO) {
+            throw new IllegalStateException("Solo aplica iniciar() en modo AUTOGENERADO");
+        }
+
+        if (corriendo) {
+            return;
+        }
         corriendo = true;
         scheduler.scheduleAtFixedRate(this::runTickSafe, 0, params.tickMs, TimeUnit.MILLISECONDS);
     }
 
-    public void pausar() { corriendo = false; }
+    public void pausar() {
+        corriendo = false;
+    }
 
     public void detener() {
         corriendo = false;
@@ -67,17 +89,21 @@ public final class Simulador {
     }
 
     private void runTickSafe() {
-        if (!corriendo) return;
-        try { runTick(); } catch (Throwable t) {
+        if (!corriendo) {
+            return;
+        }
+        try {
+            runTickAuto();
+        } catch (Throwable t) {
             logger.registrar(LogEvento.ERROR, LogNivel.ERROR, new LogDatos(null, null, null, null,
                     params.algoritmo.name(), params.quantum, "ex=" + t.getMessage()));
         }
     }
 
-    private void runTick() {
+    // AUTOGENERADO
+    private void runTickAuto() {
         tick++;
-
-        // 1) Llegadas aleatorias
+        // Llegadas aleatorias
         if (rng.nextDouble() < params.probNuevoProceso) {
             Proceso p = crearProcesoAleatorio();
             procesos.add(p);
@@ -90,11 +116,32 @@ public final class Simulador {
             logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                     new LogDatos(p.getPid(), "READY", 0, p.getMemoria(), params.algoritmo.name(), params.quantum, "NEW→READY"));
         }
+        // Núcleo del tick
+        tickCore();
+    }
 
-        // 2) Selección
+    public void tickCoordinado(List<ProcesoSpec> llegadas) {
+        tick++;
+        if (llegadas != null) {
+            for (ProcesoSpec spec : llegadas) {
+                Proceso p = crearProcesoDesdeSpec(spec);
+                procesos.add(p);
+                p.cambiarEstado(EstadoProceso.READY);
+                planificador.agregarProceso(p);
+                logger.registrar(LogEvento.CREAR_PROCESO, LogNivel.INFO,
+                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
+                                params.algoritmo.name(), params.quantum,
+                                "rafaga=" + p.getTiempoRestante() + ", prioridad=" + p.getPrioridad()));
+                logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
+                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(), params.algoritmo.name(), params.quantum, "NEW→READY"));
+            }
+        }
+        tickCore();
+    }
+
+    // Parte común: selección/ejecución/snapshot
+    private void tickCore() {
         Proceso seleccionado = planificador.seleccionarProceso();
-
-        // 3) Ejecutar/avanzar estados
         if (seleccionado != null) {
             if (seleccionado.getEstado() == EstadoProceso.READY) {
                 seleccionado.cambiarEstado(EstadoProceso.RUNNING);
@@ -102,16 +149,12 @@ public final class Simulador {
                         new LogDatos(seleccionado.getPid(), "RUNNING", seleccionado.getCpuUsage(), seleccionado.getMemoria(),
                                 params.algoritmo.name(), params.quantum, "READY→RUNNING"));
             }
-
-            // Ejecuta 1 tick
             seleccionado.avanzarTick(tick);
             logger.registrar(LogEvento.EJECUTAR_TICK, LogNivel.INFO,
                     new LogDatos(seleccionado.getPid(), "RUNNING",
                             seleccionado.getCpuUsage(), seleccionado.getMemoria(),
                             params.algoritmo.name(), params.quantum,
                             "rafagaRestante=" + seleccionado.getTiempoRestante()));
-
-            // Si terminó, remuévelo
             if (seleccionado.getEstado() == EstadoProceso.TERMINATED) {
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                         new LogDatos(seleccionado.getPid(), "TERMINATED", 0, 0,
@@ -126,12 +169,13 @@ public final class Simulador {
                     new LogDatos(null, "IDLE", null, null, params.algoritmo.name(), params.quantum, "sin procesos listos"));
         }
 
-        // 4) Construir snapshot (para UI futura)
+        // Snapshot
+        ultimoSnapshot = construirSnapshot();
         if (oyente != null) {
-            oyente.onModeloActualizado(snapshotActual());
+            oyente.onModeloActualizado(ultimoSnapshot);
         }
     }
-
+    
     private Proceso crearProcesoAleatorio() {
         int rafaga = randBetween(params.rafagaMin, params.rafagaMax);
         int prio = randBetween(params.prioridadMin, params.prioridadMax);
@@ -139,12 +183,17 @@ public final class Simulador {
         return p;
     }
 
+    // NUEVO: crear desde ProcesoSpec (semilla propia por proceso para que ambos sims sean idénticos)
+    private Proceso crearProcesoDesdeSpec(ProcesoSpec s) {
+        return new Proceso(s.pid(), s.nombre(), tick, s.rafaga(), s.prioridad(), new Random(s.seed()));
+    }
+    
     private int randBetween(int a, int b) {
         if (a > b) { int t = a; a = b; b = t; }
         return a + rng.nextInt(b - a + 1);
     }
-
-    private VistaModelo snapshotActual() {
+    
+    private VistaModelo construirSnapshot() {
         List<FilaProcesoVM> filas = new ArrayList<>();
         for (Proceso p : procesos) {
             if (p.getEstado() != EstadoProceso.TERMINATED) {
@@ -156,4 +205,8 @@ public final class Simulador {
         }
         return new VistaModelo(tick, filas.size(), filas);
     }
+
+    // NUEVO: acceso al último snapshot (útil para el comparador/UI)
+    public VistaModelo getUltimoSnapshot() { return ultimoSnapshot; }
+
 }

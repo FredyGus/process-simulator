@@ -1,4 +1,5 @@
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/logging/format/LogFormatter.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/ComparadorQuickRun.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/sim/vm/VistaModelo.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/sim/TipoAlgoritmo.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/core/Proceso.java
@@ -14,6 +15,7 @@
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/logging/LogDatos.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/sim/Simulador.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/schedule/PlanificadorFCFS.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/sim/ProcesoSpec.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/logging/LogWriter.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/logging/LogNivel.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/LoggerQuickDemo.java
@@ -21,6 +23,7 @@
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/time/RelojDelSistema.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/core/EstadoProceso.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/sim/ParametrosSimulacion.java
+/home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/sim/ComparadorAlgoritmos.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/logging/FileLogWriter.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/time/Reloj.java
 /home/fredy/NetBeansProjects/process-simulator/src/main/java/com/simulator/logging/LogConfig.java
