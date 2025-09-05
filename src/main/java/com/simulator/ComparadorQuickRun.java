@@ -5,10 +5,10 @@ import com.simulator.sim.vm.VistaModelo;
 
 public class ComparadorQuickRun {
     public static void main(String[] args) throws InterruptedException {
-        var base = ParametrosSimulacion.defaultFCFS(); // Usamos sus parametros generales
+        var base = new ParametrosSimulacion(500, 0.35, 5, 12, 1, 5, 12345L, TipoAlgoritmo.FCFS, 3); // Usamos sus parametros generales
         // Por ahora compara FCFS vs FCFS
         TipoAlgoritmo A = TipoAlgoritmo.FCFS;
-        TipoAlgoritmo B = TipoAlgoritmo.FCFS;
+        TipoAlgoritmo B = TipoAlgoritmo.RR;
         
         var comp = new ComparadorAlgoritmos(base, A, B, new ComparadorAlgoritmos.Oyente() {
             @Override

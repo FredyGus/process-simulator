@@ -1,13 +1,14 @@
 package com.simulator.sim;
 
-import com.simulator.schedule.Planificador;
-import com.simulator.schedule.PlanificadorFCFS;
+import com.simulator.schedule.*;
 
 public final class PlanificadorFactory{
-    public static Planificador crear(TipoAlgoritmo tipo){
-        return switch (tipo) {
+    public static Planificador crear(TipoAlgoritmo tipo, Integer quantum){
+        return switch (tipo){
             case FCFS -> new PlanificadorFCFS();
-            default -> throw new UnsupportedOperationException("Algoritmo no implementado: " + tipo);
+            case RR -> new PlanificadorRR(quantum != null ? quantum : 3);
+                // SJF Y PRIORIDAD PENDIENTES
+            default -> throw new UnsupportedOperationException("Algotitmo no implementado: " + tipo);
         };
     }
 }

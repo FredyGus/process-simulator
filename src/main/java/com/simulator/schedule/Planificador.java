@@ -17,7 +17,12 @@ public interface Planificador {
     void reinicializar();
 
     // Hook opcional por tick (RR/aging). En FCFS no hace nada
-    default void onTick() {
+    default void onTick(Proceso running) {
 
     }
+    
+    default boolean debePreemptar(Proceso running) {
+        return false;
+    }
+    
 }

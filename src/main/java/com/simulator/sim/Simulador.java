@@ -47,7 +47,7 @@ public final class Simulador {
 
     public Simulador(ParametrosSimulacion params, Path logPath, ModoGeneracion modo) {
         this.params = params;
-        this.planificador = PlanificadorFactory.crear(params.algoritmo);
+        this.planificador = PlanificadorFactory.crear(params.algoritmo, params.quantum);
         this.logger = new LoggerSistema(); // instancia independiente
         this.rng = new Random(params.seed);
         this.modo = modo;
@@ -142,40 +142,78 @@ public final class Simulador {
     // Parte común: selección/ejecución/snapshot
     private void tickCore() {
         Proceso seleccionado = planificador.seleccionarProceso();
+
         if (seleccionado != null) {
+            // Si estaba READY, entra a RUNNING
             if (seleccionado.getEstado() == EstadoProceso.READY) {
                 seleccionado.cambiarEstado(EstadoProceso.RUNNING);
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
-                        new LogDatos(seleccionado.getPid(), "RUNNING", seleccionado.getCpuUsage(), seleccionado.getMemoria(),
-                                params.algoritmo.name(), params.quantum, "READY→RUNNING"));
+                        new LogDatos(seleccionado.getPid(), "RUNNING",
+                                seleccionado.getCpuUsage(), seleccionado.getMemoria(),
+                                params.algoritmo.name(), params.quantum,
+                                "READY→RUNNING"));
             }
+
+            // Ejecuta 1 tick de CPU
             seleccionado.avanzarTick(tick);
+
+            // ← NUEVO: avisar al planificador que pasó 1 tick del RUNNING (RR usa esto para el quantum)
+            planificador.onTick(seleccionado);
+
+            // Log del tick ejecutado
             logger.registrar(LogEvento.EJECUTAR_TICK, LogNivel.INFO,
                     new LogDatos(seleccionado.getPid(), "RUNNING",
                             seleccionado.getCpuUsage(), seleccionado.getMemoria(),
                             params.algoritmo.name(), params.quantum,
                             "rafagaRestante=" + seleccionado.getTiempoRestante()));
+
+            // ¿Terminó naturalmente?
             if (seleccionado.getEstado() == EstadoProceso.TERMINATED) {
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                         new LogDatos(seleccionado.getPid(), "TERMINATED", 0, 0,
-                                params.algoritmo.name(), params.quantum, "RUNNING→TERMINATED"));
+                                params.algoritmo.name(), params.quantum,
+                                "RUNNING→TERMINATED"));
                 logger.registrar(LogEvento.TERMINAR_PROCESO, LogNivel.INFO,
                         new LogDatos(seleccionado.getPid(), "TERMINATED", 0, 0,
-                                params.algoritmo.name(), params.quantum, "fin_natural"));
+                                params.algoritmo.name(), params.quantum,
+                                "fin_natural"));
                 planificador.removerProceso(seleccionado);
+
+                // ← NUEVO: si no terminó y el planificador dice que hay que preemptar (RR: quantum agotado)
+            } else if (planificador.debePreemptar(seleccionado)) {
+                // Preempción: vuelve a READY y se rota al final de la cola
+                seleccionado.cambiarEstado(EstadoProceso.READY);
+                logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
+                        new LogDatos(seleccionado.getPid(), "READY",
+                                0, seleccionado.getMemoria(),
+                                params.algoritmo.name(), params.quantum,
+                                "preempt: quantum agotado"));
+
+                // Rotación específica de RR (reinicia quantum)
+                if (planificador instanceof com.simulator.schedule.PlanificadorRR rr) {
+                    rr.rotar(seleccionado);
+                } else {
+                    // Fallback genérico (por si en el futuro hay otro alg. preemptivo)
+                    planificador.removerProceso(seleccionado);
+                    planificador.agregarProceso(seleccionado);
+                }
             }
+
         } else {
+            // No hay proceso listo
             logger.registrar(LogEvento.IDLE, LogNivel.INFO,
-                    new LogDatos(null, "IDLE", null, null, params.algoritmo.name(), params.quantum, "sin procesos listos"));
+                    new LogDatos(null, "IDLE", null, null,
+                            params.algoritmo.name(), params.quantum,
+                            "sin procesos listos"));
         }
 
-        // Snapshot
+        // Publicar snapshot para UI/Comparador
         ultimoSnapshot = construirSnapshot();
         if (oyente != null) {
             oyente.onModeloActualizado(ultimoSnapshot);
         }
     }
-    
+
     private Proceso crearProcesoAleatorio() {
         int rafaga = randBetween(params.rafagaMin, params.rafagaMax);
         int prio = randBetween(params.prioridadMin, params.prioridadMax);
@@ -187,12 +225,16 @@ public final class Simulador {
     private Proceso crearProcesoDesdeSpec(ProcesoSpec s) {
         return new Proceso(s.pid(), s.nombre(), tick, s.rafaga(), s.prioridad(), new Random(s.seed()));
     }
-    
+
     private int randBetween(int a, int b) {
-        if (a > b) { int t = a; a = b; b = t; }
+        if (a > b) {
+            int t = a;
+            a = b;
+            b = t;
+        }
         return a + rng.nextInt(b - a + 1);
     }
-    
+
     private VistaModelo construirSnapshot() {
         List<FilaProcesoVM> filas = new ArrayList<>();
         for (Proceso p : procesos) {
@@ -207,6 +249,8 @@ public final class Simulador {
     }
 
     // NUEVO: acceso al último snapshot (útil para el comparador/UI)
-    public VistaModelo getUltimoSnapshot() { return ultimoSnapshot; }
+    public VistaModelo getUltimoSnapshot() {
+        return ultimoSnapshot;
+    }
 
 }

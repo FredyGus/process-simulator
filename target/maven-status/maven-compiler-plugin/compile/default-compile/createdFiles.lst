@@ -5,6 +5,7 @@ com/simulator/SimuladorQuickRun.class
 com/simulator/sim/Simulador$Oyente.class
 com/simulator/logging/LoggerSistema.class
 com/simulator/sim/Simulador.class
+com/simulator/schedule/PlanificadorRR.class
 com/simulator/sim/ComparadorAlgoritmos$Oyente.class
 com/simulator/logging/format/TablaFijaFormatter.class
 com/simulator/logging/LogWriter.class
