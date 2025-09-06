@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.simulator.ui.HomeController">
+    <top>
+        <ToolBar>
+            <Label text="Algoritmo:"/>
+            <ComboBox fx:id="cboAlg"/>
+            <Separator/>
+            <Label text="Tick (ms)"/>
+            <Spinner fx:id="spnTick" prefWidth="100"/>
+            <Label text="Prob. llegadas"/>
+            <Spinner fx:id="spnProb" prefWidth="90"/>
+            <Label text="Quantum"/>
+            <Spinner fx:id="spnQuantum" prefWidth="80"/>
+            <Label text="Seed"/>
+            <TextField fx:id="txtSeed" prefWidth="100"/>
+            <Separator/>
+            <Button text="Iniciar simulación" onAction="#onIniciar"/>
+            <Button text="Comparar algoritmos" onAction="#onComparar"/>
+        </ToolBar>
+    </top>
+    <center>
+        <StackPane>
+            <Label text="Selecciona parámetros y pulsa un botón arriba."/>
+        </StackPane>
+    </center>
+</BorderPane>
