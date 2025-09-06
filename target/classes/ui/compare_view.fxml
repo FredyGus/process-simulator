@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.simulator.ui.CompareController">
+
+    <top>
+        <ToolBar>
+            <Button text="Iniciar ambos" onAction="#onStart"/>
+            <Button text="Detener ambos" onAction="#onStop"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.5">
+            <!-- PANEL A -->
+            <BorderPane>
+                <top>
+                    <ToolBar>
+                        <Label fx:id="lblAlgA" text="A:"/>
+                        <Label fx:id="lblTickA" text="Tick A: 0" style="-fx-padding:0 0 0 16;"/>
+                        <Label fx:id="lblActivosA" text="Activos A: 0" style="-fx-padding:0 0 0 16;"/>
+                    </ToolBar>
+                </top>
+                <center>
+                    <TableView fx:id="tblA">
+                        <columns>
+                            <TableColumn fx:id="colPidA" text="PID" prefWidth="60"/>
+                            <TableColumn fx:id="colNomA" text="Nombre" prefWidth="120"/>
+                            <TableColumn fx:id="colEstadoA" text="Estado" prefWidth="100"/>
+                            <TableColumn fx:id="colCpuA" text="CPU%" prefWidth="70"/>
+                            <TableColumn fx:id="colMemA" text="MEM (MB)" prefWidth="90"/>
+                            <TableColumn fx:id="colPrioA" text="Prioridad" prefWidth="80"/>
+                            <TableColumn fx:id="colRafA" text="Ráfaga" prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                </center>
+            </BorderPane>
+
+            <!-- PANEL B -->
+            <BorderPane>
+                <top>
+                    <ToolBar>
+                        <Label fx:id="lblAlgB" text="B:"/>
+                        <Label fx:id="lblTickB" text="Tick B: 0" style="-fx-padding:0 0 0 16;"/>
+                        <Label fx:id="lblActivosB" text="Activos B: 0" style="-fx-padding:0 0 0 16;"/>
+                    </ToolBar>
+                </top>
+                <center>
+                    <TableView fx:id="tblB">
+                        <columns>
+                            <TableColumn fx:id="colPidB" text="PID" prefWidth="60"/>
+                            <TableColumn fx:id="colNomB" text="Nombre" prefWidth="120"/>
+                            <TableColumn fx:id="colEstadoB" text="Estado" prefWidth="100"/>
+                            <TableColumn fx:id="colCpuB" text="CPU%" prefWidth="70"/>
+                            <TableColumn fx:id="colMemB" text="MEM (MB)" prefWidth="90"/>
+                            <TableColumn fx:id="colPrioB" text="Prioridad" prefWidth="80"/>
+                            <TableColumn fx:id="colRafB" text="Ráfaga" prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                </center>
+            </BorderPane>
+        </SplitPane>
+    </center>
+</BorderPane>

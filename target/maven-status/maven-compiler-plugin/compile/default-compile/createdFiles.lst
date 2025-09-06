@@ -17,6 +17,7 @@ com\simulator\logging\LogMeta.class
 com\simulator\sim\Simulador$Oyente.class
 com\simulator\logging\LogConfig.class
 com\simulator\ComparadorQuickRun.class
+com\simulator\ui\CompareController.class
 com\simulator\sim\Simulador.class
 com\simulator\sim\PlanificadorFactory$1.class
 com\simulator\ui\ProcesoVM.class

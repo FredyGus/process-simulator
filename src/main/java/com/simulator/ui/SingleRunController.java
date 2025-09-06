@@ -2,7 +2,6 @@ package com.simulator.ui;
 
 import com.simulator.sim.*;
 import com.simulator.sim.vm.FilaProcesoVM;   // <- para que 'f' tenga getters
-import java.util.stream.Collectors;          // <- si usamos collect(toList)
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

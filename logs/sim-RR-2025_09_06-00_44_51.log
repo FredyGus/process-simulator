@@ -1,0 +1,122 @@
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-09-06 00:44:51.024 | INICIO_SIMULACION  |      - | READY        |       - |         - | RR           |        3 | tickMs=500, probNuevo=0.35
+2025-09-06 00:44:54.852 | IDLE               |      - | IDLE         |       - |         - | RR           |        3 | sin procesos listos
+2025-09-06 00:44:55.353 | IDLE               |      - | IDLE         |       - |         - | RR           |        3 | sin procesos listos
+2025-09-06 00:44:55.854 | IDLE               |      - | IDLE         |       - |         - | RR           |        3 | sin procesos listos
+2025-09-06 00:44:56.370 | CREAR_PROCESO      |      1 | READY        |      0% |      24MB | RR           |        3 | rafaga=6, prioridad=5
+2025-09-06 00:44:56.371 | CAMBIO_ESTADO      |      1 | READY        |      0% |      24MB | RR           |        3 | NEW→READY
+2025-09-06 00:44:56.371 | CAMBIO_ESTADO      |      1 | RUNNING      |      0% |      24MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:44:56.371 | EJECUTAR_TICK      |      1 | RUNNING      |     30% |     296MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:44:56.853 | EJECUTAR_TICK      |      1 | RUNNING      |     36% |     120MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:44:57.355 | EJECUTAR_TICK      |      1 | RUNNING      |     29% |     402MB | RR           |        3 | rafagaRestante=3
+2025-09-06 00:44:57.356 | CAMBIO_ESTADO      |      1 | READY        |      0% |     402MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:44:57.854 | CREAR_PROCESO      |      2 | READY        |      0% |     105MB | RR           |        3 | rafaga=11, prioridad=1
+2025-09-06 00:44:57.854 | CAMBIO_ESTADO      |      2 | READY        |      0% |     105MB | RR           |        3 | NEW→READY
+2025-09-06 00:44:57.855 | CAMBIO_ESTADO      |      1 | RUNNING      |      0% |     402MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:44:57.856 | EJECUTAR_TICK      |      1 | RUNNING      |     80% |     243MB | RR           |        3 | rafagaRestante=2
+2025-09-06 00:44:58.357 | CREAR_PROCESO      |      3 | READY        |      0% |     116MB | RR           |        3 | rafaga=11, prioridad=2
+2025-09-06 00:44:58.357 | CAMBIO_ESTADO      |      3 | READY        |      0% |     116MB | RR           |        3 | NEW→READY
+2025-09-06 00:44:58.358 | EJECUTAR_TICK      |      1 | RUNNING      |     90% |     122MB | RR           |        3 | rafagaRestante=1
+2025-09-06 00:44:58.858 | CREAR_PROCESO      |      4 | READY        |      0% |      25MB | RR           |        3 | rafaga=10, prioridad=3
+2025-09-06 00:44:58.859 | CAMBIO_ESTADO      |      4 | READY        |      0% |      25MB | RR           |        3 | NEW→READY
+2025-09-06 00:44:58.860 | EJECUTAR_TICK      |      1 | RUNNING      |      0% |       0MB | RR           |        3 | rafagaRestante=0
+2025-09-06 00:44:58.861 | CAMBIO_ESTADO      |      1 | TERMINATED   |      0% |       0MB | RR           |        3 | RUNNING→TERMINATED
+2025-09-06 00:44:58.861 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | RR           |        3 | fin_natural
+2025-09-06 00:44:59.355 | CAMBIO_ESTADO      |      2 | RUNNING      |      0% |     105MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:44:59.356 | EJECUTAR_TICK      |      2 | RUNNING      |     44% |     142MB | RR           |        3 | rafagaRestante=10
+2025-09-06 00:44:59.854 | CREAR_PROCESO      |      5 | READY        |      0% |     197MB | RR           |        3 | rafaga=9, prioridad=4
+2025-09-06 00:44:59.855 | CAMBIO_ESTADO      |      5 | READY        |      0% |     197MB | RR           |        3 | NEW→READY
+2025-09-06 00:44:59.855 | EJECUTAR_TICK      |      2 | RUNNING      |     33% |      94MB | RR           |        3 | rafagaRestante=9
+2025-09-06 00:45:00.354 | EJECUTAR_TICK      |      2 | RUNNING      |     28% |     466MB | RR           |        3 | rafagaRestante=8
+2025-09-06 00:45:00.355 | CAMBIO_ESTADO      |      2 | READY        |      0% |     466MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:00.854 | CREAR_PROCESO      |      6 | READY        |      0% |     194MB | RR           |        3 | rafaga=7, prioridad=2
+2025-09-06 00:45:00.854 | CAMBIO_ESTADO      |      6 | READY        |      0% |     194MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:00.854 | CAMBIO_ESTADO      |      3 | RUNNING      |      0% |     116MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:00.855 | EJECUTAR_TICK      |      3 | RUNNING      |     47% |     434MB | RR           |        3 | rafagaRestante=10
+2025-09-06 00:45:01.356 | CREAR_PROCESO      |      7 | READY        |      0% |      16MB | RR           |        3 | rafaga=6, prioridad=4
+2025-09-06 00:45:01.357 | CAMBIO_ESTADO      |      7 | READY        |      0% |      16MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:01.358 | EJECUTAR_TICK      |      3 | RUNNING      |     61% |     403MB | RR           |        3 | rafagaRestante=9
+2025-09-06 00:45:01.854 | EJECUTAR_TICK      |      3 | RUNNING      |     20% |     432MB | RR           |        3 | rafagaRestante=8
+2025-09-06 00:45:01.855 | CAMBIO_ESTADO      |      3 | READY        |      0% |     432MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:02.355 | CREAR_PROCESO      |      8 | READY        |      0% |     176MB | RR           |        3 | rafaga=6, prioridad=3
+2025-09-06 00:45:02.356 | CAMBIO_ESTADO      |      8 | READY        |      0% |     176MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:02.357 | CAMBIO_ESTADO      |      4 | RUNNING      |      0% |      25MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:02.358 | EJECUTAR_TICK      |      4 | RUNNING      |     85% |     255MB | RR           |        3 | rafagaRestante=9
+2025-09-06 00:45:02.854 | CREAR_PROCESO      |      9 | READY        |      0% |      15MB | RR           |        3 | rafaga=9, prioridad=4
+2025-09-06 00:45:02.854 | CAMBIO_ESTADO      |      9 | READY        |      0% |      15MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:02.854 | EJECUTAR_TICK      |      4 | RUNNING      |     35% |      50MB | RR           |        3 | rafagaRestante=8
+2025-09-06 00:45:03.355 | EJECUTAR_TICK      |      4 | RUNNING      |     16% |     396MB | RR           |        3 | rafagaRestante=7
+2025-09-06 00:45:03.356 | CAMBIO_ESTADO      |      4 | READY        |      0% |     396MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:03.852 | CAMBIO_ESTADO      |      5 | RUNNING      |      0% |     197MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:03.852 | EJECUTAR_TICK      |      5 | RUNNING      |     55% |     485MB | RR           |        3 | rafagaRestante=8
+2025-09-06 00:45:04.356 | EJECUTAR_TICK      |      5 | RUNNING      |     97% |     102MB | RR           |        3 | rafagaRestante=7
+2025-09-06 00:45:04.856 | CREAR_PROCESO      |     10 | READY        |      0% |     127MB | RR           |        3 | rafaga=6, prioridad=1
+2025-09-06 00:45:04.857 | CAMBIO_ESTADO      |     10 | READY        |      0% |     127MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:04.858 | EJECUTAR_TICK      |      5 | RUNNING      |     44% |     158MB | RR           |        3 | rafagaRestante=6
+2025-09-06 00:45:04.858 | CAMBIO_ESTADO      |      5 | READY        |      0% |     158MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:05.353 | CAMBIO_ESTADO      |      2 | RUNNING      |      0% |     466MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:05.354 | EJECUTAR_TICK      |      2 | RUNNING      |     82% |     175MB | RR           |        3 | rafagaRestante=7
+2025-09-06 00:45:05.853 | EJECUTAR_TICK      |      2 | RUNNING      |     10% |     154MB | RR           |        3 | rafagaRestante=6
+2025-09-06 00:45:06.353 | EJECUTAR_TICK      |      2 | RUNNING      |     28% |     122MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:06.354 | CAMBIO_ESTADO      |      2 | READY        |      0% |     122MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:06.853 | CAMBIO_ESTADO      |      6 | RUNNING      |      0% |     194MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:06.853 | EJECUTAR_TICK      |      6 | RUNNING      |     97% |     115MB | RR           |        3 | rafagaRestante=6
+2025-09-06 00:45:07.353 | EJECUTAR_TICK      |      6 | RUNNING      |     44% |     265MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:07.853 | CREAR_PROCESO      |     11 | READY        |      0% |     113MB | RR           |        3 | rafaga=9, prioridad=2
+2025-09-06 00:45:07.853 | CAMBIO_ESTADO      |     11 | READY        |      0% |     113MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:07.853 | EJECUTAR_TICK      |      6 | RUNNING      |     67% |     492MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:45:07.854 | CAMBIO_ESTADO      |      6 | READY        |      0% |     492MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:08.353 | CAMBIO_ESTADO      |      7 | RUNNING      |      0% |      16MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:08.355 | EJECUTAR_TICK      |      7 | RUNNING      |     95% |      21MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:08.852 | EJECUTAR_TICK      |      7 | RUNNING      |     90% |     425MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:45:09.355 | CREAR_PROCESO      |     12 | READY        |      0% |      71MB | RR           |        3 | rafaga=5, prioridad=5
+2025-09-06 00:45:09.356 | CAMBIO_ESTADO      |     12 | READY        |      0% |      71MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:09.357 | EJECUTAR_TICK      |      7 | RUNNING      |     83% |     290MB | RR           |        3 | rafagaRestante=3
+2025-09-06 00:45:09.357 | CAMBIO_ESTADO      |      7 | READY        |      0% |     290MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:09.852 | CAMBIO_ESTADO      |      3 | RUNNING      |      0% |     432MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:09.853 | EJECUTAR_TICK      |      3 | RUNNING      |     44% |     387MB | RR           |        3 | rafagaRestante=7
+2025-09-06 00:45:10.356 | CREAR_PROCESO      |     13 | READY        |      0% |     171MB | RR           |        3 | rafaga=8, prioridad=2
+2025-09-06 00:45:10.358 | CAMBIO_ESTADO      |     13 | READY        |      0% |     171MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:10.358 | EJECUTAR_TICK      |      3 | RUNNING      |     56% |     153MB | RR           |        3 | rafagaRestante=6
+2025-09-06 00:45:10.853 | EJECUTAR_TICK      |      3 | RUNNING      |     56% |     286MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:10.853 | CAMBIO_ESTADO      |      3 | READY        |      0% |     286MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:11.354 | CAMBIO_ESTADO      |      8 | RUNNING      |      0% |     176MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:11.355 | EJECUTAR_TICK      |      8 | RUNNING      |     58% |     148MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:11.853 | CREAR_PROCESO      |     14 | READY        |      0% |     184MB | RR           |        3 | rafaga=9, prioridad=1
+2025-09-06 00:45:11.853 | CAMBIO_ESTADO      |     14 | READY        |      0% |     184MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:11.853 | EJECUTAR_TICK      |      8 | RUNNING      |     37% |     301MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:45:12.355 | CREAR_PROCESO      |     15 | READY        |      0% |     142MB | RR           |        3 | rafaga=10, prioridad=3
+2025-09-06 00:45:12.355 | CAMBIO_ESTADO      |     15 | READY        |      0% |     142MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:12.357 | EJECUTAR_TICK      |      8 | RUNNING      |     74% |      28MB | RR           |        3 | rafagaRestante=3
+2025-09-06 00:45:12.358 | CAMBIO_ESTADO      |      8 | READY        |      0% |      28MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:12.853 | CAMBIO_ESTADO      |      9 | RUNNING      |      0% |      15MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:12.853 | EJECUTAR_TICK      |      9 | RUNNING      |     44% |      18MB | RR           |        3 | rafagaRestante=8
+2025-09-06 00:45:13.353 | EJECUTAR_TICK      |      9 | RUNNING      |     11% |      22MB | RR           |        3 | rafagaRestante=7
+2025-09-06 00:45:13.853 | EJECUTAR_TICK      |      9 | RUNNING      |     64% |     484MB | RR           |        3 | rafagaRestante=6
+2025-09-06 00:45:13.853 | CAMBIO_ESTADO      |      9 | READY        |      0% |     484MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:14.353 | CAMBIO_ESTADO      |      4 | RUNNING      |      0% |     396MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:14.354 | EJECUTAR_TICK      |      4 | RUNNING      |     44% |     219MB | RR           |        3 | rafagaRestante=6
+2025-09-06 00:45:14.857 | EJECUTAR_TICK      |      4 | RUNNING      |     92% |      23MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:15.354 | EJECUTAR_TICK      |      4 | RUNNING      |     97% |     413MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:45:15.354 | CAMBIO_ESTADO      |      4 | READY        |      0% |     413MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:15.854 | CAMBIO_ESTADO      |     10 | RUNNING      |      0% |     127MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:15.855 | EJECUTAR_TICK      |     10 | RUNNING      |     52% |     352MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:16.355 | EJECUTAR_TICK      |     10 | RUNNING      |     72% |     411MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:45:16.854 | EJECUTAR_TICK      |     10 | RUNNING      |     29% |     316MB | RR           |        3 | rafagaRestante=3
+2025-09-06 00:45:16.855 | CAMBIO_ESTADO      |     10 | READY        |      0% |     316MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:17.352 | CAMBIO_ESTADO      |      5 | RUNNING      |      0% |     158MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:17.353 | EJECUTAR_TICK      |      5 | RUNNING      |     12% |     137MB | RR           |        3 | rafagaRestante=5
+2025-09-06 00:45:17.854 | EJECUTAR_TICK      |      5 | RUNNING      |     39% |     478MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:45:18.353 | EJECUTAR_TICK      |      5 | RUNNING      |    100% |     346MB | RR           |        3 | rafagaRestante=3
+2025-09-06 00:45:18.353 | CAMBIO_ESTADO      |      5 | READY        |      0% |     346MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:18.852 | CAMBIO_ESTADO      |      2 | RUNNING      |      0% |     122MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:18.854 | EJECUTAR_TICK      |      2 | RUNNING      |     54% |     167MB | RR           |        3 | rafagaRestante=4
+2025-09-06 00:45:19.356 | EJECUTAR_TICK      |      2 | RUNNING      |     36% |     407MB | RR           |        3 | rafagaRestante=3
+2025-09-06 00:45:19.853 | EJECUTAR_TICK      |      2 | RUNNING      |     74% |     196MB | RR           |        3 | rafagaRestante=2
+2025-09-06 00:45:19.854 | CAMBIO_ESTADO      |      2 | READY        |      0% |     196MB | RR           |        3 | preempt: quantum agotado
+2025-09-06 00:45:20.352 | CREAR_PROCESO      |     16 | READY        |      0% |      43MB | RR           |        3 | rafaga=8, prioridad=2
+2025-09-06 00:45:20.354 | CAMBIO_ESTADO      |     16 | READY        |      0% |      43MB | RR           |        3 | NEW→READY
+2025-09-06 00:45:20.354 | CAMBIO_ESTADO      |     11 | RUNNING      |      0% |     113MB | RR           |        3 | READY→RUNNING
+2025-09-06 00:45:20.355 | EJECUTAR_TICK      |     11 | RUNNING      |     70% |      16MB | RR           |        3 | rafagaRestante=8
+2025-09-06 00:45:20.711 | FIN_SIMULACION     |      - | -            |       - |         - | -            |        - | 

@@ -1,0 +1,26 @@
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-09-06 00:53:53.825 | INICIO_SIMULACION  |      - | READY        |       - |         - | FCFS         |        - | tickMs=500, probNuevo=0.35
+2025-09-06 00:54:07.131 | IDLE               |      - | IDLE         |       - |         - | FCFS         |        - | sin procesos listos
+2025-09-06 00:54:07.632 | IDLE               |      - | IDLE         |       - |         - | FCFS         |        - | sin procesos listos
+2025-09-06 00:54:08.132 | IDLE               |      - | IDLE         |       - |         - | FCFS         |        - | sin procesos listos
+2025-09-06 00:54:08.640 | CREAR_PROCESO      |      1 | READY        |      0% |     132MB | FCFS         |        - | rafaga=6, prioridad=5
+2025-09-06 00:54:08.641 | CAMBIO_ESTADO      |      1 | READY        |      0% |     132MB | FCFS         |        - | NEW→READY
+2025-09-06 00:54:08.641 | CAMBIO_ESTADO      |      1 | RUNNING      |      0% |     132MB | FCFS         |        - | READY→RUNNING
+2025-09-06 00:54:08.643 | EJECUTAR_TICK      |      1 | RUNNING      |     99% |     281MB | FCFS         |        - | rafagaRestante=5
+2025-09-06 00:54:09.131 | EJECUTAR_TICK      |      1 | RUNNING      |     40% |     201MB | FCFS         |        - | rafagaRestante=4
+2025-09-06 00:54:09.631 | EJECUTAR_TICK      |      1 | RUNNING      |     46% |     133MB | FCFS         |        - | rafagaRestante=3
+2025-09-06 00:54:10.132 | CREAR_PROCESO      |      2 | READY        |      0% |     138MB | FCFS         |        - | rafaga=11, prioridad=2
+2025-09-06 00:54:10.132 | CAMBIO_ESTADO      |      2 | READY        |      0% |     138MB | FCFS         |        - | NEW→READY
+2025-09-06 00:54:10.133 | EJECUTAR_TICK      |      1 | RUNNING      |    100% |     352MB | FCFS         |        - | rafagaRestante=2
+2025-09-06 00:54:10.632 | EJECUTAR_TICK      |      1 | RUNNING      |     74% |      76MB | FCFS         |        - | rafagaRestante=1
+2025-09-06 00:54:11.132 | EJECUTAR_TICK      |      1 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-06 00:54:11.132 | CAMBIO_ESTADO      |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-06 00:54:11.132 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-06 00:54:11.632 | CAMBIO_ESTADO      |      2 | RUNNING      |      0% |     138MB | FCFS         |        - | READY→RUNNING
+2025-09-06 00:54:11.633 | EJECUTAR_TICK      |      2 | RUNNING      |     41% |      50MB | FCFS         |        - | rafagaRestante=10
+2025-09-06 00:54:12.131 | EJECUTAR_TICK      |      2 | RUNNING      |     43% |     304MB | FCFS         |        - | rafagaRestante=9
+2025-09-06 00:54:12.631 | CREAR_PROCESO      |      3 | READY        |      0% |     142MB | FCFS         |        - | rafaga=10, prioridad=4
+2025-09-06 00:54:12.632 | CAMBIO_ESTADO      |      3 | READY        |      0% |     142MB | FCFS         |        - | NEW→READY
+2025-09-06 00:54:12.633 | EJECUTAR_TICK      |      2 | RUNNING      |     11% |     362MB | FCFS         |        - | rafagaRestante=8
+2025-09-06 00:54:12.895 | FIN_SIMULACION     |      - | -            |       - |         - | -            |        - | 
