@@ -25,7 +25,7 @@ public class HomeController {
 
     @FXML
     private void initialize() {
-        cboAlg.getItems().setAll(TipoAlgoritmo.FCFS, TipoAlgoritmo.RR);
+        cboAlg.getItems().setAll(TipoAlgoritmo.FCFS, TipoAlgoritmo.RR, TipoAlgoritmo.SJF);
         cboAlg.getSelectionModel().select(TipoAlgoritmo.FCFS);
         spnTick.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 2000, 500, 50));
         spnProb.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.35, 0.05));

@@ -7,8 +7,14 @@ public final class PlanificadorFactory{
         return switch (tipo){
             case FCFS -> new PlanificadorFCFS();
             case RR -> new PlanificadorRR(quantum != null ? quantum : 3);
-                // SJF Y PRIORIDAD PENDIENTES
+            case SJF -> new PlanificadorSJF();
+                // PRIORIDAD PENDIENTE
             default -> throw new UnsupportedOperationException("Algotitmo no implementado: " + tipo);
         };
+    }
+    
+    // Sobrecarga existente, si la tienes
+    public static Planificador crear(TipoAlgoritmo alg) {
+        return crear(alg, null);
     }
 }
