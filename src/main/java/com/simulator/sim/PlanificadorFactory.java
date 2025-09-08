@@ -8,7 +8,7 @@ public final class PlanificadorFactory{
             case FCFS -> new PlanificadorFCFS();
             case RR -> new PlanificadorRR(quantum != null ? quantum : 3);
             case SJF -> new PlanificadorSJF();
-                // PRIORIDAD PENDIENTE
+            case PRIORIDAD -> new PlanificadorPrioridad();
             default -> throw new UnsupportedOperationException("Algotitmo no implementado: " + tipo);
         };
     }
