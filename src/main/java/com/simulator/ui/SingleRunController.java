@@ -26,8 +26,13 @@ public class SingleRunController {
     private Simulador sim;
 
     public void configurar(ParametrosSimulacion params) {
-        Path logPath = LogNombres.singleRunPath(params.algoritmo);
-        sim = new Simulador(params, logPath);
+
+        // AHORA: una carpeta por corrida de single run
+        String runId = LogNombres.newRunId();          // p.ej. "run-2025_09_06-01_25_30"
+        Path logPath = LogNombres.runPath(runId, params.algoritmo);
+
+        sim = new Simulador(params, logPath, Simulador.ModoGeneracion.AUTOGENERADO);
+
         sim.setOyente(vm -> Platform.runLater(() -> actualizarTabla(vm.getTick(), vm.getFilas())));
     }
 
@@ -62,22 +67,21 @@ public class SingleRunController {
     }
 
     private void actualizarTabla(int tick, java.util.List<FilaProcesoVM> filas) {
-    lblTick.setText("Tick: " + tick);
-    lblActivos.setText("Activos: " + filas.size());
+        lblTick.setText("Tick: " + tick);
+        lblActivos.setText("Activos: " + filas.size());
 
-    datos.setAll(
-        filas.stream()
-             .map(f -> new ProcesoVM(
-                     f.pid(),              // <-- record accessor (no get)
-                     f.nombre(),
-                     f.estado(),
-                     f.cpu(),
-                     f.memoria(),
-                     f.prioridad(),
-                     f.rafagaRestante()))
-             .toList()                   // o .collect(Collectors.toList()) si lo prefieres
-    );
-}
-
+        datos.setAll(
+                filas.stream()
+                        .map(f -> new ProcesoVM(
+                        f.pid(), // <-- record accessor (no get)
+                        f.nombre(),
+                        f.estado(),
+                        f.cpu(),
+                        f.memoria(),
+                        f.prioridad(),
+                        f.rafagaRestante()))
+                        .toList() // o .collect(Collectors.toList()) si lo prefieres
+        );
+    }
 
 }

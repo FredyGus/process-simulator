@@ -21,16 +21,24 @@ import java.util.concurrent.*;
 public class CompareController {
 
     // UI A
-    @FXML private TableView<ProcesoVM> tblA;
-    @FXML private TableColumn<ProcesoVM, Number> colPidA, colCpuA, colMemA, colPrioA, colRafA;
-    @FXML private TableColumn<ProcesoVM, String> colNomA, colEstadoA;
-    @FXML private Label lblTickA, lblActivosA, lblAlgA;
+    @FXML
+    private TableView<ProcesoVM> tblA;
+    @FXML
+    private TableColumn<ProcesoVM, Number> colPidA, colCpuA, colMemA, colPrioA, colRafA;
+    @FXML
+    private TableColumn<ProcesoVM, String> colNomA, colEstadoA;
+    @FXML
+    private Label lblTickA, lblActivosA, lblAlgA;
 
     // UI B
-    @FXML private TableView<ProcesoVM> tblB;
-    @FXML private TableColumn<ProcesoVM, Number> colPidB, colCpuB, colMemB, colPrioB, colRafB;
-    @FXML private TableColumn<ProcesoVM, String> colNomB, colEstadoB;
-    @FXML private Label lblTickB, lblActivosB, lblAlgB;
+    @FXML
+    private TableView<ProcesoVM> tblB;
+    @FXML
+    private TableColumn<ProcesoVM, Number> colPidB, colCpuB, colMemB, colPrioB, colRafB;
+    @FXML
+    private TableColumn<ProcesoVM, String> colNomB, colEstadoB;
+    @FXML
+    private Label lblTickB, lblActivosB, lblAlgB;
 
     private final ObservableList<ProcesoVM> datosA = FXCollections.observableArrayList();
     private final ObservableList<ProcesoVM> datosB = FXCollections.observableArrayList();
@@ -70,12 +78,13 @@ public class CompareController {
         );
 
         // Rutas de log (reusamos nombres existentes)
-        Path logA = LogNombres.singleRunPath(a);
-        Path logB = LogNombres.singleRunPath(b);
+        String runId = LogNombres.newRunId();
+        Path logA = LogNombres.comparePath(runId, a);
+        Path logB = LogNombres.comparePath(runId, b);
 
         // Simuladores en modo COORDINADO (no llaman iniciar(); los "tiqueamos" nosotros)
-        simA = new Simulador(paramsA, logA, ModoGeneracion.COORDINADO);
-        simB = new Simulador(paramsB, logB, ModoGeneracion.COORDINADO);
+        simA = new Simulador(paramsA, logA, Simulador.ModoGeneracion.COORDINADO);
+        simB = new Simulador(paramsB, logB, Simulador.ModoGeneracion.COORDINADO);
 
         // Oyentes: refrescan cada tabla
         simA.setOyente(vm -> Platform.runLater(() -> actualizarTablaA(vm.getTick(), vm.getFilas())));
@@ -114,18 +123,25 @@ public class CompareController {
 
     @FXML
     private void onStart() {
-        if (running) return;
+        if (running) {
+            return;
+        }
         running = true;
-        tick = 0; nextPid = 1;
+        tick = 0;
+        nextPid = 1;
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::tickCoordinado, 0, base.tickMs, TimeUnit.MILLISECONDS);
     }
 
     @FXML
     private void onStop() {
-        if (!running) return;
+        if (!running) {
+            return;
+        }
         running = false;
-        if (scheduler != null) scheduler.shutdownNow();
+        if (scheduler != null) {
+            scheduler.shutdownNow();
+        }
         // Cerramos logs de ambos
         simA.detener();
         simB.detener();
@@ -138,7 +154,7 @@ public class CompareController {
         if (rng.nextDouble() < base.probNuevoProceso) {
             int pid = nextPid++;
             int rafaga = randBetween(base.rafagaMin, base.rafagaMax);
-            int prio   = randBetween(base.prioridadMin, base.prioridadMax);
+            int prio = randBetween(base.prioridadMin, base.prioridadMax);
             long seedProc = rng.nextLong();
             llegadas.add(new ProcesoSpec(pid, "P" + pid, rafaga, prio, seedProc));
         }
@@ -147,7 +163,11 @@ public class CompareController {
     }
 
     private int randBetween(int a, int b) {
-        if (a > b) { int t = a; a = b; b = t; }
+        if (a > b) {
+            int t = a;
+            a = b;
+            b = t;
+        }
         return a + rng.nextInt(b - a + 1);
     }
 
@@ -156,7 +176,7 @@ public class CompareController {
         lblActivosA.setText("Activos A: " + filas.size());
         datosA.setAll(filas.stream()
                 .map(f -> new ProcesoVM(f.pid(), f.nombre(), f.estado(),
-                        f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
+                f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
                 .toList());
     }
 
@@ -165,7 +185,7 @@ public class CompareController {
         lblActivosB.setText("Activos B: " + filas.size());
         datosB.setAll(filas.stream()
                 .map(f -> new ProcesoVM(f.pid(), f.nombre(), f.estado(),
-                        f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
+                f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
                 .toList());
     }
 }
