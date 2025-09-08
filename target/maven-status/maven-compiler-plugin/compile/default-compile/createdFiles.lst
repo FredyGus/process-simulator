@@ -35,6 +35,7 @@ com\simulator\sim\TipoAlgoritmo.class
 com\simulator\logging\format\TablaAnchos.class
 com\simulator\sim\Simulador$ModoGeneracion.class
 com\simulator\schedule\Planificador.class
+com\simulator\schedule\PlanificadorSJF.class
 com\simulator\sim\ParametrosSimulacion.class
 com\simulator\ComparadorQuickRun$1.class
 com\simulator\sim\ComparadorAlgoritmos$Oyente.class
