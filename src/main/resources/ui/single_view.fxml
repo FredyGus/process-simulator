@@ -1,28 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.simulator.ui.SingleRunController">
+
+    <!-- Definiciones que luego se referencian por id -->
+    <fx:define>
+        <!-- 👇 Context menu de la tabla con los fx:id que el controller espera -->
+        <ContextMenu fx:id="ctxMenu">
+            <items>
+                <MenuItem fx:id="miTerminar"  text="Terminar"/>
+                <MenuItem fx:id="miSuspender" text="Suspender"/>
+                <MenuItem fx:id="miReanudar"  text="Reanudar"/>
+            </items>
+        </ContextMenu>
+    </fx:define>
+
     <top>
         <ToolBar>
-            <Button fx:id="btnStart" text="Iniciar" onAction="#onStart"/>
-            <Button fx:id="btnStop" text="Detener" onAction="#onStop" disable="true"/>
+            <Button fx:id="btnStart" text="Iniciar"  onAction="#onStart"/>
+            <Button fx:id="btnStop"  text="Detener" onAction="#onStop" disable="true"/>
             <Separator/>
-            <Label fx:id="lblTick" text="Tick: 0"/>
+            <Label fx:id="lblTick"    text="Tick: 0"/>
             <Label fx:id="lblActivos" text="Activos: 0" style="-fx-padding:0 0 0 16;"/>
         </ToolBar>
     </top>
+
     <center>
-        <TableView fx:id="tbl">
+        <!-- 👇 La tabla referencia el menú por id -->
+        <TableView fx:id="tbl" contextMenu="$ctxMenu" prefHeight="400.0" prefWidth="600.0">
             <columns>
-                <TableColumn fx:id="colPid" text="PID" prefWidth="60"/>
-                <TableColumn fx:id="colNom" text="Nombre" prefWidth="120"/>
-                <TableColumn fx:id="colEstado" text="Estado" prefWidth="100"/>
-                <TableColumn fx:id="colCpu" text="CPU%" prefWidth="70"/>
-                <TableColumn fx:id="colMem" text="MEM (MB)" prefWidth="90"/>
-                <TableColumn fx:id="colPrio" text="Prioridad" prefWidth="80"/>
-                <TableColumn fx:id="colRaf" text="Ráfaga" prefWidth="80"/>
+                <TableColumn fx:id="colPid"    text="PID"       prefWidth="60"/>
+                <TableColumn fx:id="colNom"    text="Nombre"    prefWidth="120"/>
+                <TableColumn fx:id="colEstado" text="Estado"    prefWidth="100"/>
+                <TableColumn fx:id="colCpu"    text="CPU%"      prefWidth="70"/>
+                <TableColumn fx:id="colMem"    text="MEM (MB)"  prefWidth="90"/>
+                <TableColumn fx:id="colPrio"   text="Prioridad" prefWidth="80"/>
+                <TableColumn fx:id="colRaf"    text="Ráfaga"    prefWidth="80"/>
             </columns>
         </TableView>
     </center>
+
 </BorderPane>

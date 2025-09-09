@@ -3,7 +3,6 @@ package com.simulator.ui;
 import com.simulator.sim.LogNombres;
 import com.simulator.sim.ParametrosSimulacion;
 import com.simulator.sim.Simulador;
-import com.simulator.sim.Simulador.ModoGeneracion;
 import com.simulator.sim.TipoAlgoritmo;
 import com.simulator.sim.ProcesoSpec;
 import com.simulator.sim.vm.FilaProcesoVM;
@@ -17,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.Optional;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
 
 public class CompareController {
 
@@ -39,6 +41,10 @@ public class CompareController {
     private TableColumn<ProcesoVM, String> colNomB, colEstadoB;
     @FXML
     private Label lblTickB, lblActivosB, lblAlgB;
+    @FXML
+    private MenuItem miTerminarA, miSuspenderA, miReanudarA;
+    @FXML
+    private MenuItem miTerminarB, miSuspenderB, miReanudarB;
 
     private final ObservableList<ProcesoVM> datosA = FXCollections.observableArrayList();
     private final ObservableList<ProcesoVM> datosB = FXCollections.observableArrayList();
@@ -119,6 +125,15 @@ public class CompareController {
         tblB.setItems(datosB);
         tblB.getSortOrder().setAll(colCpuB);
         colCpuB.setSortType(TableColumn.SortType.DESCENDING);
+
+        miTerminarA.setOnAction(e -> getSelectedPidA().ifPresent(simA::terminarProceso));
+        miSuspenderA.setOnAction(e -> getSelectedPidA().ifPresent(simA::suspenderProceso));
+        miReanudarA.setOnAction(e -> getSelectedPidA().ifPresent(simA::reanudarProceso));
+
+        miTerminarB.setOnAction(e -> getSelectedPidB().ifPresent(simB::terminarProceso));
+        miSuspenderB.setOnAction(e -> getSelectedPidB().ifPresent(simB::suspenderProceso));
+        miReanudarB.setOnAction(e -> getSelectedPidB().ifPresent(simB::reanudarProceso));
+
     }
 
     @FXML
@@ -187,5 +202,21 @@ public class CompareController {
                 .map(f -> new ProcesoVM(f.pid(), f.nombre(), f.estado(),
                 f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
                 .toList());
+    }
+
+    private Optional<Integer> getSelectedPidA() {
+        ProcesoVM vm = tblA.getSelectionModel().getSelectedItem();
+        if (vm == null) {
+            return Optional.empty();
+        }
+        return Optional.of(vm.pid.get());       // o vm.getPid()
+    }
+
+    private Optional<Integer> getSelectedPidB() {
+        ProcesoVM vm = tblB.getSelectionModel().getSelectedItem();
+        if (vm == null) {
+            return Optional.empty();
+        }
+        return Optional.of(vm.pid.get());       // o vm.getPid()
     }
 }

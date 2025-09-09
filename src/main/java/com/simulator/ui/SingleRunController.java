@@ -8,6 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.nio.file.Path;
+import java.util.Optional;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
 
 public class SingleRunController {
 
@@ -21,6 +24,12 @@ public class SingleRunController {
     private Label lblTick, lblActivos;
     @FXML
     private Button btnStart, btnStop;
+    @FXML
+    private MenuItem miTerminar;
+    @FXML
+    private MenuItem miSuspender;
+    @FXML
+    private MenuItem miReanudar;
 
     private final ObservableList<ProcesoVM> datos = FXCollections.observableArrayList();
     private Simulador sim;
@@ -50,6 +59,10 @@ public class SingleRunController {
         // ordenar visual por CPU desc (estilo Task Manager)
         tbl.getSortOrder().setAll(colCpu);
         colCpu.setSortType(TableColumn.SortType.DESCENDING);
+
+        miTerminar.setOnAction(e -> getSelectedPid().ifPresent(sim::terminarProceso));
+        miSuspender.setOnAction(e -> getSelectedPid().ifPresent(sim::suspenderProceso));
+        miReanudar.setOnAction(e -> getSelectedPid().ifPresent(sim::reanudarProceso));
     }
 
     @FXML
@@ -82,6 +95,17 @@ public class SingleRunController {
                         f.rafagaRestante()))
                         .toList() // o .collect(Collectors.toList()) si lo prefieres
         );
+    }
+
+    private Optional<Integer> getSelectedPid() {
+        ProcesoVM vm = tbl.getSelectionModel().getSelectedItem();
+        if (vm == null) {
+            return Optional.empty();
+        }
+        // Si ProcesoVM expone propiedades JavaFX públicas:
+        return Optional.of(vm.pid.get());
+        // Si en tu ProcesoVM usas getters (getPid()):
+        // return Optional.of(vm.getPid());
     }
 
 }

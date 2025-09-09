@@ -33,7 +33,7 @@ public final class Simulador {
     private int nextPid = 1;
     private final ModoGeneracion modo;
 
-    private final java.util.concurrent.ConcurrentLinkedQueue<Runnable> acciones = new java.util.concurrent.ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Runnable> acciones = new ConcurrentLinkedQueue<>();
 
     public interface Oyente {
 
@@ -235,8 +235,9 @@ public final class Simulador {
             try {
                 r.run();
             } catch (Throwable t) {
-                logger.registrar(LogEvento.ERROR, LogNivel.ERROR, new LogDatos(null, null, null, null,
-                        params.algoritmo.name(), params.quantum, "accion_fallida=" + t.getMessage()));
+                logger.registrar(LogEvento.ERROR, LogNivel.ERROR,
+                        new LogDatos(null, null, null, null,
+                                params.algoritmo.name(), params.quantum, "accion_fallida=" + t.getMessage()));
             }
         }
     }
@@ -255,28 +256,48 @@ public final class Simulador {
         }
     }
 
+    // SUSPENDER: pasa a SUSPENDED y lo saca del planificador
     private void doSuspender(int pid) {
         for (Proceso p : procesos) {
-            if (p.getPid() == pid && p.getEstado() == EstadoProceso.RUNNING) {
-                p.cambiarEstado(EstadoProceso.READY);
+            if (p.getPid() == pid
+                    && p.getEstado() != EstadoProceso.TERMINATED
+                    && p.getEstado() != EstadoProceso.SUSPENDED) {
+
+                EstadoProceso prev = p.getEstado();
+                p.cambiarEstado(EstadoProceso.SUSPENDED);
+                planificador.removerProceso(p);
+
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
-                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
+                        new LogDatos(p.getPid(), "SUSPENDED", p.getCpuUsage(), p.getMemoria(),
                                 params.algoritmo.name(), params.quantum,
-                                "suspendido_por_UI"));
-                planificador.agregarProceso(p);
+                                prev + "→SUSPENDED"));
+
+                logger.registrar(LogEvento.SUSPENDER, LogNivel.INFO,
+                        new LogDatos(p.getPid(), "SUSPENDED", p.getCpuUsage(), p.getMemoria(),
+                                params.algoritmo.name(), params.quantum,
+                                "usuario"));
                 break;
             }
         }
     }
 
+    // REANUDAR: de SUSPENDED a READY y vuelve al planificador
     private void doReanudar(int pid) {
         for (Proceso p : procesos) {
-            if (p.getPid() == pid && p.getEstado() == EstadoProceso.READY) {
-                p.cambiarEstado(EstadoProceso.RUNNING);
+            if (p.getPid() == pid && p.getEstado() == EstadoProceso.SUSPENDED) {
+
+                p.cambiarEstado(EstadoProceso.READY);
+                planificador.agregarProceso(p);
+
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
-                        new LogDatos(p.getPid(), "RUNNING", p.getCpuUsage(), p.getMemoria(),
+                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
                                 params.algoritmo.name(), params.quantum,
-                                "reanudar_por_UI"));
+                                "SUSPENDED→READY"));
+
+                logger.registrar(LogEvento.REANUDAR, LogNivel.INFO,
+                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
+                                params.algoritmo.name(), params.quantum,
+                                "usuario"));
                 break;
             }
         }
