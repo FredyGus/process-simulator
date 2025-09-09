@@ -33,6 +33,8 @@ public final class Simulador {
     private int nextPid = 1;
     private final ModoGeneracion modo;
 
+    private final java.util.concurrent.ConcurrentLinkedQueue<Runnable> acciones = new java.util.concurrent.ConcurrentLinkedQueue<>();
+
     public interface Oyente {
 
         void onModeloActualizado(VistaModelo vm);
@@ -63,6 +65,18 @@ public final class Simulador {
 
     public void setOyente(Oyente oyente) {
         this.oyente = oyente;
+    }
+
+    public void terminarProceso(int pid) {
+        acciones.add(() -> doTerminar(pid));
+    }
+
+    public void suspenderProceso(int pid) {
+        acciones.add(() -> doSuspender(pid));
+    }
+
+    public void reanudarProceso(int pid) {
+        acciones.add(() -> doReanudar(pid));
     }
 
     public void iniciar() {
@@ -141,6 +155,7 @@ public final class Simulador {
 
     // Parte común: selección/ejecución/snapshot
     private void tickCore() {
+        procesarAccionesPendientes();
         Proceso seleccionado = planificador.seleccionarProceso();
 
         if (seleccionado != null) {
@@ -211,6 +226,59 @@ public final class Simulador {
         ultimoSnapshot = construirSnapshot();
         if (oyente != null) {
             oyente.onModeloActualizado(ultimoSnapshot);
+        }
+    }
+
+    private void procesarAccionesPendientes() {
+        Runnable r;
+        while ((r = acciones.poll()) != null) {
+            try {
+                r.run();
+            } catch (Throwable t) {
+                logger.registrar(LogEvento.ERROR, LogNivel.ERROR, new LogDatos(null, null, null, null,
+                        params.algoritmo.name(), params.quantum, "accion_fallida=" + t.getMessage()));
+            }
+        }
+    }
+
+    private void doTerminar(int pid) {
+        for (Proceso p : procesos) {
+            if (p.getPid() == pid && p.getEstado() != EstadoProceso.TERMINATED) {
+                p.forzarTerminar();
+                logger.registrar(LogEvento.TERMINAR_PROCESO, LogNivel.WARN,
+                        new LogDatos(p.getPid(), "TERMINATED", 0, 0,
+                                params.algoritmo.name(), params.quantum,
+                                "forzado_por_UI"));
+                planificador.removerProceso(p);
+                break;
+            }
+        }
+    }
+
+    private void doSuspender(int pid) {
+        for (Proceso p : procesos) {
+            if (p.getPid() == pid && p.getEstado() == EstadoProceso.RUNNING) {
+                p.cambiarEstado(EstadoProceso.READY);
+                logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
+                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
+                                params.algoritmo.name(), params.quantum,
+                                "suspendido_por_UI"));
+                planificador.agregarProceso(p);
+                break;
+            }
+        }
+    }
+
+    private void doReanudar(int pid) {
+        for (Proceso p : procesos) {
+            if (p.getPid() == pid && p.getEstado() == EstadoProceso.READY) {
+                p.cambiarEstado(EstadoProceso.RUNNING);
+                logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
+                        new LogDatos(p.getPid(), "RUNNING", p.getCpuUsage(), p.getMemoria(),
+                                params.algoritmo.name(), params.quantum,
+                                "reanudar_por_UI"));
+                break;
+            }
         }
     }
 

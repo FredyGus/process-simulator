@@ -156,4 +156,9 @@ public final class Proceso {
         return Integer.compare(this.tiempoRestante, other.tiempoRestante);
     }
 
+    public void forzarTerminar() {
+        this.estado = EstadoProceso.TERMINATED;
+        this.tiempoRestante = 0;
+    }
+
 }
