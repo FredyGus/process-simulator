@@ -30,6 +30,9 @@ public class SingleRunController {
     private MenuItem miSuspender;
     @FXML
     private MenuItem miReanudar;
+    @FXML
+    private ContextMenu ctxMenu;
+    private Integer pidMenu;
 
     private final ObservableList<ProcesoVM> datos = FXCollections.observableArrayList();
     private Simulador sim;
@@ -60,9 +63,38 @@ public class SingleRunController {
         tbl.getSortOrder().setAll(colCpu);
         colCpu.setSortType(TableColumn.SortType.DESCENDING);
 
-        miTerminar.setOnAction(e -> getSelectedPid().ifPresent(sim::terminarProceso));
-        miSuspender.setOnAction(e -> getSelectedPid().ifPresent(sim::suspenderProceso));
-        miReanudar.setOnAction(e -> getSelectedPid().ifPresent(sim::reanudarProceso));
+        ctxMenu.setOnShowing(e -> {
+            var vm = tbl.getSelectionModel().getSelectedItem();
+            pidMenu = (vm != null) ? vm.pid.get() : null;
+        });
+
+        ctxMenu.setOnHidden(e -> pidMenu = null);
+        tbl.setRowFactory(tv -> {
+            TableRow<ProcesoVM> row = new TableRow<>();
+            row.setOnContextMenuRequested(ev -> {
+                if (!row.isEmpty()) {
+                    tv.getSelectionModel().select(row.getIndex());
+                }
+            });
+
+            return row;
+        });
+
+        miTerminar.setOnAction(e -> {
+            if (pidMenu != null) {
+                sim.terminarProceso(pidMenu);
+            }
+        });
+        miSuspender.setOnAction(e -> {
+            if (pidMenu != null) {
+                sim.suspenderProceso(pidMenu);
+            }
+        });
+        miReanudar.setOnAction(e -> {
+            if (pidMenu != null) {
+                sim.reanudarProceso(pidMenu);
+            }
+        });
     }
 
     @FXML
@@ -80,6 +112,7 @@ public class SingleRunController {
     }
 
     private void actualizarTabla(int tick, java.util.List<FilaProcesoVM> filas) {
+        Integer seleccionado = getSelectedPid().orElse(null);
         lblTick.setText("Tick: " + tick);
         lblActivos.setText("Activos: " + filas.size());
 
@@ -95,6 +128,17 @@ public class SingleRunController {
                         f.rafagaRestante()))
                         .toList() // o .collect(Collectors.toList()) si lo prefieres
         );
+        
+        if (seleccionado != null){
+            int idx = -1;
+            for (int i = 0; i < datos.size(); i++){
+                if (datos.get(i).pid.get() == seleccionado ){ idx = i; break;}
+            }
+            if (idx >= 0){
+                tbl.getSelectionModel().select(idx);
+                tbl.scrollTo(idx);
+            }
+        }
     }
 
     private Optional<Integer> getSelectedPid() {

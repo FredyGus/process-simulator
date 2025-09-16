@@ -1,0 +1,373 @@
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-09-09 10:21:43.719 | INICIO_SIMULACION  |      - | READY        |       - |         - | FCFS         |        - | tickMs=500, probNuevo=0.35
+2025-09-09 10:21:45.364 | IDLE               |      - | IDLE         |       - |         - | FCFS         |        - | sin procesos listos
+2025-09-09 10:21:45.863 | IDLE               |      - | IDLE         |       - |         - | FCFS         |        - | sin procesos listos
+2025-09-09 10:21:46.363 | IDLE               |      - | IDLE         |       - |         - | FCFS         |        - | sin procesos listos
+2025-09-09 10:21:46.870 | CREAR_PROCESO      |      1 | READY        |      0% |     132MB | FCFS         |        - | rafaga=6, prioridad=5
+2025-09-09 10:21:46.871 | CAMBIO_ESTADO      |      1 | READY        |      0% |     132MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:46.873 | CAMBIO_ESTADO      |      1 | RUNNING      |      0% |     132MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:21:46.875 | EJECUTAR_TICK      |      1 | RUNNING      |     99% |     281MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:21:47.363 | EJECUTAR_TICK      |      1 | RUNNING      |     40% |     201MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:21:47.863 | EJECUTAR_TICK      |      1 | RUNNING      |     46% |     133MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:21:48.363 | CREAR_PROCESO      |      2 | READY        |      0% |     138MB | FCFS         |        - | rafaga=11, prioridad=2
+2025-09-09 10:21:48.364 | CAMBIO_ESTADO      |      2 | READY        |      0% |     138MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:48.365 | EJECUTAR_TICK      |      1 | RUNNING      |    100% |     352MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:21:48.863 | EJECUTAR_TICK      |      1 | RUNNING      |     74% |      76MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:21:49.363 | EJECUTAR_TICK      |      1 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:21:49.364 | CAMBIO_ESTADO      |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:21:49.365 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:21:49.863 | CAMBIO_ESTADO      |      2 | RUNNING      |      0% |     138MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:21:49.863 | EJECUTAR_TICK      |      2 | RUNNING      |     41% |      50MB | FCFS         |        - | rafagaRestante=10
+2025-09-09 10:21:50.363 | EJECUTAR_TICK      |      2 | RUNNING      |     43% |     304MB | FCFS         |        - | rafagaRestante=9
+2025-09-09 10:21:50.863 | CREAR_PROCESO      |      3 | READY        |      0% |     142MB | FCFS         |        - | rafaga=10, prioridad=4
+2025-09-09 10:21:50.864 | CAMBIO_ESTADO      |      3 | READY        |      0% |     142MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:50.865 | EJECUTAR_TICK      |      2 | RUNNING      |     11% |     362MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:21:51.363 | EJECUTAR_TICK      |      2 | RUNNING      |     91% |      50MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:21:51.863 | CREAR_PROCESO      |      4 | READY        |      0% |     166MB | FCFS         |        - | rafaga=6, prioridad=3
+2025-09-09 10:21:51.864 | CAMBIO_ESTADO      |      4 | READY        |      0% |     166MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:51.865 | EJECUTAR_TICK      |      2 | RUNNING      |     28% |     131MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:21:52.363 | EJECUTAR_TICK      |      2 | RUNNING      |     59% |     396MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:21:52.863 | EJECUTAR_TICK      |      2 | RUNNING      |     75% |      71MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:21:53.363 | EJECUTAR_TICK      |      2 | RUNNING      |     86% |      23MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:21:53.863 | CREAR_PROCESO      |      5 | READY        |      0% |     189MB | FCFS         |        - | rafaga=9, prioridad=1
+2025-09-09 10:21:53.864 | CAMBIO_ESTADO      |      5 | READY        |      0% |     189MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:53.865 | EJECUTAR_TICK      |      2 | RUNNING      |     80% |     485MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:21:54.363 | EJECUTAR_TICK      |      2 | RUNNING      |     43% |     171MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:21:54.863 | EJECUTAR_TICK      |      2 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:21:54.864 | CAMBIO_ESTADO      |      2 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:21:54.865 | TERMINAR_PROCESO   |      2 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:21:55.363 | CAMBIO_ESTADO      |      3 | RUNNING      |      0% |     142MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:21:55.364 | EJECUTAR_TICK      |      3 | RUNNING      |     24% |     278MB | FCFS         |        - | rafagaRestante=9
+2025-09-09 10:21:55.863 | EJECUTAR_TICK      |      3 | RUNNING      |     51% |     313MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:21:56.363 | CREAR_PROCESO      |      6 | READY        |      0% |     189MB | FCFS         |        - | rafaga=5, prioridad=5
+2025-09-09 10:21:56.363 | CAMBIO_ESTADO      |      6 | READY        |      0% |     189MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:56.364 | EJECUTAR_TICK      |      3 | RUNNING      |     23% |     388MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:21:56.863 | CREAR_PROCESO      |      7 | READY        |      0% |      75MB | FCFS         |        - | rafaga=8, prioridad=2
+2025-09-09 10:21:56.864 | CAMBIO_ESTADO      |      7 | READY        |      0% |      75MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:56.865 | EJECUTAR_TICK      |      3 | RUNNING      |     79% |      74MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:21:57.363 | EJECUTAR_TICK      |      3 | RUNNING      |     37% |      78MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:21:57.863 | EJECUTAR_TICK      |      3 | RUNNING      |     42% |     269MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:21:58.363 | CREAR_PROCESO      |      8 | READY        |      0% |     113MB | FCFS         |        - | rafaga=10, prioridad=3
+2025-09-09 10:21:58.364 | CAMBIO_ESTADO      |      8 | READY        |      0% |     113MB | FCFS         |        - | NEW→READY
+2025-09-09 10:21:58.364 | EJECUTAR_TICK      |      3 | RUNNING      |     80% |     347MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:21:58.864 | CAMBIO_ESTADO      |      5 | SUSPENDED    |      0% |     189MB | FCFS         |        - | READY→SUSPENDED
+2025-09-09 10:21:58.865 | SUSPENDER          |      5 | SUSPENDED    |      0% |     189MB | FCFS         |        - | usuario
+2025-09-09 10:21:58.866 | EJECUTAR_TICK      |      3 | RUNNING      |     67% |     287MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:21:59.363 | EJECUTAR_TICK      |      3 | RUNNING      |     67% |      61MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:21:59.863 | EJECUTAR_TICK      |      3 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:21:59.864 | CAMBIO_ESTADO      |      3 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:21:59.864 | TERMINAR_PROCESO   |      3 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:00.363 | CAMBIO_ESTADO      |      4 | RUNNING      |      0% |     166MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:00.364 | EJECUTAR_TICK      |      4 | RUNNING      |     31% |     131MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:00.863 | EJECUTAR_TICK      |      4 | RUNNING      |     92% |     101MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:01.363 | EJECUTAR_TICK      |      4 | RUNNING      |     27% |      87MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:01.863 | EJECUTAR_TICK      |      4 | RUNNING      |     98% |     458MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:02.364 | CREAR_PROCESO      |      9 | READY        |      0% |     114MB | FCFS         |        - | rafaga=8, prioridad=2
+2025-09-09 10:22:02.366 | CAMBIO_ESTADO      |      9 | READY        |      0% |     114MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:02.366 | EJECUTAR_TICK      |      4 | RUNNING      |     98% |     345MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:02.863 | EJECUTAR_TICK      |      4 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:02.864 | CAMBIO_ESTADO      |      4 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:02.865 | TERMINAR_PROCESO   |      4 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:03.363 | CAMBIO_ESTADO      |      6 | RUNNING      |      0% |     189MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:03.365 | EJECUTAR_TICK      |      6 | RUNNING      |     90% |      70MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:03.863 | CREAR_PROCESO      |     10 | READY        |      0% |     153MB | FCFS         |        - | rafaga=5, prioridad=4
+2025-09-09 10:22:03.864 | CAMBIO_ESTADO      |     10 | READY        |      0% |     153MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:03.865 | EJECUTAR_TICK      |      6 | RUNNING      |     70% |     218MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:04.363 | CREAR_PROCESO      |     11 | READY        |      0% |     111MB | FCFS         |        - | rafaga=8, prioridad=4
+2025-09-09 10:22:04.364 | CAMBIO_ESTADO      |     11 | READY        |      0% |     111MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:04.365 | EJECUTAR_TICK      |      6 | RUNNING      |     87% |     497MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:04.863 | EJECUTAR_TICK      |      6 | RUNNING      |     74% |     266MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:05.363 | EJECUTAR_TICK      |      6 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:05.364 | CAMBIO_ESTADO      |      6 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:05.365 | TERMINAR_PROCESO   |      6 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:05.863 | CREAR_PROCESO      |     12 | READY        |      0% |      68MB | FCFS         |        - | rafaga=10, prioridad=1
+2025-09-09 10:22:05.864 | CAMBIO_ESTADO      |     12 | READY        |      0% |      68MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:05.865 | CAMBIO_ESTADO      |      7 | RUNNING      |      0% |      75MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:05.866 | EJECUTAR_TICK      |      7 | RUNNING      |     26% |     111MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:06.363 | EJECUTAR_TICK      |      7 | RUNNING      |     28% |     155MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:06.863 | EJECUTAR_TICK      |      7 | RUNNING      |     85% |     139MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:07.363 | CREAR_PROCESO      |     13 | READY        |      0% |     150MB | FCFS         |        - | rafaga=8, prioridad=5
+2025-09-09 10:22:07.364 | CAMBIO_ESTADO      |     13 | READY        |      0% |     150MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:07.365 | EJECUTAR_TICK      |      7 | RUNNING      |     71% |     117MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:07.863 | EJECUTAR_TICK      |      7 | RUNNING      |     80% |     464MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:08.363 | CREAR_PROCESO      |     14 | READY        |      0% |     197MB | FCFS         |        - | rafaga=5, prioridad=3
+2025-09-09 10:22:08.364 | CAMBIO_ESTADO      |     14 | READY        |      0% |     197MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:08.365 | EJECUTAR_TICK      |      7 | RUNNING      |     12% |     263MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:08.863 | CREAR_PROCESO      |     15 | READY        |      0% |     187MB | FCFS         |        - | rafaga=12, prioridad=2
+2025-09-09 10:22:08.864 | CAMBIO_ESTADO      |     15 | READY        |      0% |     187MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:08.865 | EJECUTAR_TICK      |      7 | RUNNING      |     49% |      23MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:09.363 | EJECUTAR_TICK      |      7 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:09.364 | CAMBIO_ESTADO      |      7 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:09.364 | TERMINAR_PROCESO   |      7 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:09.863 | CAMBIO_ESTADO      |      8 | RUNNING      |      0% |     113MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:09.864 | EJECUTAR_TICK      |      8 | RUNNING      |     78% |     297MB | FCFS         |        - | rafagaRestante=9
+2025-09-09 10:22:10.363 | EJECUTAR_TICK      |      8 | RUNNING      |     70% |     197MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:22:10.863 | CREAR_PROCESO      |     16 | READY        |      0% |      71MB | FCFS         |        - | rafaga=12, prioridad=1
+2025-09-09 10:22:10.864 | CAMBIO_ESTADO      |     16 | READY        |      0% |      71MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:10.865 | EJECUTAR_TICK      |      8 | RUNNING      |     83% |     280MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:11.363 | EJECUTAR_TICK      |      8 | RUNNING      |     41% |     364MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:11.863 | EJECUTAR_TICK      |      8 | RUNNING      |     29% |     317MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:12.363 | EJECUTAR_TICK      |      8 | RUNNING      |      6% |     242MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:12.863 | CREAR_PROCESO      |     17 | READY        |      0% |     145MB | FCFS         |        - | rafaga=7, prioridad=4
+2025-09-09 10:22:12.864 | CAMBIO_ESTADO      |     17 | READY        |      0% |     145MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:12.865 | EJECUTAR_TICK      |      8 | RUNNING      |     88% |     169MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:13.363 | EJECUTAR_TICK      |      8 | RUNNING      |      8% |     483MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:13.863 | CREAR_PROCESO      |     18 | READY        |      0% |      90MB | FCFS         |        - | rafaga=9, prioridad=3
+2025-09-09 10:22:13.864 | CAMBIO_ESTADO      |     18 | READY        |      0% |      90MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:13.864 | EJECUTAR_TICK      |      8 | RUNNING      |     57% |     409MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:14.363 | CREAR_PROCESO      |     19 | READY        |      0% |     116MB | FCFS         |        - | rafaga=5, prioridad=4
+2025-09-09 10:22:14.364 | CAMBIO_ESTADO      |     19 | READY        |      0% |     116MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:14.365 | CAMBIO_ESTADO      |      5 | READY        |      0% |     189MB | FCFS         |        - | SUSPENDED→READY
+2025-09-09 10:22:14.366 | REANUDAR           |      5 | READY        |      0% |     189MB | FCFS         |        - | usuario
+2025-09-09 10:22:14.366 | EJECUTAR_TICK      |      8 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:14.366 | CAMBIO_ESTADO      |      8 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:14.367 | TERMINAR_PROCESO   |      8 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:14.863 | CAMBIO_ESTADO      |      9 | RUNNING      |      0% |     114MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:14.864 | EJECUTAR_TICK      |      9 | RUNNING      |     14% |      93MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:15.363 | EJECUTAR_TICK      |      9 | RUNNING      |     47% |     177MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:15.863 | EJECUTAR_TICK      |      9 | RUNNING      |     90% |     223MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:16.363 | EJECUTAR_TICK      |      9 | RUNNING      |     65% |     398MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:16.863 | CREAR_PROCESO      |     20 | READY        |      0% |     193MB | FCFS         |        - | rafaga=10, prioridad=2
+2025-09-09 10:22:16.864 | CAMBIO_ESTADO      |     20 | READY        |      0% |     193MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:16.865 | EJECUTAR_TICK      |      9 | RUNNING      |     42% |     392MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:17.363 | CREAR_PROCESO      |     21 | READY        |      0% |      45MB | FCFS         |        - | rafaga=6, prioridad=3
+2025-09-09 10:22:17.364 | CAMBIO_ESTADO      |     21 | READY        |      0% |      45MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:17.365 | EJECUTAR_TICK      |      9 | RUNNING      |     84% |     298MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:17.863 | EJECUTAR_TICK      |      9 | RUNNING      |     30% |     212MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:18.363 | EJECUTAR_TICK      |      9 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:18.364 | CAMBIO_ESTADO      |      9 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:18.365 | TERMINAR_PROCESO   |      9 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:18.863 | CAMBIO_ESTADO      |     10 | RUNNING      |      0% |     153MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:18.864 | EJECUTAR_TICK      |     10 | RUNNING      |      9% |      86MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:19.363 | EJECUTAR_TICK      |     10 | RUNNING      |     36% |      84MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:19.863 | CREAR_PROCESO      |     22 | READY        |      0% |      18MB | FCFS         |        - | rafaga=6, prioridad=3
+2025-09-09 10:22:19.864 | CAMBIO_ESTADO      |     22 | READY        |      0% |      18MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:19.865 | EJECUTAR_TICK      |     10 | RUNNING      |     28% |     161MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:20.363 | EJECUTAR_TICK      |     10 | RUNNING      |     39% |     400MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:20.863 | CREAR_PROCESO      |     23 | READY        |      0% |     170MB | FCFS         |        - | rafaga=10, prioridad=5
+2025-09-09 10:22:20.864 | CAMBIO_ESTADO      |     23 | READY        |      0% |     170MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:20.865 | EJECUTAR_TICK      |     10 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:20.866 | CAMBIO_ESTADO      |     10 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:20.867 | TERMINAR_PROCESO   |     10 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:21.363 | CAMBIO_ESTADO      |     11 | RUNNING      |      0% |     111MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:21.364 | EJECUTAR_TICK      |     11 | RUNNING      |     87% |      59MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:21.863 | EJECUTAR_TICK      |     11 | RUNNING      |     56% |      59MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:22.363 | EJECUTAR_TICK      |     11 | RUNNING      |      7% |     431MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:22.863 | CREAR_PROCESO      |     24 | READY        |      0% |      41MB | FCFS         |        - | rafaga=9, prioridad=4
+2025-09-09 10:22:22.864 | CAMBIO_ESTADO      |     24 | READY        |      0% |      41MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:22.865 | EJECUTAR_TICK      |     11 | RUNNING      |     65% |     449MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:23.363 | EJECUTAR_TICK      |     11 | RUNNING      |     86% |      80MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:23.863 | EJECUTAR_TICK      |     11 | RUNNING      |     62% |     134MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:24.363 | CREAR_PROCESO      |     25 | READY        |      0% |     145MB | FCFS         |        - | rafaga=11, prioridad=5
+2025-09-09 10:22:24.364 | CAMBIO_ESTADO      |     25 | READY        |      0% |     145MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:24.364 | EJECUTAR_TICK      |     11 | RUNNING      |     46% |     145MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:24.863 | CREAR_PROCESO      |     26 | READY        |      0% |     119MB | FCFS         |        - | rafaga=12, prioridad=2
+2025-09-09 10:22:24.864 | CAMBIO_ESTADO      |     26 | READY        |      0% |     119MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:24.865 | EJECUTAR_TICK      |     11 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:24.865 | CAMBIO_ESTADO      |     11 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:24.866 | TERMINAR_PROCESO   |     11 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:25.363 | CAMBIO_ESTADO      |     12 | RUNNING      |      0% |      68MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:25.364 | EJECUTAR_TICK      |     12 | RUNNING      |     77% |     475MB | FCFS         |        - | rafagaRestante=9
+2025-09-09 10:22:25.863 | EJECUTAR_TICK      |     12 | RUNNING      |     47% |     305MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:22:26.363 | CREAR_PROCESO      |     27 | READY        |      0% |     137MB | FCFS         |        - | rafaga=7, prioridad=4
+2025-09-09 10:22:26.364 | CAMBIO_ESTADO      |     27 | READY        |      0% |     137MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:26.364 | EJECUTAR_TICK      |     12 | RUNNING      |    100% |     236MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:26.863 | EJECUTAR_TICK      |     12 | RUNNING      |     66% |     306MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:27.363 | CAMBIO_ESTADO      |     16 | SUSPENDED    |      0% |      71MB | FCFS         |        - | READY→SUSPENDED
+2025-09-09 10:22:27.365 | SUSPENDER          |     16 | SUSPENDED    |      0% |      71MB | FCFS         |        - | usuario
+2025-09-09 10:22:27.365 | EJECUTAR_TICK      |     12 | RUNNING      |     87% |     156MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:27.863 | EJECUTAR_TICK      |     12 | RUNNING      |     39% |     212MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:28.363 | EJECUTAR_TICK      |     12 | RUNNING      |     25% |     319MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:28.863 | EJECUTAR_TICK      |     12 | RUNNING      |     76% |     302MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:29.363 | CREAR_PROCESO      |     28 | READY        |      0% |     153MB | FCFS         |        - | rafaga=9, prioridad=3
+2025-09-09 10:22:29.364 | CAMBIO_ESTADO      |     28 | READY        |      0% |     153MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:29.365 | EJECUTAR_TICK      |     12 | RUNNING      |     35% |      80MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:29.863 | EJECUTAR_TICK      |     12 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:29.864 | CAMBIO_ESTADO      |     12 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:29.865 | TERMINAR_PROCESO   |     12 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:30.363 | CREAR_PROCESO      |     29 | READY        |      0% |     175MB | FCFS         |        - | rafaga=11, prioridad=2
+2025-09-09 10:22:30.364 | CAMBIO_ESTADO      |     29 | READY        |      0% |     175MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:30.365 | CAMBIO_ESTADO      |     13 | RUNNING      |      0% |     150MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:30.365 | EJECUTAR_TICK      |     13 | RUNNING      |      5% |     249MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:30.863 | EJECUTAR_TICK      |     13 | RUNNING      |     48% |     330MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:31.363 | EJECUTAR_TICK      |     13 | RUNNING      |     48% |     274MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:31.863 | EJECUTAR_TICK      |     13 | RUNNING      |     45% |     427MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:32.363 | EJECUTAR_TICK      |     13 | RUNNING      |     81% |     143MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:32.863 | EJECUTAR_TICK      |     13 | RUNNING      |      9% |     327MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:33.363 | CREAR_PROCESO      |     30 | READY        |      0% |      65MB | FCFS         |        - | rafaga=7, prioridad=3
+2025-09-09 10:22:33.364 | CAMBIO_ESTADO      |     30 | READY        |      0% |      65MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:33.365 | CAMBIO_ESTADO      |     17 | SUSPENDED    |      0% |     145MB | FCFS         |        - | READY→SUSPENDED
+2025-09-09 10:22:33.365 | SUSPENDER          |     17 | SUSPENDED    |      0% |     145MB | FCFS         |        - | usuario
+2025-09-09 10:22:33.366 | EJECUTAR_TICK      |     13 | RUNNING      |     56% |      83MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:33.863 | CREAR_PROCESO      |     31 | READY        |      0% |      76MB | FCFS         |        - | rafaga=7, prioridad=3
+2025-09-09 10:22:33.864 | CAMBIO_ESTADO      |     31 | READY        |      0% |      76MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:33.865 | EJECUTAR_TICK      |     13 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:33.865 | CAMBIO_ESTADO      |     13 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:33.866 | TERMINAR_PROCESO   |     13 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:34.363 | CAMBIO_ESTADO      |     14 | RUNNING      |      0% |     197MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:34.363 | EJECUTAR_TICK      |     14 | RUNNING      |     22% |      82MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:34.863 | EJECUTAR_TICK      |     14 | RUNNING      |     35% |     113MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:35.363 | EJECUTAR_TICK      |     14 | RUNNING      |     14% |      11MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:35.863 | EJECUTAR_TICK      |     14 | RUNNING      |     41% |      37MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:36.363 | CREAR_PROCESO      |     32 | READY        |      0% |     112MB | FCFS         |        - | rafaga=6, prioridad=2
+2025-09-09 10:22:36.363 | CAMBIO_ESTADO      |     32 | READY        |      0% |     112MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:36.364 | EJECUTAR_TICK      |     14 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:36.364 | CAMBIO_ESTADO      |     14 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:36.365 | TERMINAR_PROCESO   |     14 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:36.863 | CREAR_PROCESO      |     33 | READY        |      0% |     133MB | FCFS         |        - | rafaga=10, prioridad=1
+2025-09-09 10:22:36.864 | CAMBIO_ESTADO      |     33 | READY        |      0% |     133MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:36.865 | CAMBIO_ESTADO      |     15 | RUNNING      |      0% |     187MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:36.866 | EJECUTAR_TICK      |     15 | RUNNING      |      5% |     454MB | FCFS         |        - | rafagaRestante=11
+2025-09-09 10:22:37.363 | EJECUTAR_TICK      |     15 | RUNNING      |     63% |     454MB | FCFS         |        - | rafagaRestante=10
+2025-09-09 10:22:37.863 | CREAR_PROCESO      |     34 | READY        |      0% |      91MB | FCFS         |        - | rafaga=8, prioridad=5
+2025-09-09 10:22:37.864 | CAMBIO_ESTADO      |     34 | READY        |      0% |      91MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:37.865 | EJECUTAR_TICK      |     15 | RUNNING      |     99% |      31MB | FCFS         |        - | rafagaRestante=9
+2025-09-09 10:22:38.363 | EJECUTAR_TICK      |     15 | RUNNING      |     88% |      56MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:22:38.863 | EJECUTAR_TICK      |     15 | RUNNING      |     47% |     482MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:39.363 | CREAR_PROCESO      |     35 | READY        |      0% |     187MB | FCFS         |        - | rafaga=7, prioridad=5
+2025-09-09 10:22:39.364 | CAMBIO_ESTADO      |     35 | READY        |      0% |     187MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:39.365 | EJECUTAR_TICK      |     15 | RUNNING      |     93% |     293MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:39.863 | EJECUTAR_TICK      |     15 | RUNNING      |     91% |      30MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:40.363 | CREAR_PROCESO      |     36 | READY        |      0% |      36MB | FCFS         |        - | rafaga=10, prioridad=5
+2025-09-09 10:22:40.364 | CAMBIO_ESTADO      |     36 | READY        |      0% |      36MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:40.364 | EJECUTAR_TICK      |     15 | RUNNING      |     31% |     195MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:40.863 | EJECUTAR_TICK      |     15 | RUNNING      |     36% |     167MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:41.363 | EJECUTAR_TICK      |     15 | RUNNING      |     41% |     284MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:41.863 | CREAR_PROCESO      |     37 | READY        |      0% |      41MB | FCFS         |        - | rafaga=7, prioridad=1
+2025-09-09 10:22:41.864 | CAMBIO_ESTADO      |     37 | READY        |      0% |      41MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:41.864 | CAMBIO_ESTADO      |     29 | SUSPENDED    |      0% |     175MB | FCFS         |        - | READY→SUSPENDED
+2025-09-09 10:22:41.865 | SUSPENDER          |     29 | SUSPENDED    |      0% |     175MB | FCFS         |        - | usuario
+2025-09-09 10:22:41.866 | EJECUTAR_TICK      |     15 | RUNNING      |     38% |     221MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:42.363 | EJECUTAR_TICK      |     15 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:42.364 | CAMBIO_ESTADO      |     15 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:42.365 | TERMINAR_PROCESO   |     15 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:42.863 | CAMBIO_ESTADO      |     18 | RUNNING      |      0% |      90MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:42.864 | EJECUTAR_TICK      |     18 | RUNNING      |     61% |     366MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:22:43.363 | EJECUTAR_TICK      |     18 | RUNNING      |     74% |     248MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:43.863 | EJECUTAR_TICK      |     18 | RUNNING      |     45% |     377MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:44.363 | EJECUTAR_TICK      |     18 | RUNNING      |     69% |      78MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:44.863 | EJECUTAR_TICK      |     18 | RUNNING      |     49% |      31MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:45.363 | CREAR_PROCESO      |     38 | READY        |      0% |      68MB | FCFS         |        - | rafaga=7, prioridad=3
+2025-09-09 10:22:45.363 | CAMBIO_ESTADO      |     38 | READY        |      0% |      68MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:45.364 | EJECUTAR_TICK      |     18 | RUNNING      |     29% |     413MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:45.863 | CREAR_PROCESO      |     39 | READY        |      0% |      72MB | FCFS         |        - | rafaga=11, prioridad=3
+2025-09-09 10:22:45.863 | CAMBIO_ESTADO      |     39 | READY        |      0% |      72MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:45.865 | TERMINAR_PROCESO   |     17 | TERMINATED   |      0% |       0MB | FCFS         |        - | forzado_por_UI
+2025-09-09 10:22:45.865 | EJECUTAR_TICK      |     18 | RUNNING      |     95% |     261MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:46.363 | EJECUTAR_TICK      |     18 | RUNNING      |     84% |     177MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:46.863 | CREAR_PROCESO      |     40 | READY        |      0% |     152MB | FCFS         |        - | rafaga=6, prioridad=2
+2025-09-09 10:22:46.864 | CAMBIO_ESTADO      |     40 | READY        |      0% |     152MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:46.865 | EJECUTAR_TICK      |     18 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:46.865 | CAMBIO_ESTADO      |     18 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:46.865 | TERMINAR_PROCESO   |     18 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:47.363 | CAMBIO_ESTADO      |     19 | RUNNING      |      0% |     116MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:47.364 | EJECUTAR_TICK      |     19 | RUNNING      |     99% |     342MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:47.863 | CREAR_PROCESO      |     41 | READY        |      0% |      70MB | FCFS         |        - | rafaga=7, prioridad=5
+2025-09-09 10:22:47.864 | CAMBIO_ESTADO      |     41 | READY        |      0% |      70MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:47.864 | EJECUTAR_TICK      |     19 | RUNNING      |     99% |     373MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:48.363 | EJECUTAR_TICK      |     19 | RUNNING      |     25% |     261MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:48.863 | CREAR_PROCESO      |     42 | READY        |      0% |     197MB | FCFS         |        - | rafaga=9, prioridad=4
+2025-09-09 10:22:48.864 | CAMBIO_ESTADO      |     42 | READY        |      0% |     197MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:48.864 | EJECUTAR_TICK      |     19 | RUNNING      |     17% |      96MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:49.363 | CREAR_PROCESO      |     43 | READY        |      0% |      87MB | FCFS         |        - | rafaga=6, prioridad=4
+2025-09-09 10:22:49.364 | CAMBIO_ESTADO      |     43 | READY        |      0% |      87MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:49.365 | EJECUTAR_TICK      |     19 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:49.365 | CAMBIO_ESTADO      |     19 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:49.366 | TERMINAR_PROCESO   |     19 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:49.863 | CREAR_PROCESO      |     44 | READY        |      0% |     195MB | FCFS         |        - | rafaga=5, prioridad=3
+2025-09-09 10:22:49.864 | CAMBIO_ESTADO      |     44 | READY        |      0% |     195MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:49.864 | CAMBIO_ESTADO      |      5 | RUNNING      |      0% |     189MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:49.865 | EJECUTAR_TICK      |      5 | RUNNING      |      8% |     182MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:22:50.363 | CREAR_PROCESO      |     45 | READY        |      0% |      38MB | FCFS         |        - | rafaga=12, prioridad=2
+2025-09-09 10:22:50.364 | CAMBIO_ESTADO      |     45 | READY        |      0% |      38MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:50.365 | EJECUTAR_TICK      |      5 | RUNNING      |     33% |     371MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:50.863 | EJECUTAR_TICK      |      5 | RUNNING      |     85% |     128MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:51.363 | EJECUTAR_TICK      |      5 | RUNNING      |     84% |     482MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:51.863 | EJECUTAR_TICK      |      5 | RUNNING      |      8% |     349MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:52.363 | EJECUTAR_TICK      |      5 | RUNNING      |     46% |     105MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:52.863 | EJECUTAR_TICK      |      5 | RUNNING      |     22% |      54MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:53.363 | EJECUTAR_TICK      |      5 | RUNNING      |     87% |     456MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:53.863 | CREAR_PROCESO      |     46 | READY        |      0% |     158MB | FCFS         |        - | rafaga=6, prioridad=3
+2025-09-09 10:22:53.864 | CAMBIO_ESTADO      |     46 | READY        |      0% |     158MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:53.864 | EJECUTAR_TICK      |      5 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:53.865 | CAMBIO_ESTADO      |      5 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:53.865 | TERMINAR_PROCESO   |      5 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:54.363 | TERMINAR_PROCESO   |     16 | TERMINATED   |      0% |       0MB | FCFS         |        - | forzado_por_UI
+2025-09-09 10:22:54.363 | CAMBIO_ESTADO      |     20 | RUNNING      |      0% |     193MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:54.364 | EJECUTAR_TICK      |     20 | RUNNING      |     49% |     415MB | FCFS         |        - | rafagaRestante=9
+2025-09-09 10:22:54.863 | EJECUTAR_TICK      |     20 | RUNNING      |     83% |     172MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:22:55.363 | EJECUTAR_TICK      |     20 | RUNNING      |     36% |     212MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:22:55.863 | EJECUTAR_TICK      |     20 | RUNNING      |     55% |     157MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:22:56.363 | EJECUTAR_TICK      |     20 | RUNNING      |     63% |     380MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:56.863 | CREAR_PROCESO      |     47 | READY        |      0% |      10MB | FCFS         |        - | rafaga=5, prioridad=4
+2025-09-09 10:22:56.863 | CAMBIO_ESTADO      |     47 | READY        |      0% |      10MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:56.864 | EJECUTAR_TICK      |     20 | RUNNING      |     88% |     269MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:22:57.363 | CREAR_PROCESO      |     48 | READY        |      0% |     177MB | FCFS         |        - | rafaga=10, prioridad=2
+2025-09-09 10:22:57.363 | CAMBIO_ESTADO      |     48 | READY        |      0% |     177MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:57.363 | EJECUTAR_TICK      |     20 | RUNNING      |     93% |      36MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:22:57.863 | EJECUTAR_TICK      |     20 | RUNNING      |     32% |      64MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:22:58.363 | EJECUTAR_TICK      |     20 | RUNNING      |     53% |      68MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:22:58.863 | TERMINAR_PROCESO   |     29 | TERMINATED   |      0% |       0MB | FCFS         |        - | forzado_por_UI
+2025-09-09 10:22:58.864 | EJECUTAR_TICK      |     20 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:22:58.864 | CAMBIO_ESTADO      |     20 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:22:58.865 | TERMINAR_PROCESO   |     20 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:22:59.363 | CAMBIO_ESTADO      |     21 | RUNNING      |      0% |      45MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:22:59.363 | EJECUTAR_TICK      |     21 | RUNNING      |     99% |      96MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:22:59.863 | CREAR_PROCESO      |     49 | READY        |      0% |     196MB | FCFS         |        - | rafaga=11, prioridad=4
+2025-09-09 10:22:59.864 | CAMBIO_ESTADO      |     49 | READY        |      0% |     196MB | FCFS         |        - | NEW→READY
+2025-09-09 10:22:59.864 | EJECUTAR_TICK      |     21 | RUNNING      |     36% |     315MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:23:00.363 | CREAR_PROCESO      |     50 | READY        |      0% |      26MB | FCFS         |        - | rafaga=11, prioridad=5
+2025-09-09 10:23:00.364 | CAMBIO_ESTADO      |     50 | READY        |      0% |      26MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:00.364 | EJECUTAR_TICK      |     21 | RUNNING      |     13% |     147MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:23:00.863 | EJECUTAR_TICK      |     21 | RUNNING      |     81% |     458MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:23:01.363 | EJECUTAR_TICK      |     21 | RUNNING      |     80% |      30MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:23:01.863 | CREAR_PROCESO      |     51 | READY        |      0% |     117MB | FCFS         |        - | rafaga=7, prioridad=5
+2025-09-09 10:23:01.863 | CAMBIO_ESTADO      |     51 | READY        |      0% |     117MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:01.864 | EJECUTAR_TICK      |     21 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:23:01.864 | CAMBIO_ESTADO      |     21 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:23:01.865 | TERMINAR_PROCESO   |     21 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:23:02.363 | CAMBIO_ESTADO      |     22 | RUNNING      |      0% |      18MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:23:02.363 | EJECUTAR_TICK      |     22 | RUNNING      |     48% |     244MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:23:02.863 | EJECUTAR_TICK      |     22 | RUNNING      |     35% |     268MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:23:03.363 | CREAR_PROCESO      |     52 | READY        |      0% |      36MB | FCFS         |        - | rafaga=9, prioridad=2
+2025-09-09 10:23:03.363 | CAMBIO_ESTADO      |     52 | READY        |      0% |      36MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:03.364 | EJECUTAR_TICK      |     22 | RUNNING      |     54% |     124MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:23:03.863 | EJECUTAR_TICK      |     22 | RUNNING      |     88% |     492MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:23:04.363 | EJECUTAR_TICK      |     22 | RUNNING      |      8% |     188MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:23:04.863 | EJECUTAR_TICK      |     22 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:23:04.864 | CAMBIO_ESTADO      |     22 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:23:04.864 | TERMINAR_PROCESO   |     22 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:23:05.363 | CREAR_PROCESO      |     53 | READY        |      0% |     177MB | FCFS         |        - | rafaga=9, prioridad=4
+2025-09-09 10:23:05.364 | CAMBIO_ESTADO      |     53 | READY        |      0% |     177MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:05.364 | CAMBIO_ESTADO      |     23 | RUNNING      |      0% |     170MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:23:05.365 | EJECUTAR_TICK      |     23 | RUNNING      |     10% |     473MB | FCFS         |        - | rafagaRestante=9
+2025-09-09 10:23:05.863 | EJECUTAR_TICK      |     23 | RUNNING      |     41% |     175MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:23:06.363 | EJECUTAR_TICK      |     23 | RUNNING      |     18% |     139MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:23:06.863 | EJECUTAR_TICK      |     23 | RUNNING      |     11% |     207MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:23:07.363 | EJECUTAR_TICK      |     23 | RUNNING      |     10% |     143MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:23:07.863 | CREAR_PROCESO      |     54 | READY        |      0% |      56MB | FCFS         |        - | rafaga=11, prioridad=3
+2025-09-09 10:23:07.864 | CAMBIO_ESTADO      |     54 | READY        |      0% |      56MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:07.865 | EJECUTAR_TICK      |     23 | RUNNING      |     71% |     476MB | FCFS         |        - | rafagaRestante=4
+2025-09-09 10:23:08.363 | EJECUTAR_TICK      |     23 | RUNNING      |     21% |      73MB | FCFS         |        - | rafagaRestante=3
+2025-09-09 10:23:08.863 | CREAR_PROCESO      |     55 | READY        |      0% |     153MB | FCFS         |        - | rafaga=9, prioridad=5
+2025-09-09 10:23:08.863 | CAMBIO_ESTADO      |     55 | READY        |      0% |     153MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:08.864 | EJECUTAR_TICK      |     23 | RUNNING      |     43% |      23MB | FCFS         |        - | rafagaRestante=2
+2025-09-09 10:23:09.363 | EJECUTAR_TICK      |     23 | RUNNING      |     74% |     340MB | FCFS         |        - | rafagaRestante=1
+2025-09-09 10:23:09.863 | CREAR_PROCESO      |     56 | READY        |      0% |      41MB | FCFS         |        - | rafaga=6, prioridad=5
+2025-09-09 10:23:09.864 | CAMBIO_ESTADO      |     56 | READY        |      0% |      41MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:09.864 | EJECUTAR_TICK      |     23 | RUNNING      |      0% |       0MB | FCFS         |        - | rafagaRestante=0
+2025-09-09 10:23:09.865 | CAMBIO_ESTADO      |     23 | TERMINATED   |      0% |       0MB | FCFS         |        - | RUNNING→TERMINATED
+2025-09-09 10:23:09.865 | TERMINAR_PROCESO   |     23 | TERMINATED   |      0% |       0MB | FCFS         |        - | fin_natural
+2025-09-09 10:23:10.363 | CREAR_PROCESO      |     57 | READY        |      0% |     135MB | FCFS         |        - | rafaga=8, prioridad=1
+2025-09-09 10:23:10.364 | CAMBIO_ESTADO      |     57 | READY        |      0% |     135MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:10.364 | CAMBIO_ESTADO      |     24 | RUNNING      |      0% |      41MB | FCFS         |        - | READY→RUNNING
+2025-09-09 10:23:10.365 | EJECUTAR_TICK      |     24 | RUNNING      |     43% |     408MB | FCFS         |        - | rafagaRestante=8
+2025-09-09 10:23:10.863 | EJECUTAR_TICK      |     24 | RUNNING      |     74% |     449MB | FCFS         |        - | rafagaRestante=7
+2025-09-09 10:23:11.363 | CREAR_PROCESO      |     58 | READY        |      0% |     156MB | FCFS         |        - | rafaga=6, prioridad=4
+2025-09-09 10:23:11.364 | CAMBIO_ESTADO      |     58 | READY        |      0% |     156MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:11.364 | EJECUTAR_TICK      |     24 | RUNNING      |     60% |     285MB | FCFS         |        - | rafagaRestante=6
+2025-09-09 10:23:11.863 | EJECUTAR_TICK      |     24 | RUNNING      |     31% |      85MB | FCFS         |        - | rafagaRestante=5
+2025-09-09 10:23:12.363 | CREAR_PROCESO      |     59 | READY        |      0% |      70MB | FCFS         |        - | rafaga=7, prioridad=2
+2025-09-09 10:23:12.364 | CAMBIO_ESTADO      |     59 | READY        |      0% |      70MB | FCFS         |        - | NEW→READY
+2025-09-09 10:23:12.364 | EJECUTAR_TICK      |     24 | RUNNING      |     31% |      38MB | FCFS         |        - | rafagaRestante=4

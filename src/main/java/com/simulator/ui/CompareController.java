@@ -45,6 +45,9 @@ public class CompareController {
     private MenuItem miTerminarA, miSuspenderA, miReanudarA;
     @FXML
     private MenuItem miTerminarB, miSuspenderB, miReanudarB;
+    @FXML
+    private ContextMenu ctxA, ctxB;
+    private Integer pidMenuA, pidMenuB;
 
     private final ObservableList<ProcesoVM> datosA = FXCollections.observableArrayList();
     private final ObservableList<ProcesoVM> datosB = FXCollections.observableArrayList();
@@ -60,6 +63,12 @@ public class CompareController {
     private Random rng;
     private int tick = 0;
     private int nextPid = 1;
+
+    // Botones faltantes
+    @FXML
+    private Button btnStartAmbos;
+    @FXML
+    private Button btnStopAmbos;
 
     public void configurar(ParametrosSimulacion baseParams, TipoAlgoritmo a, TipoAlgoritmo b) {
         this.base = baseParams;
@@ -126,18 +135,74 @@ public class CompareController {
         tblB.getSortOrder().setAll(colCpuB);
         colCpuB.setSortType(TableColumn.SortType.DESCENDING);
 
-        miTerminarA.setOnAction(e -> getSelectedPidA().ifPresent(simA::terminarProceso));
-        miSuspenderA.setOnAction(e -> getSelectedPidA().ifPresent(simA::suspenderProceso));
-        miReanudarA.setOnAction(e -> getSelectedPidA().ifPresent(simA::reanudarProceso));
+        ctxA.setOnShowing(e -> {
+            var vm = tblA.getSelectionModel().getSelectedItem();
+            pidMenuA = (vm != null) ? vm.pid.get() : null;
+        });
+        ctxA.setOnHidden(e -> pidMenuA = null);
 
-        miTerminarB.setOnAction(e -> getSelectedPidB().ifPresent(simB::terminarProceso));
-        miSuspenderB.setOnAction(e -> getSelectedPidB().ifPresent(simB::suspenderProceso));
-        miReanudarB.setOnAction(e -> getSelectedPidB().ifPresent(simB::reanudarProceso));
+        tblA.setRowFactory(tv -> {
+            TableRow<ProcesoVM> row = new TableRow<>();
+            row.setOnContextMenuRequested(ev -> {
+                if (!row.isEmpty()) {
+                    tv.getSelectionModel().select(row.getIndex());
+                }
+            });
+            return row;
+        });
+
+        miTerminarA.setOnAction(e -> {
+            if (pidMenuA != null) {
+                simA.terminarProceso(pidMenuA);
+            }
+        });
+        miSuspenderA.setOnAction(e -> {
+            if (pidMenuA != null) {
+                simA.suspenderProceso(pidMenuA);
+            }
+        });
+        miReanudarA.setOnAction(e -> {
+            if (pidMenuA != null) {
+                simA.reanudarProceso(pidMenuA);
+            }
+        });
+
+        ctxB.setOnShowing(e -> {
+            var vm = tblB.getSelectionModel().getSelectedItem();
+            pidMenuB = (vm != null) ? vm.pid.get() : null;
+        });
+        ctxB.setOnHidden(e -> pidMenuB = null);
+
+        tblB.setRowFactory(tv -> {
+            TableRow<ProcesoVM> row = new TableRow<>();
+            row.setOnContextMenuRequested(ev -> {
+                if (!row.isEmpty()) {
+                    tv.getSelectionModel().select(row.getIndex());
+                }
+            });
+            return row;
+        });
+
+        miTerminarB.setOnAction(e -> {
+            if (pidMenuB != null) {
+                simB.terminarProceso(pidMenuB);
+            }
+        });
+        miSuspenderB.setOnAction(e -> {
+            if (pidMenuB != null) {
+                simB.suspenderProceso(pidMenuB);
+            }
+        });
+        miReanudarB.setOnAction(e -> {
+            if (pidMenuB != null) {
+                simB.reanudarProceso(pidMenuB);
+            }
+        });
 
     }
 
     @FXML
-    private void onStart() {
+    private void onStartAmbos() {
         if (running) {
             return;
         }
@@ -146,10 +211,17 @@ public class CompareController {
         nextPid = 1;
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::tickCoordinado, 0, base.tickMs, TimeUnit.MILLISECONDS);
+
+        if (btnStartAmbos != null) {
+            btnStartAmbos.setDisable(true);
+        }
+        if (btnStopAmbos != null) {
+            btnStopAmbos.setDisable(false);
+        }
     }
 
     @FXML
-    private void onStop() {
+    private void onStopAmbos() {
         if (!running) {
             return;
         }
@@ -157,9 +229,15 @@ public class CompareController {
         if (scheduler != null) {
             scheduler.shutdownNow();
         }
-        // Cerramos logs de ambos
         simA.detener();
         simB.detener();
+
+        if (btnStartAmbos != null) {
+            btnStartAmbos.setDisable(false);
+        }
+        if (btnStopAmbos != null) {
+            btnStopAmbos.setDisable(true);
+        }
     }
 
     private void tickCoordinado() {
@@ -189,19 +267,50 @@ public class CompareController {
     private void actualizarTablaA(int tk, List<FilaProcesoVM> filas) {
         lblTickA.setText("Tick A: " + tk);
         lblActivosA.setText("Activos A: " + filas.size());
+
+        // 1) guardar PID seleccionado actual (si hay)
+        Integer seleccionado = Optional.ofNullable(tblA.getSelectionModel().getSelectedItem())
+                .map(vm -> vm.pid.get()).orElse(null);
+
+        // 2) refrescar datos
         datosA.setAll(filas.stream()
                 .map(f -> new ProcesoVM(f.pid(), f.nombre(), f.estado(),
                 f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
                 .toList());
+
+        // 3) restaurar selección por PID
+        if (seleccionado != null) {
+            for (int i = 0; i < datosA.size(); i++) {
+                if (datosA.get(i).pid.get() == seleccionado) {
+                    tblA.getSelectionModel().select(i);
+                    tblA.scrollTo(i); // opcional
+                    break;
+                }
+            }
+        }
     }
 
     private void actualizarTablaB(int tk, List<FilaProcesoVM> filas) {
         lblTickB.setText("Tick B: " + tk);
         lblActivosB.setText("Activos B: " + filas.size());
+
+        Integer seleccionado = Optional.ofNullable(tblB.getSelectionModel().getSelectedItem())
+                .map(vm -> vm.pid.get()).orElse(null);
+
         datosB.setAll(filas.stream()
                 .map(f -> new ProcesoVM(f.pid(), f.nombre(), f.estado(),
                 f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
                 .toList());
+
+        if (seleccionado != null) {
+            for (int i = 0; i < datosB.size(); i++) {
+                if (datosB.get(i).pid.get() == seleccionado) {
+                    tblB.getSelectionModel().select(i);
+                    tblB.scrollTo(i);
+                    break;
+                }
+            }
+        }
     }
 
     private Optional<Integer> getSelectedPidA() {

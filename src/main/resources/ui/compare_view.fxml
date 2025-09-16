@@ -1,15 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.simulator.ui.CompareController">
 
+    <top>
+        <ToolBar>
+            <Label fx:id="lblAlgA" text="A: -" />
+            <Separator orientation="VERTICAL"/>
+            <Label fx:id="lblAlgB" text="B: -" />
+            <Separator orientation="VERTICAL"/>
+            <Button fx:id="btnStartAmbos" text="Iniciar ambos" onAction="#onStartAmbos"/>
+            <Button fx:id="btnStopAmbos"  text="Detener ambos" onAction="#onStopAmbos" disable="true"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.5">
+            <TableView fx:id="tblA" contextMenu="$ctxA" prefHeight="400.0" prefWidth="600.0">
+                <columns>
+                    <TableColumn fx:id="colPidA"    text="PID"        prefWidth="60"/>
+                    <TableColumn fx:id="colNomA"    text="Nombre"     prefWidth="120"/>
+                    <TableColumn fx:id="colEstadoA" text="Estado"     prefWidth="100"/>
+                    <TableColumn fx:id="colCpuA"    text="CPU%"       prefWidth="70"/>
+                    <TableColumn fx:id="colMemA"    text="MEM (MB)"   prefWidth="90"/>
+                    <TableColumn fx:id="colPrioA"   text="Prioridad"  prefWidth="80"/>
+                    <TableColumn fx:id="colRafA"    text="Ráfaga"     prefWidth="80"/>
+                </columns>
+            </TableView>
+
+            <TableView fx:id="tblB" contextMenu="$ctxB" prefHeight="400.0" prefWidth="600.0">
+                <columns>
+                    <TableColumn fx:id="colPidB"    text="PID"        prefWidth="60"/>
+                    <TableColumn fx:id="colNomB"    text="Nombre"     prefWidth="120"/>
+                    <TableColumn fx:id="colEstadoB" text="Estado"     prefWidth="100"/>
+                    <TableColumn fx:id="colCpuB"    text="CPU%"       prefWidth="70"/>
+                    <TableColumn fx:id="colMemB"    text="MEM (MB)"   prefWidth="90"/>
+                    <TableColumn fx:id="colPrioB"   text="Prioridad"  prefWidth="80"/>
+                    <TableColumn fx:id="colRafB"    text="Ráfaga"     prefWidth="80"/>
+                </columns>
+            </TableView>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="24.0" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="10.0" right="10.0" bottom="10.0" left="10.0"/>
+            </padding>
+            <children>
+                <Label fx:id="lblTickA"     text="Tick A: 0"/>
+                <Label fx:id="lblActivosA"  text="Activos A: 0"/>
+                <Separator orientation="VERTICAL"/>
+                <Label fx:id="lblTickB"     text="Tick B: 0"/>
+                <Label fx:id="lblActivosB"  text="Activos B: 0"/>
+            </children>
+        </HBox>
+
+    </bottom>
+
+    <!-- Definiciones NO visuales -->
     <fx:define>
-        <!-- 👇 Context menu para la tabla A -->
         <ContextMenu fx:id="ctxA">
             <items>
                 <MenuItem fx:id="miTerminarA"  text="Terminar"/>
@@ -18,7 +72,6 @@
             </items>
         </ContextMenu>
 
-        <!-- 👇 Context menu para la tabla B -->
         <ContextMenu fx:id="ctxB">
             <items>
                 <MenuItem fx:id="miTerminarB"  text="Terminar"/>
@@ -27,58 +80,4 @@
             </items>
         </ContextMenu>
     </fx:define>
-
-    <top>
-        <ToolBar>
-            <Button fx:id="btnStartAmbos"  text="Iniciar ambos"  onAction="#onStartAmbos"/>
-            <Button fx:id="btnStopAmbos"   text="Detener ambos" onAction="#onStopAmbos" disable="true"/>
-            <Separator/>
-            <Label text="A:"/>
-            <Label fx:id="lblAlgA"  text="-" style="-fx-font-weight: bold;"/>
-            <Label fx:id="lblTickA" text="Tick A: 0"  style="-fx-padding:0 0 0 16;"/>
-            <Label fx:id="lblActA"  text="Activos A: 0" style="-fx-padding:0 0 0 16;"/>
-            <Separator/>
-            <Label text="B:"/>
-            <Label fx:id="lblAlgB"  text="-" style="-fx-font-weight: bold;"/>
-            <Label fx:id="lblTickB" text="Tick B: 0"  style="-fx-padding:0 0 0 16;"/>
-            <Label fx:id="lblActB"  text="Activos B: 0" style="-fx-padding:0 0 0 16;"/>
-        </ToolBar>
-    </top>
-
-    <center>
-        <SplitPane dividerPositions="0.5">
-            <!-- Panel A -->
-            <VBox spacing="4.0" padding="8.0">
-                <Label text="A: FCFS/SJF/RR/PRIORIDAD" fx:id="lblHeaderA"/>
-                <TableView fx:id="tblA" contextMenu="$ctxA" prefHeight="400" prefWidth="600">
-                    <columns>
-                        <TableColumn fx:id="colPidA"    text="PID"       prefWidth="60"/>
-                        <TableColumn fx:id="colNomA"    text="Nombre"    prefWidth="120"/>
-                        <TableColumn fx:id="colEstadoA" text="Estado"    prefWidth="100"/>
-                        <TableColumn fx:id="colCpuA"    text="CPU%"      prefWidth="70"/>
-                        <TableColumn fx:id="colMemA"    text="MEM (MB)"  prefWidth="90"/>
-                        <TableColumn fx:id="colPrioA"   text="Prioridad" prefWidth="80"/>
-                        <TableColumn fx:id="colRafA"    text="Ráfaga"    prefWidth="80"/>
-                    </columns>
-                </TableView>
-            </VBox>
-
-            <!-- Panel B -->
-            <VBox spacing="4.0" padding="8.0">
-                <Label text="B: FCFS/SJF/RR/PRIORIDAD" fx:id="lblHeaderB"/>
-                <TableView fx:id="tblB" contextMenu="$ctxB" prefHeight="400" prefWidth="600">
-                    <columns>
-                        <TableColumn fx:id="colPidB"    text="PID"       prefWidth="60"/>
-                        <TableColumn fx:id="colNomB"    text="Nombre"    prefWidth="120"/>
-                        <TableColumn fx:id="colEstadoB" text="Estado"    prefWidth="100"/>
-                        <TableColumn fx:id="colCpuB"    text="CPU%"      prefWidth="70"/>
-                        <TableColumn fx:id="colMemB"    text="MEM (MB)"  prefWidth="90"/>
-                        <TableColumn fx:id="colPrioB"   text="Prioridad" prefWidth="80"/>
-                        <TableColumn fx:id="colRafB"    text="Ráfaga"    prefWidth="80"/>
-                    </columns>
-                </TableView>
-            </VBox>
-        </SplitPane>
-    </center>
-
 </BorderPane>
