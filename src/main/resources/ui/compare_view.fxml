@@ -18,8 +18,12 @@
             <Button fx:id="btnStopAmbos"  text="Detener ambos" onAction="#onStopAmbos" disable="true"/>
             <Button text="Exportar A" onAction="#onExportA"/>
             <Button text="Exportar B" onAction="#onExportB"/>
+
+            <!-- NUEVO -->
+            <Button text="Resumen A/B" onAction="#onShowResumenAB"/>
         </ToolBar>
     </top>
+
 
 
     <center>

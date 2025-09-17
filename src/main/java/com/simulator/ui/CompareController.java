@@ -399,4 +399,89 @@ public class CompareController {
         }
         return Optional.of(vm.pid.get());       // o vm.getPid()
     }
+
+    @FXML
+    private void onShowResumenAB() {
+        if (simA == null || simB == null) {
+            return;
+        }
+
+        var la = simA.getMetricasTerminadasSnapshot();
+        var lb = simB.getMetricasTerminadasSnapshot();
+        if (la.isEmpty() && lb.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados en A ni en B.").showAndWait();
+            return;
+        }
+
+        // Tabla: Métrica | A(algA) | B(algB)
+        TableView<RowAB> tv = new TableView<>();
+        TableColumn<RowAB, String> cM = new TableColumn<>("Métrica");
+        TableColumn<RowAB, String> cA = new TableColumn<>("A (" + algA.name() + ")");
+        TableColumn<RowAB, String> cB = new TableColumn<>("B (" + algB.name() + ")");
+        cM.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().metrica()));
+        cA.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().valorA()));
+        cB.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().valorB()));
+        tv.getColumns().addAll(cM, cA, cB);
+        tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+        // Agregados A
+        int nA = la.size();
+        double aEspera = la.stream().mapToInt(m -> m.getEspera()).average().orElse(0);
+        double aResp = la.stream().mapToInt(m -> m.getRespuesta()).average().orElse(0);
+        double aTurn = la.stream().mapToInt(m -> m.getTurnaround()).average().orElse(0);
+        double aEjec = la.stream().mapToInt(m -> m.getEjecucion()).average().orElse(0);
+        double aRaf = la.stream().mapToInt(m -> m.getRafagaTotal()).average().orElse(0);
+
+        // Agregados B
+        int nB = lb.size();
+        double bEspera = lb.stream().mapToInt(m -> m.getEspera()).average().orElse(0);
+        double bResp = lb.stream().mapToInt(m -> m.getRespuesta()).average().orElse(0);
+        double bTurn = lb.stream().mapToInt(m -> m.getTurnaround()).average().orElse(0);
+        double bEjec = lb.stream().mapToInt(m -> m.getEjecucion()).average().orElse(0);
+        double bRaf = lb.stream().mapToInt(m -> m.getRafagaTotal()).average().orElse(0);
+
+        tv.getItems().addAll(
+                new RowAB("Procesos", String.valueOf(nA), String.valueOf(nB)),
+                new RowAB("Espera (prom)", fmt(aEspera), fmt(bEspera)),
+                new RowAB("Respuesta (prom)", fmt(aResp), fmt(bResp)),
+                new RowAB("Turnaround (prom)", fmt(aTurn), fmt(bTurn)),
+                new RowAB("Ejecución (prom)", fmt(aEjec), fmt(bEjec)),
+                new RowAB("Ráfaga total (prom)", fmt(aRaf), fmt(bRaf))
+        );
+
+        Dialog<Void> dlg = new Dialog<>();
+        dlg.setTitle("Resumen A/B");
+        dlg.getDialogPane().setContent(tv);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.showAndWait();
+    }
+
+// helpers (puedes reutilizar fmt del SingleRunController si lo tienes allí)
+    private static String fmt(double v) {
+        return String.format(java.util.Locale.US, "%.2f", v);
+    }
+
+    private static final class RowAB {
+
+        private final String metrica, valorA, valorB;
+
+        RowAB(String m, String a, String b) {
+            this.metrica = m;
+            this.valorA = a;
+            this.valorB = b;
+        }
+
+        public String metrica() {
+            return metrica;
+        }
+
+        public String valorA() {
+            return valorA;
+        }
+
+        public String valorB() {
+            return valorB;
+        }
+    }
+
 }

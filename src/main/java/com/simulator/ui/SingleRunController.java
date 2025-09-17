@@ -224,4 +224,75 @@ public class SingleRunController {
         ProcesoVM vm = tbl.getSelectionModel().getSelectedItem();
         return (vm == null) ? Optional.empty() : Optional.of(vm.pid.get());
     }
+
+    @FXML
+    private void onShowResumen() {
+        if (sim == null) {
+            return;
+        }
+
+        var lista = sim.getMetricasTerminadasSnapshot(); // snapshot seguro
+        if (lista.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados.").showAndWait();
+            return;
+        }
+
+        // Agregados
+        int n = lista.size();
+        double avgEspera = lista.stream().mapToInt(m -> m.getEspera()).average().orElse(0);
+        double avgRespuesta = lista.stream().mapToInt(m -> m.getRespuesta()).average().orElse(0);
+        double avgTurnaround = lista.stream().mapToInt(m -> m.getTurnaround()).average().orElse(0);
+        double avgEjecucion = lista.stream().mapToInt(m -> m.getEjecucion()).average().orElse(0);
+        double avgRafaga = lista.stream().mapToInt(m -> m.getRafagaTotal()).average().orElse(0);
+
+        // Tabla simple (Métrica | Valor)
+        TableView<RowMetric> tv = new TableView<>();
+        TableColumn<RowMetric, String> c1 = new TableColumn<>("Métrica");
+        TableColumn<RowMetric, String> c2 = new TableColumn<>("Valor");
+        c1.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().nombre()));
+        c2.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().valor()));
+        tv.getColumns().addAll(c1, c2);
+        tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+        tv.getItems().addAll(
+                new RowMetric("Procesos", String.valueOf(n)),
+                new RowMetric("Espera (prom)", fmt(avgEspera)),
+                new RowMetric("Respuesta (prom)", fmt(avgRespuesta)),
+                new RowMetric("Turnaround (prom)", fmt(avgTurnaround)),
+                new RowMetric("Ejecución (prom)", fmt(avgEjecucion)),
+                new RowMetric("Ráfaga total (prom)", fmt(avgRafaga))
+        );
+
+        Dialog<Void> dlg = new Dialog<>();
+        dlg.setTitle("Métricas (Single)");
+        dlg.getDialogPane().setContent(tv);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.showAndWait();
+    }
+
+// --- helpers ---
+    private static String fmt(double v) {
+        return String.format(java.util.Locale.US, "%.2f", v);
+    }
+
+// Filita para la tabla de métricas
+    private static final class RowMetric {
+
+        private final String nombre;
+        private final String valor;
+
+        RowMetric(String n, String v) {
+            this.nombre = n;
+            this.valor = v;
+        }
+
+        public String nombre() {
+            return nombre;
+        }
+
+        public String valor() {
+            return valor;
+        }
+    }
+
 }
