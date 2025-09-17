@@ -1,0 +1,2 @@
+pid,algoritmo,llegada,primera_ejec,fin,rafaga_total,ejecucion,espera,respuesta,turnaround
+1,SJF,4,4,9,6,6,0,0,5

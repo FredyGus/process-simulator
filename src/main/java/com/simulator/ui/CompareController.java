@@ -2,23 +2,26 @@ package com.simulator.ui;
 
 import com.simulator.sim.LogNombres;
 import com.simulator.sim.ParametrosSimulacion;
+import com.simulator.sim.ProcesoSpec;
 import com.simulator.sim.Simulador;
 import com.simulator.sim.TipoAlgoritmo;
-import com.simulator.sim.ProcesoSpec;
 import com.simulator.sim.vm.FilaProcesoVM;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
 import java.util.Optional;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class CompareController {
 
@@ -41,14 +44,21 @@ public class CompareController {
     private TableColumn<ProcesoVM, String> colNomB, colEstadoB;
     @FXML
     private Label lblTickB, lblActivosB, lblAlgB;
+
+    // Menús contextuales
+    @FXML
+    private ContextMenu ctxA, ctxB;
     @FXML
     private MenuItem miTerminarA, miSuspenderA, miReanudarA;
     @FXML
     private MenuItem miTerminarB, miSuspenderB, miReanudarB;
-    @FXML
-    private ContextMenu ctxA, ctxB;
     private Integer pidMenuA, pidMenuB;
 
+    // Botones control
+    @FXML
+    private Button btnStartAmbos, btnPauseAmbos, btnStopAmbos;
+
+    // Datos
     private final ObservableList<ProcesoVM> datosA = FXCollections.observableArrayList();
     private final ObservableList<ProcesoVM> datosB = FXCollections.observableArrayList();
 
@@ -58,24 +68,17 @@ public class CompareController {
     // Coordinación
     private ScheduledExecutorService scheduler;
     private boolean running = false;
+    private boolean paused = false;
     private ParametrosSimulacion base;
     private TipoAlgoritmo algA, algB;
     private Random rng;
     private int tick = 0;
     private int nextPid = 1;
 
-    // Botones faltantes
-    @FXML
-    private Button btnStartAmbos;
-    @FXML
-    private Button btnStopAmbos;
-
-    @FXML
-    private Button btnPauseAmbos;
-
-    private boolean paused = false;   // para el tick coordinado
+    // run/logs
     private String runId;
 
+    // =================== Configuración desde Home ===================
     public void configurar(ParametrosSimulacion baseParams, TipoAlgoritmo a, TipoAlgoritmo b) {
         this.base = baseParams;
         this.algA = a;
@@ -84,71 +87,36 @@ public class CompareController {
         lblAlgA.setText("A: " + a.name());
         lblAlgB.setText("B: " + b.name());
 
-        // Id de corrida compartido para esta comparación
+        // Id de corrida compartido para ambos
         this.runId = LogNombres.newRunId();
-
-        // Logs separados A/B dentro de la carpeta de la corrida
         Path logA = LogNombres.comparePath(runId, a);
         Path logB = LogNombres.comparePath(runId, b);
 
-        // Copias de parámetros, cada una con su algoritmo
+        // Copias de parámetros
         var paramsA = new ParametrosSimulacion(
                 base.tickMs, base.probNuevoProceso,
                 base.rafagaMin, base.rafagaMax,
                 base.prioridadMin, base.prioridadMax,
-                base.seed, a, (a == TipoAlgoritmo.RR ? base.quantum : null)
-        );
+                base.seed, a, (a == TipoAlgoritmo.RR ? base.quantum : null));
         var paramsB = new ParametrosSimulacion(
                 base.tickMs, base.probNuevoProceso,
                 base.rafagaMin, base.rafagaMax,
                 base.prioridadMin, base.prioridadMax,
-                base.seed, b, (b == TipoAlgoritmo.RR ? base.quantum : null)
-        );
+                base.seed, b, (b == TipoAlgoritmo.RR ? base.quantum : null));
 
-        // Simuladores en modo coordinado (los tiqueamos nosotros)
+        // Simuladores en modo COORDINADO (tick desde aquí)
         simA = new Simulador(paramsA, logA, Simulador.ModoGeneracion.COORDINADO);
         simB = new Simulador(paramsB, logB, Simulador.ModoGeneracion.COORDINADO);
 
-        // Oyentes: refrescan cada tabla
+        // Oyentes para refrescar tablas
         simA.setOyente(vm -> Platform.runLater(() -> actualizarTablaA(vm.getTick(), vm.getFilas())));
         simB.setOyente(vm -> Platform.runLater(() -> actualizarTablaB(vm.getTick(), vm.getFilas())));
 
-        // RNG único para generar llegadas idénticas en A y B
+        // RNG común para llegadas idénticas
         rng = new Random(base.seed);
     }
 
-    @FXML
-    private void onExportA() {
-        try {
-            var lista = simA.getMetricasTerminadasSnapshot();
-            if (lista.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en A.").showAndWait();
-                return;
-            }
-            var out = com.simulator.sim.LogNombres.metricsComparePath(runId, algA);
-            com.simulator.metrics.CsvMetricsWriter.write(out, lista);
-            new Alert(Alert.AlertType.INFORMATION, "CSV A exportado en:\n" + out).showAndWait();
-        } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, "Error exportando A:\n" + ex.getMessage()).showAndWait();
-        }
-    }
-
-    @FXML
-    private void onExportB() {
-        try {
-            var lista = simB.getMetricasTerminadasSnapshot();
-            if (lista.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en B.").showAndWait();
-                return;
-            }
-            var out = com.simulator.sim.LogNombres.metricsComparePath(runId, algB);
-            com.simulator.metrics.CsvMetricsWriter.write(out, lista);
-            new Alert(Alert.AlertType.INFORMATION, "CSV B exportado en:\n" + out).showAndWait();
-        } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, "Error exportando B:\n" + ex.getMessage()).showAndWait();
-        }
-    }
-
+    // =================== Inicialización UI ===================
     @FXML
     private void initialize() {
         // A
@@ -175,12 +143,12 @@ public class CompareController {
         tblB.getSortOrder().setAll(colCpuB);
         colCpuB.setSortType(TableColumn.SortType.DESCENDING);
 
+        // Context menu A
         ctxA.setOnShowing(e -> {
             var vm = tblA.getSelectionModel().getSelectedItem();
             pidMenuA = (vm != null) ? vm.pid.get() : null;
         });
         ctxA.setOnHidden(e -> pidMenuA = null);
-
         tblA.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
             row.setOnContextMenuRequested(ev -> {
@@ -190,7 +158,6 @@ public class CompareController {
             });
             return row;
         });
-
         miTerminarA.setOnAction(e -> {
             if (pidMenuA != null) {
                 simA.terminarProceso(pidMenuA);
@@ -207,12 +174,12 @@ public class CompareController {
             }
         });
 
+        // Context menu B
         ctxB.setOnShowing(e -> {
             var vm = tblB.getSelectionModel().getSelectedItem();
             pidMenuB = (vm != null) ? vm.pid.get() : null;
         });
         ctxB.setOnHidden(e -> pidMenuB = null);
-
         tblB.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
             row.setOnContextMenuRequested(ev -> {
@@ -222,7 +189,6 @@ public class CompareController {
             });
             return row;
         });
-
         miTerminarB.setOnAction(e -> {
             if (pidMenuB != null) {
                 simB.terminarProceso(pidMenuB);
@@ -240,9 +206,9 @@ public class CompareController {
         });
 
         refreshButtonsAB();
-
     }
 
+    // =================== Botones de control ===================
     @FXML
     private void onStartAmbos() {
         if (running) {
@@ -256,10 +222,28 @@ public class CompareController {
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::tickCoordinado, 0, base.tickMs, TimeUnit.MILLISECONDS);
 
-        // Arrancan en "corriendo"
+        // por consistencia, en "corriendo"
         simA.continuar();
         simB.continuar();
 
+        refreshButtonsAB();
+    }
+
+    @FXML
+    private void onPauseAmbos() {
+        if (!running) {
+            return;
+        }
+
+        if (!paused) {
+            paused = true;
+            simA.pausar();
+            simB.pausar();
+        } else {
+            paused = false;
+            simA.continuar();
+            simB.continuar();
+        }
         refreshButtonsAB();
     }
 
@@ -268,6 +252,7 @@ public class CompareController {
         if (!running) {
             return;
         }
+
         running = false;
         paused = false;
 
@@ -281,47 +266,31 @@ public class CompareController {
         refreshButtonsAB();
     }
 
-    @FXML
-    private void onPauseAmbos() {
-        if (!running) {
-            return;
-        }
-
-        if (!paused) {
-            paused = true;
-            // pausar sims internos (por consistencia)
-            simA.pausar();
-            simB.pausar();
-        } else {
-            paused = false;
-            simA.continuar();
-            simB.continuar();
-        }
-        refreshButtonsAB();
-    }
-
     private void refreshButtonsAB() {
         btnStartAmbos.setDisable(running);
         btnPauseAmbos.setDisable(!running);
         btnStopAmbos.setDisable(!running);
-
         btnPauseAmbos.setText(paused ? "Reanudar ambos" : "Pausar ambos");
     }
 
+    // =================== Ticks coordinados ===================
     private void tickCoordinado() {
         if (paused) {
             return;
         }
+
         tick++;
-        // Generar llegadas idénticas para A y B
+
+        // Llegadas idénticas en A y B
         List<ProcesoSpec> llegadas = new ArrayList<>();
         if (rng.nextDouble() < base.probNuevoProceso) {
             int pid = nextPid++;
-            int rafaga = randBetween(base.rafagaMin, base.rafagaMax);
+            int raf = randBetween(base.rafagaMin, base.rafagaMax);
             int prio = randBetween(base.prioridadMin, base.prioridadMax);
-            long seedProc = rng.nextLong();
-            llegadas.add(new ProcesoSpec(pid, "P" + pid, rafaga, prio, seedProc));
+            long seed = rng.nextLong();
+            llegadas.add(new ProcesoSpec(pid, "P" + pid, raf, prio, seed));
         }
+
         simA.tickCoordinado(llegadas);
         simB.tickCoordinado(llegadas);
     }
@@ -335,26 +304,57 @@ public class CompareController {
         return a + rng.nextInt(b - a + 1);
     }
 
+    // =================== Exportación A/B ===================
+    @FXML
+    private void onExportA() {
+        try {
+            var lista = simA.getMetricasTerminadasSnapshot();
+            if (lista.isEmpty()) {
+                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en A.").showAndWait();
+                return;
+            }
+            var out = LogNombres.metricsComparePath(runId, algA);
+            com.simulator.metrics.CsvMetricsWriter.write(out, lista);
+            new Alert(Alert.AlertType.INFORMATION, "CSV A exportado en:\n" + out).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error exportando A:\n" + ex.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void onExportB() {
+        try {
+            var lista = simB.getMetricasTerminadasSnapshot();
+            if (lista.isEmpty()) {
+                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en B.").showAndWait();
+                return;
+            }
+            var out = LogNombres.metricsComparePath(runId, algB);
+            com.simulator.metrics.CsvMetricsWriter.write(out, lista);
+            new Alert(Alert.AlertType.INFORMATION, "CSV B exportado en:\n" + out).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error exportando B:\n" + ex.getMessage()).showAndWait();
+        }
+    }
+
+    // =================== Actualización de tablas ===================
     private void actualizarTablaA(int tk, List<FilaProcesoVM> filas) {
         lblTickA.setText("Tick A: " + tk);
         lblActivosA.setText("Activos A: " + filas.size());
 
-        // 1) guardar PID seleccionado actual (si hay)
         Integer seleccionado = Optional.ofNullable(tblA.getSelectionModel().getSelectedItem())
                 .map(vm -> vm.pid.get()).orElse(null);
 
-        // 2) refrescar datos
         datosA.setAll(filas.stream()
                 .map(f -> new ProcesoVM(f.pid(), f.nombre(), f.estado(),
                 f.cpu(), f.memoria(), f.prioridad(), f.rafagaRestante()))
                 .toList());
 
-        // 3) restaurar selección por PID
         if (seleccionado != null) {
             for (int i = 0; i < datosA.size(); i++) {
                 if (datosA.get(i).pid.get() == seleccionado) {
                     tblA.getSelectionModel().select(i);
-                    tblA.scrollTo(i); // opcional
+                    tblA.scrollTo(i);
                     break;
                 }
             }
@@ -384,22 +384,7 @@ public class CompareController {
         }
     }
 
-    private Optional<Integer> getSelectedPidA() {
-        ProcesoVM vm = tblA.getSelectionModel().getSelectedItem();
-        if (vm == null) {
-            return Optional.empty();
-        }
-        return Optional.of(vm.pid.get());       // o vm.getPid()
-    }
-
-    private Optional<Integer> getSelectedPidB() {
-        ProcesoVM vm = tblB.getSelectionModel().getSelectedItem();
-        if (vm == null) {
-            return Optional.empty();
-        }
-        return Optional.of(vm.pid.get());       // o vm.getPid()
-    }
-
+    // =================== Resumen A/B (10c) ===================
     @FXML
     private void onShowResumenAB() {
         if (simA == null || simB == null) {
@@ -408,37 +393,36 @@ public class CompareController {
 
         var la = simA.getMetricasTerminadasSnapshot();
         var lb = simB.getMetricasTerminadasSnapshot();
+
         if (la.isEmpty() && lb.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados en A ni en B.").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Aún no hay procesos terminados en A ni en B.").showAndWait();
             return;
         }
 
-        // Tabla: Métrica | A(algA) | B(algB)
         TableView<RowAB> tv = new TableView<>();
         TableColumn<RowAB, String> cM = new TableColumn<>("Métrica");
         TableColumn<RowAB, String> cA = new TableColumn<>("A (" + algA.name() + ")");
         TableColumn<RowAB, String> cB = new TableColumn<>("B (" + algB.name() + ")");
-        cM.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().metrica()));
-        cA.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().valorA()));
-        cB.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().valorB()));
+        cM.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getMetrica()));
+        cA.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorA()));
+        cB.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorB()));
         tv.getColumns().addAll(cM, cA, cB);
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
-        // Agregados A
         int nA = la.size();
-        double aEspera = la.stream().mapToInt(m -> m.getEspera()).average().orElse(0);
-        double aResp = la.stream().mapToInt(m -> m.getRespuesta()).average().orElse(0);
-        double aTurn = la.stream().mapToInt(m -> m.getTurnaround()).average().orElse(0);
-        double aEjec = la.stream().mapToInt(m -> m.getEjecucion()).average().orElse(0);
-        double aRaf = la.stream().mapToInt(m -> m.getRafagaTotal()).average().orElse(0);
+        double aEspera = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
+        double aResp = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
+        double aTurn = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
+        double aEjec = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.ejecucion(m)).average().orElse(0);
+        double aRaf = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.rafagaTotal(m)).average().orElse(0);
 
-        // Agregados B
         int nB = lb.size();
-        double bEspera = lb.stream().mapToInt(m -> m.getEspera()).average().orElse(0);
-        double bResp = lb.stream().mapToInt(m -> m.getRespuesta()).average().orElse(0);
-        double bTurn = lb.stream().mapToInt(m -> m.getTurnaround()).average().orElse(0);
-        double bEjec = lb.stream().mapToInt(m -> m.getEjecucion()).average().orElse(0);
-        double bRaf = lb.stream().mapToInt(m -> m.getRafagaTotal()).average().orElse(0);
+        double bEspera = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
+        double bResp = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
+        double bTurn = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
+        double bEjec = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.ejecucion(m)).average().orElse(0);
+        double bRaf = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.rafagaTotal(m)).average().orElse(0);
 
         tv.getItems().addAll(
                 new RowAB("Procesos", String.valueOf(nA), String.valueOf(nB)),
@@ -451,37 +435,44 @@ public class CompareController {
 
         Dialog<Void> dlg = new Dialog<>();
         dlg.setTitle("Resumen A/B");
+        dlg.initOwner(btnStartAmbos.getScene().getWindow());
+        dlg.setResizable(true);
         dlg.getDialogPane().setContent(tv);
+        dlg.getDialogPane().setPrefSize(720, 380);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dlg.showAndWait();
     }
 
-// helpers (puedes reutilizar fmt del SingleRunController si lo tienes allí)
+    // =================== Helpers ===================
+    private static final DecimalFormat DF = new DecimalFormat("#,##0.##");
+
     private static String fmt(double v) {
-        return String.format(java.util.Locale.US, "%.2f", v);
+        return DF.format(v);
     }
 
-    private static final class RowAB {
+    /**
+     * Fila para la tabla de resumen A/B.
+     */
+    public static final class RowAB {
 
         private final String metrica, valorA, valorB;
 
-        RowAB(String m, String a, String b) {
+        public RowAB(String m, String a, String b) {
             this.metrica = m;
             this.valorA = a;
             this.valorB = b;
         }
 
-        public String metrica() {
+        public String getMetrica() {
             return metrica;
         }
 
-        public String valorA() {
+        public String getValorA() {
             return valorA;
         }
 
-        public String valorB() {
+        public String getValorB() {
             return valorB;
         }
     }
-
 }

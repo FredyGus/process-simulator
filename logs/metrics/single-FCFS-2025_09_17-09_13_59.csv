@@ -1,0 +1,3 @@
+pid,algoritmo,llegada,primera_ejec,fin,rafaga_total,ejecucion,espera,respuesta,turnaround
+1,FCFS,4,4,9,6,6,0,0,5
+2,FCFS,7,10,20,11,11,0,3,13

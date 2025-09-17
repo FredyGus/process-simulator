@@ -10,7 +10,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxml = new FXMLLoader(getClass().getResource("/ui/home_view.fxml"));
-        Scene scene = new Scene(fxml.load(), 1047, 640);
+        Scene scene = new Scene(fxml.load(), 1131, 640);
         stage.setTitle("Process Simulator");
         stage.setScene(scene);
         stage.show();

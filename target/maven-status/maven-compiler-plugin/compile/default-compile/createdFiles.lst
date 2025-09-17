@@ -1,2 +1,3 @@
-com\simulator\metrics\CsvMetricsWriter.class
-com\simulator\metrics\ProcesoMetricas.class
+com/simulator/metrics/MetricsCompat.class
+com/simulator/ui/CompareController$RowAB.class
+com/simulator/ui/SingleRunController$RowMetric.class

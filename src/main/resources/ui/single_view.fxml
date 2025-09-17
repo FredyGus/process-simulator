@@ -10,17 +10,12 @@
     <top>
         <ToolBar>
             <Button fx:id="btnStart" text="Iniciar" onAction="#onStart"/>
-            <Button fx:id="btnPause" text="Pausar" onAction="#onPauseResume" disable="true"/>
-            <Button fx:id="btnStop" text="Detener" onAction="#onStop" disable="true"/>
-            <Separator/>
-            <Label fx:id="lblTick" text="Tick: 0"/>
-            <Label fx:id="lblActivos" text="Activos: 0" style="-fx-padding:0 0 0 16;"/>
-
-            <!-- NUEVO: exportar y ver métricas -->
-            <Separator/>
-            <Button fx:id="btnExport" text="Exportar CSV" onAction="#onExportMetrics"/>
-            <Button fx:id="btnResumen" text="Ver métricas" onAction="#onShowResumen"/>
+            <Button fx:id="btnPause" text="Pausar" onAction="#onPauseResume"/>
+            <Button fx:id="btnStop" text="Detener" onAction="#onStop"/>
+            <Button fx:id="btnExport" text="Exportar métricas" onAction="#onExportMetrics"/>
+            <Button text="Ver métricas" onAction="#onShowResumen"/>
         </ToolBar>
+
     </top>
 
 

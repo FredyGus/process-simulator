@@ -9,13 +9,15 @@
 
     <top>
         <ToolBar>
-            <Button fx:id="btnStart"  text="Iniciar"           onAction="#onStart"/>
-            <Button fx:id="btnPause"  text="Pausar"            onAction="#onPauseResume" disable="true"/>
-            <Button fx:id="btnStop"   text="Detener"           onAction="#onStop"        disable="true"/>
-            <Separator/>
+            <Button fx:id="btnStart" text="Iniciar" onAction="#onStart"/>
+            <Button fx:id="btnPause" text="Pausar" onAction="#onPauseResume"/>
+            <Button fx:id="btnStop" text="Detener" onAction="#onStop"/>
             <Button fx:id="btnExport" text="Exportar métricas" onAction="#onExportMetrics"/>
+            <Button text="Ver métricas" onAction="#onShowResumen"/>
         </ToolBar>
+
     </top>
+
 
     <center>
         <TableView fx:id="tbl" contextMenu="$ctxMenu" prefHeight="420.0" prefWidth="700.0">

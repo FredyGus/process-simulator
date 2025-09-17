@@ -5,12 +5,14 @@ import com.simulator.sim.ParametrosSimulacion;
 import com.simulator.sim.Simulador;
 import com.simulator.sim.vm.FilaProcesoVM;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.nio.file.Path;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +26,11 @@ public class SingleRunController {
     @FXML
     private TableColumn<ProcesoVM, String> colNom, colEstado;
 
-    // Barra superior / estado
-    //INICIA
+    // Estado/acciones
     @FXML
     private Label lblTick, lblActivos;
     @FXML
-    private Button btnStart, btnPause, btnStop;
-    @FXML
-    private Button btnExport;
+    private Button btnStart, btnPause, btnStop, btnExport;
 
     // Menú contextual
     @FXML
@@ -44,16 +43,15 @@ public class SingleRunController {
     private final ObservableList<ProcesoVM> datos = FXCollections.observableArrayList();
     private Simulador sim;
 
-    // Guardamos los parámetros (necesario para exportar y para título)
+    // Guardamos los parámetros (para exportar)
     private ParametrosSimulacion params;
 
-    // Estado de control
+    // Bande­ras de control
     private boolean running = false;
     private boolean paused = false;
 
     // =================== Ciclo de vida / configuración ===================
     public void configurar(ParametrosSimulacion params) {
-        // guardamos para uso posterior (exportar CSV, etc.)
         this.params = params;
 
         // carpeta por corrida de single-run
@@ -80,14 +78,13 @@ public class SingleRunController {
         tbl.getSortOrder().setAll(colCpu);
         colCpu.setSortType(TableColumn.SortType.DESCENDING);
 
-        // Menú contextual: capturamos el PID en el momento de abrirlo
+        // Menú contextual: capturamos el PID al abrirlo y forzamos selección de fila
         ctxMenu.setOnShowing(e -> {
             var vm = tbl.getSelectionModel().getSelectedItem();
             pidMenu = (vm != null) ? vm.pid.get() : null;
         });
         ctxMenu.setOnHidden(e -> pidMenu = null);
 
-        // Asegurar selección de la fila bajo el cursor al abrir el menú
         tbl.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
             row.setOnContextMenuRequested(ev -> {
@@ -140,8 +137,6 @@ public class SingleRunController {
             sim.pausar();
             paused = true;
         } else {
-            // Si tu Simulador implementa continuar(), úsalo.
-            // Si no, puedes llamar otra vez a iniciar() o crear un método continuar().
             sim.continuar();
             paused = false;
         }
@@ -153,7 +148,8 @@ public class SingleRunController {
         if (sim == null || !running) {
             return;
         }
-        sim.detener();          // cierra logs y apaga el scheduler interno
+
+        sim.detener();     // cierra logs y apaga scheduler interno
         running = false;
         paused = false;
         refreshButtons();
@@ -168,20 +164,67 @@ public class SingleRunController {
                         "Aún no hay procesos terminados para exportar.").showAndWait();
                 return;
             }
-            // Archivo CSV por algoritmo en single-run
             var out = LogNombres.metricsSinglePath(params.algoritmo);
             com.simulator.metrics.CsvMetricsWriter.write(out, lista);
 
             new Alert(Alert.AlertType.INFORMATION,
-                    "CSV exportado en:\n" + out.toString()).showAndWait();
-
+                    "CSV exportado en:\n" + out).showAndWait();
         } catch (Exception ex) {
             new Alert(Alert.AlertType.ERROR,
                     "No se pudo exportar CSV:\n" + ex.getMessage()).showAndWait();
         }
     }
 
-    // =================== UI helpers ===================
+    // =================== Resumen (10c) ===================
+    @FXML
+    private void onShowResumen() {
+        if (sim == null) {
+            return;
+        }
+
+        var lista = sim.getMetricasTerminadasSnapshot();
+        if (lista.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Aún no hay procesos terminados.").showAndWait();
+            return;
+        }
+
+        double avgEspera = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
+        double avgRespuesta = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
+        double avgTurnaround = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
+        double avgEjecucion = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.ejecucion(m)).average().orElse(0);
+        double avgRafaga = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.rafagaTotal(m)).average().orElse(0);
+
+        int n = lista.size();
+
+        TableView<RowMetric> tv = new TableView<>();
+        TableColumn<RowMetric, String> c1 = new TableColumn<>("Métrica");
+        TableColumn<RowMetric, String> c2 = new TableColumn<>("Valor");
+        c1.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNombre()));
+        c2.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValor()));
+        tv.getColumns().addAll(c1, c2);
+        tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
+
+        tv.getItems().addAll(
+                new RowMetric("Procesos", String.valueOf(n)),
+                new RowMetric("Espera (prom)", fmt(avgEspera)),
+                new RowMetric("Respuesta (prom)", fmt(avgRespuesta)),
+                new RowMetric("Turnaround (prom)", fmt(avgTurnaround)),
+                new RowMetric("Ejecución (prom)", fmt(avgEjecucion)),
+                new RowMetric("Ráfaga total (prom)", fmt(avgRafaga))
+        );
+
+        Dialog<Void> dlg = new Dialog<>();
+        dlg.setTitle("Resumen de métricas");
+        dlg.initOwner(btnStart.getScene().getWindow()); // <- owner
+        dlg.setResizable(true);                         // <- redimensionable
+        dlg.getDialogPane().setContent(tv);
+        dlg.getDialogPane().setPrefSize(560, 360);      // <- tamaño del pane
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.showAndWait();
+    }
+
+    // =================== Helpers UI ===================
     private void refreshButtons() {
         btnStart.setDisable(running);
         btnPause.setDisable(!running);
@@ -190,7 +233,6 @@ public class SingleRunController {
     }
 
     private void actualizarTabla(int tick, List<FilaProcesoVM> filas) {
-        // Guardar selección actual por PID para restaurar después del refresh
         Integer seleccionado = getSelectedPid().orElse(null);
 
         lblTick.setText("Tick: " + tick);
@@ -199,7 +241,7 @@ public class SingleRunController {
         datos.setAll(
                 filas.stream()
                         .map(f -> new ProcesoVM(
-                        f.pid(), // record accessors
+                        f.pid(),
                         f.nombre(),
                         f.estado(),
                         f.cpu(),
@@ -221,78 +263,34 @@ public class SingleRunController {
     }
 
     private Optional<Integer> getSelectedPid() {
-        ProcesoVM vm = tbl.getSelectionModel().getSelectedItem();
+        var vm = tbl.getSelectionModel().getSelectedItem();
         return (vm == null) ? Optional.empty() : Optional.of(vm.pid.get());
     }
 
-    @FXML
-    private void onShowResumen() {
-        if (sim == null) {
-            return;
-        }
+    // =================== Util formateo ===================
+    private static final DecimalFormat DF = new DecimalFormat("#,##0.##");
 
-        var lista = sim.getMetricasTerminadasSnapshot(); // snapshot seguro
-        if (lista.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados.").showAndWait();
-            return;
-        }
-
-        // Agregados
-        int n = lista.size();
-        double avgEspera = lista.stream().mapToInt(m -> m.getEspera()).average().orElse(0);
-        double avgRespuesta = lista.stream().mapToInt(m -> m.getRespuesta()).average().orElse(0);
-        double avgTurnaround = lista.stream().mapToInt(m -> m.getTurnaround()).average().orElse(0);
-        double avgEjecucion = lista.stream().mapToInt(m -> m.getEjecucion()).average().orElse(0);
-        double avgRafaga = lista.stream().mapToInt(m -> m.getRafagaTotal()).average().orElse(0);
-
-        // Tabla simple (Métrica | Valor)
-        TableView<RowMetric> tv = new TableView<>();
-        TableColumn<RowMetric, String> c1 = new TableColumn<>("Métrica");
-        TableColumn<RowMetric, String> c2 = new TableColumn<>("Valor");
-        c1.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().nombre()));
-        c2.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().valor()));
-        tv.getColumns().addAll(c1, c2);
-        tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
-
-        tv.getItems().addAll(
-                new RowMetric("Procesos", String.valueOf(n)),
-                new RowMetric("Espera (prom)", fmt(avgEspera)),
-                new RowMetric("Respuesta (prom)", fmt(avgRespuesta)),
-                new RowMetric("Turnaround (prom)", fmt(avgTurnaround)),
-                new RowMetric("Ejecución (prom)", fmt(avgEjecucion)),
-                new RowMetric("Ráfaga total (prom)", fmt(avgRafaga))
-        );
-
-        Dialog<Void> dlg = new Dialog<>();
-        dlg.setTitle("Métricas (Single)");
-        dlg.getDialogPane().setContent(tv);
-        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-        dlg.showAndWait();
-    }
-
-// --- helpers ---
     private static String fmt(double v) {
-        return String.format(java.util.Locale.US, "%.2f", v);
+        return DF.format(v);
     }
 
-// Filita para la tabla de métricas
-    private static final class RowMetric {
+    // =================== Fila para tabla de resumen ===================
+    public static final class RowMetric {
 
         private final String nombre;
         private final String valor;
 
-        RowMetric(String n, String v) {
-            this.nombre = n;
-            this.valor = v;
+        public RowMetric(String nombre, String valor) {
+            this.nombre = nombre;
+            this.valor = valor;
         }
 
-        public String nombre() {
+        public String getNombre() {
             return nombre;
         }
 
-        public String valor() {
+        public String getValor() {
             return valor;
         }
     }
-
 }

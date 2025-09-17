@@ -9,17 +9,22 @@
 
     <top>
         <ToolBar>
-            <Label fx:id="lblAlgA" text="A: -" />
-            <Separator orientation="VERTICAL"/>
-            <Label fx:id="lblAlgB" text="B: -" />
-            <Separator orientation="VERTICAL"/>
-            <Button fx:id="btnStartAmbos" text="Iniciar ambos" onAction="#onStartAmbos"/>
-            <Button fx:id="btnPauseAmbos" text="Pausar ambos" onAction="#onPauseAmbos" disable="true"/>
-            <Button fx:id="btnStopAmbos"  text="Detener ambos" onAction="#onStopAmbos" disable="true"/>
-            <Button text="Exportar A" onAction="#onExportA"/>
-            <Button text="Exportar B" onAction="#onExportB"/>
+            <ToolBar>
+                <Label text="A:"/>
+                <Label fx:id="lblAlgA"/>
+                <Label text="B:"/>
+                <Label fx:id="lblAlgB"/>
+                <Button fx:id="btnStartAmbos" text="Iniciar ambos" onAction="#onStartAmbos"/>
+                <Button fx:id="btnPauseAmbos" text="Pausar ambos" onAction="#onPauseAmbos"/>
+                <Button fx:id="btnStopAmbos" text="Detener ambos" onAction="#onStopAmbos"/>
+                <Button text="Exportar A" onAction="#onExportA"/>
+                <Button text="Exportar B" onAction="#onExportB"/>
+                <Button text="Ver resumen A/B" onAction="#onShowResumenAB"/>
+            </ToolBar>
+
         </ToolBar>
     </top>
+
 
 
     <center>
