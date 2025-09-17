@@ -404,9 +404,13 @@ public class CompareController {
         TableColumn<RowAB, String> cM = new TableColumn<>("Métrica");
         TableColumn<RowAB, String> cA = new TableColumn<>("A (" + algA.name() + ")");
         TableColumn<RowAB, String> cB = new TableColumn<>("B (" + algB.name() + ")");
-        cM.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getMetrica()));
-        cA.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorA()));
-        cB.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorB()));
+
+        cM.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getMetrica()));
+        cA.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getValorA()));
+        cB.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getValorB()));
+        //cM.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getMetrica()));
+        //cA.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorA()));
+        //cB.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorB()));
         tv.getColumns().addAll(cM, cA, cB);
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 

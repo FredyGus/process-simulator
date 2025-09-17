@@ -200,8 +200,11 @@ public class SingleRunController {
         TableView<RowMetric> tv = new TableView<>();
         TableColumn<RowMetric, String> c1 = new TableColumn<>("Métrica");
         TableColumn<RowMetric, String> c2 = new TableColumn<>("Valor");
-        c1.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNombre()));
-        c2.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValor()));
+
+        c1.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getNombre()));
+        c2.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getValor()));
+        //c1.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNombre()));
+        //c2.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValor()));
         tv.getColumns().addAll(c1, c2);
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 

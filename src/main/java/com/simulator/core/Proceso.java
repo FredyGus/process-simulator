@@ -236,4 +236,8 @@ public final class Proceso {
         forzarTerminar(-1);
     }
 
+    public void acumularEsperaUnTick() {
+        tiempoEspera++;
+    }
+
 }
