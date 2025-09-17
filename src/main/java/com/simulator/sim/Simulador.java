@@ -11,22 +11,25 @@ import com.simulator.sim.vm.VistaModelo;
 import com.simulator.time.RelojDelSistema;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.*;
 
 public final class Simulador {
 
-    public enum ModoGeneracion {
-        AUTOGENERADO, COORDINADO
-    }
+    public enum ModoGeneracion { AUTOGENERADO, COORDINADO }
 
     private final ParametrosSimulacion params;
     private final Planificador planificador;
     private final LoggerSistema logger;
 
+    // Scheduler único del simulador (single thread)
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private final java.util.List<com.simulator.metrics.ProcesoMetricas> metricasTerminadas
-            = new java.util.ArrayList<>();
+
+    // Métricas de procesos terminados (fase 9b)
+    private final List<com.simulator.metrics.ProcesoMetricas> metricasTerminadas =
+            new CopyOnWriteArrayList<>();
 
     private final Random rng;
     private final List<Proceso> procesos = new ArrayList<>();
@@ -36,22 +39,19 @@ public final class Simulador {
     private int nextPid = 1;
     private final ModoGeneracion modo;
 
+    // Acciones encoladas desde la UI (terminar/suspender/reanudar)
     private final ConcurrentLinkedQueue<Runnable> acciones = new ConcurrentLinkedQueue<>();
 
-    public interface Oyente {
-
-        void onModeloActualizado(VistaModelo vm);
-    }
+    // Snapshot/oyente para UI
+    public interface Oyente { void onModeloActualizado(VistaModelo vm); }
     private Oyente oyente;
     private VistaModelo ultimoSnapshot;
 
-    // Constructor sigle-run (AUTOGENERADO)
+    // --- Constructores ---
+
+    // Single-run (autogenerado)
     public Simulador(ParametrosSimulacion params, Path logPath) {
         this(params, logPath, ModoGeneracion.AUTOGENERADO);
-    }
-
-    public java.util.List<com.simulator.metrics.ProcesoMetricas> getMetricasTerminadas() {
-        return java.util.List.copyOf(metricasTerminadas);
     }
 
     public Simulador(ParametrosSimulacion params, Path logPath, ModoGeneracion modo) {
@@ -61,46 +61,42 @@ public final class Simulador {
         this.rng = new Random(params.seed);
         this.modo = modo;
 
-        // inicia logger
+        // Logger
         var config = LogConfig.basica(logPath, new RotacionPorTamano(5 * 1024 * 1024, 3));
         logger.iniciar(config, new FileLogWriter(), new TablaFijaFormatter(), new RelojDelSistema());
-
-        logger.registrar(LogEvento.INICIO_SIMULACION, LogNivel.INFO,
-                new LogDatos(null, "READY", null, null, params.algoritmo.name(), params.quantum,
-                        "tickMs=" + params.tickMs + ", probNuevo=" + params.probNuevoProceso));
+        logger.registrar(
+                LogEvento.INICIO_SIMULACION, LogNivel.INFO,
+                new LogDatos(null, "READY", null, null,
+                        params.algoritmo.name(), params.quantum,
+                        "tickMs=" + params.tickMs + ", probNuevo=" + params.probNuevoProceso)
+        );
     }
 
-    public void setOyente(Oyente oyente) {
-        this.oyente = oyente;
-    }
+    // --- Oyente/UI ---
 
-    public void terminarProceso(int pid) {
-        acciones.add(() -> doTerminar(pid));
-    }
+    public void setOyente(Oyente oyente) { this.oyente = oyente; }
 
-    public void suspenderProceso(int pid) {
-        acciones.add(() -> doSuspender(pid));
-    }
+    public VistaModelo getUltimoSnapshot() { return ultimoSnapshot; }
 
-    public void reanudarProceso(int pid) {
-        acciones.add(() -> doReanudar(pid));
-    }
+    // --- API de acciones desde UI (se encolan y se aplican dentro del tick) ---
+
+    public void terminarProceso(int pid)   { acciones.add(() -> doTerminar(pid)); }
+    public void suspenderProceso(int pid)  { acciones.add(() -> doSuspender(pid)); }
+    public void reanudarProceso(int pid)   { acciones.add(() -> doReanudar(pid)); }
+
+    // --- Control de ejecución (single-run AUTOGENERADO) ---
 
     public void iniciar() {
         if (modo != ModoGeneracion.AUTOGENERADO) {
             throw new IllegalStateException("Solo aplica iniciar() en modo AUTOGENERADO");
         }
-
-        if (corriendo) {
-            return;
-        }
+        if (corriendo) return;
         corriendo = true;
         scheduler.scheduleAtFixedRate(this::runTickSafe, 0, params.tickMs, TimeUnit.MILLISECONDS);
     }
 
-    public void pausar() {
-        corriendo = false;
-    }
+    public void pausar()     { corriendo = false; }
+    public void continuar()  { corriendo = true;  }
 
     public void detener() {
         corriendo = false;
@@ -109,53 +105,58 @@ public final class Simulador {
         logger.finalizar();
     }
 
-    // Reanudar/continuar la simulación (el scheduler ya fue creado en iniciar())
-    public void continuar() {
-        corriendo = true;
+    public boolean isCorriendo() { return corriendo; }
+    public boolean isPausado()   { return !corriendo && !scheduler.isShutdown(); }
+
+    // --- Métricas (getters) ---
+
+    /** Alias antiguo (por compatibilidad) */
+    public List<com.simulator.metrics.ProcesoMetricas> getMetricasTerminadas() {
+        return List.copyOf(metricasTerminadas);
     }
 
-// Estado conveniente para la UI
-    public boolean isCorriendo() {
-        return corriendo;
+    /** El que usa el controller: snapshot inmutable de métricas */
+    public List<com.simulator.metrics.ProcesoMetricas> getMetricasTerminadasSnapshot() {
+        return List.copyOf(metricasTerminadas);
     }
 
-// Pausado = no corriendo pero con scheduler aún vivo
-    public boolean isPausado() {
-        return !corriendo && !scheduler.isShutdown();
-    }
+    // --- Bucle de ticks ---
 
     private void runTickSafe() {
-        if (!corriendo) {
-            return;
-        }
+        if (!corriendo) return;
         try {
             runTickAuto();
         } catch (Throwable t) {
-            logger.registrar(LogEvento.ERROR, LogNivel.ERROR, new LogDatos(null, null, null, null,
-                    params.algoritmo.name(), params.quantum, "ex=" + t.getMessage()));
+            logger.registrar(LogEvento.ERROR, LogNivel.ERROR,
+                    new LogDatos(null, null, null, null,
+                            params.algoritmo.name(), params.quantum, "ex=" + t.getMessage()));
         }
     }
 
-    // AUTOGENERADO
+    // Modo AUTOGENERADO
     private void runTickAuto() {
         tick++;
+
         // Llegadas aleatorias
         if (rng.nextDouble() < params.probNuevoProceso) {
             Proceso p = crearProcesoAleatorio();
             procesos.add(p);
             p.cambiarEstado(EstadoProceso.READY);
             planificador.agregarProceso(p);
+
             logger.registrar(LogEvento.CREAR_PROCESO, LogNivel.INFO,
                     new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
                             params.algoritmo.name(), params.quantum,
                             "rafaga=" + p.getTiempoRestante() + ", prioridad=" + p.getPrioridad()));
             logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
-                    new LogDatos(p.getPid(), "READY", 0, p.getMemoria(), params.algoritmo.name(), params.quantum, "NEW→READY"));
+                    new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
+                            params.algoritmo.name(), params.quantum, "NEW→READY"));
         }
-        // Núcleo del tick
+
         tickCore();
     }
 
+    // Modo COORDINADO (comparador)
     public void tickCoordinado(List<ProcesoSpec> llegadas) {
         tick++;
         if (llegadas != null) {
@@ -164,100 +165,92 @@ public final class Simulador {
                 procesos.add(p);
                 p.cambiarEstado(EstadoProceso.READY);
                 planificador.agregarProceso(p);
+
                 logger.registrar(LogEvento.CREAR_PROCESO, LogNivel.INFO,
                         new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
                                 params.algoritmo.name(), params.quantum,
                                 "rafaga=" + p.getTiempoRestante() + ", prioridad=" + p.getPrioridad()));
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
-                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(), params.algoritmo.name(), params.quantum, "NEW→READY"));
+                        new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
+                                params.algoritmo.name(), params.quantum, "NEW→READY"));
             }
         }
         tickCore();
     }
 
-    // Parte común: selección/ejecución/snapshot
+    // Parte común de un tick
     private void tickCore() {
         procesarAccionesPendientes();
-        Proceso seleccionado = planificador.seleccionarProceso();
 
+        Proceso seleccionado = planificador.seleccionarProceso();
         if (seleccionado != null) {
-            // Si estaba READY, entra a RUNNING
+            // READY → RUNNING
             if (seleccionado.getEstado() == EstadoProceso.READY) {
                 seleccionado.cambiarEstado(EstadoProceso.RUNNING);
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                         new LogDatos(seleccionado.getPid(), "RUNNING",
                                 seleccionado.getCpuUsage(), seleccionado.getMemoria(),
-                                params.algoritmo.name(), params.quantum,
-                                "READY→RUNNING"));
+                                params.algoritmo.name(), params.quantum, "READY→RUNNING"));
             }
 
-            // Ejecuta 1 tick de CPU
+            // Ejecuta 1 tick
             seleccionado.avanzarTick(tick);
 
-            // ← NUEVO: avisar al planificador que pasó 1 tick del RUNNING (RR usa esto para el quantum)
+            // Hook por tick (RR usa esto para el quantum)
             planificador.onTick(seleccionado);
 
-            // Log del tick ejecutado
+            // Log del tick
             logger.registrar(LogEvento.EJECUTAR_TICK, LogNivel.INFO,
                     new LogDatos(seleccionado.getPid(), "RUNNING",
                             seleccionado.getCpuUsage(), seleccionado.getMemoria(),
                             params.algoritmo.name(), params.quantum,
                             "rafagaRestante=" + seleccionado.getTiempoRestante()));
 
-            // ¿Terminó naturalmente?
-            // ¿Terminó naturalmente?
+            // ¿Terminó?
             if (seleccionado.getEstado() == EstadoProceso.TERMINATED) {
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                         new LogDatos(seleccionado.getPid(), "TERMINATED", 0, 0,
-                                params.algoritmo.name(), params.quantum,
-                                "RUNNING→TERMINATED"));
+                                params.algoritmo.name(), params.quantum, "RUNNING→TERMINATED"));
                 logger.registrar(LogEvento.TERMINAR_PROCESO, LogNivel.INFO,
                         new LogDatos(seleccionado.getPid(), "TERMINATED", 0, 0,
-                                params.algoritmo.name(), params.quantum,
-                                "fin_natural"));
+                                params.algoritmo.name(), params.quantum, "fin_natural"));
 
-                // ← NUEVO: guardar la métrica del proceso finalizado (fase 9b)
+                // Guardar métricas del proceso finalizado (fase 9b)
                 metricasTerminadas.add(
                         com.simulator.metrics.ProcesoMetricas.from(seleccionado, params.algoritmo.name())
                 );
 
                 planificador.removerProceso(seleccionado);
 
-                // ← NUEVO: si no terminó y el planificador dice que hay que preemptar (RR: quantum agotado)
             } else if (planificador.debePreemptar(seleccionado)) {
-                // Preempción: vuelve a READY y se rota al final de la cola
+                // Preempción (RR: quantum agotado)
                 seleccionado.cambiarEstado(EstadoProceso.READY);
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
-                        new LogDatos(seleccionado.getPid(), "READY",
-                                0, seleccionado.getMemoria(),
-                                params.algoritmo.name(), params.quantum,
-                                "preempt: quantum agotado"));
+                        new LogDatos(seleccionado.getPid(), "READY", 0, seleccionado.getMemoria(),
+                                params.algoritmo.name(), params.quantum, "preempt: quantum agotado"));
 
-                // Rotación específica de RR (reinicia quantum)
                 if (planificador instanceof com.simulator.schedule.PlanificadorRR rr) {
                     rr.rotar(seleccionado);
                 } else {
-                    // Fallback genérico (por si en el futuro hay otro alg. preemptivo)
+                    // Fallback genérico
                     planificador.removerProceso(seleccionado);
                     planificador.agregarProceso(seleccionado);
                 }
             }
 
         } else {
-            // No hay proceso listo
+            // CPU idle
             logger.registrar(LogEvento.IDLE, LogNivel.INFO,
                     new LogDatos(null, "IDLE", null, null,
-                            params.algoritmo.name(), params.quantum,
-                            "sin procesos listos"));
+                            params.algoritmo.name(), params.quantum, "sin procesos listos"));
         }
 
-        // Publicar snapshot para UI/Comparador
+        // Publicar snapshot para la UI
         ultimoSnapshot = construirSnapshot();
-        if (oyente != null) {
-            oyente.onModeloActualizado(ultimoSnapshot);
-        }
+        if (oyente != null) oyente.onModeloActualizado(ultimoSnapshot);
     }
 
+    // Acciones encoladas desde la UI
     private void procesarAccionesPendientes() {
         Runnable r;
         while ((r = acciones.poll()) != null) {
@@ -266,24 +259,25 @@ public final class Simulador {
             } catch (Throwable t) {
                 logger.registrar(LogEvento.ERROR, LogNivel.ERROR,
                         new LogDatos(null, null, null, null,
-                                params.algoritmo.name(), params.quantum, "accion_fallida=" + t.getMessage()));
+                                params.algoritmo.name(), params.quantum,
+                                "accion_fallida=" + t.getMessage()));
             }
         }
     }
 
+    // ---- Acciones concretas ----
+
     private void doTerminar(int pid) {
         for (Proceso p : procesos) {
             if (p.getPid() == pid && p.getEstado() != EstadoProceso.TERMINATED) {
-
-                // si ya pasas el tick actual, usa p.forzarTerminar(tick);
+                // marcar terminado (con tick actual)
                 p.forzarTerminar(tick);
 
                 logger.registrar(LogEvento.TERMINAR_PROCESO, LogNivel.WARN,
                         new LogDatos(p.getPid(), "TERMINATED", 0, 0,
-                                params.algoritmo.name(), params.quantum,
-                                "forzado_por_UI"));
+                                params.algoritmo.name(), params.quantum, "forzado_por_UI"));
 
-                // ← NUEVO: guardar métrica también en el caso forzado
+                // capturar métricas también en el forzado
                 metricasTerminadas.add(
                         com.simulator.metrics.ProcesoMetricas.from(p, params.algoritmo.name())
                 );
@@ -307,77 +301,66 @@ public final class Simulador {
 
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                         new LogDatos(p.getPid(), "SUSPENDED", p.getCpuUsage(), p.getMemoria(),
-                                params.algoritmo.name(), params.quantum,
-                                prev + "→SUSPENDED"));
-
+                                params.algoritmo.name(), params.quantum, prev + "→SUSPENDED"));
                 logger.registrar(LogEvento.SUSPENDER, LogNivel.INFO,
                         new LogDatos(p.getPid(), "SUSPENDED", p.getCpuUsage(), p.getMemoria(),
-                                params.algoritmo.name(), params.quantum,
-                                "usuario"));
+                                params.algoritmo.name(), params.quantum, "usuario"));
                 break;
             }
         }
     }
 
-    // REANUDAR: de SUSPENDED a READY y vuelve al planificador
+    // REANUDAR: SUSPENDED → READY y vuelve al planificador
     private void doReanudar(int pid) {
         for (Proceso p : procesos) {
             if (p.getPid() == pid && p.getEstado() == EstadoProceso.SUSPENDED) {
-
                 p.cambiarEstado(EstadoProceso.READY);
                 planificador.agregarProceso(p);
 
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                         new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
-                                params.algoritmo.name(), params.quantum,
-                                "SUSPENDED→READY"));
-
+                                params.algoritmo.name(), params.quantum, "SUSPENDED→READY"));
                 logger.registrar(LogEvento.REANUDAR, LogNivel.INFO,
                         new LogDatos(p.getPid(), "READY", 0, p.getMemoria(),
-                                params.algoritmo.name(), params.quantum,
-                                "usuario"));
+                                params.algoritmo.name(), params.quantum, "usuario"));
                 break;
             }
         }
     }
 
+    // ---- Helpers de creación ----
+
     private Proceso crearProcesoAleatorio() {
         int rafaga = randBetween(params.rafagaMin, params.rafagaMax);
-        int prio = randBetween(params.prioridadMin, params.prioridadMax);
-        Proceso p = new Proceso(nextPid++, "P" + (nextPid - 1), tick, rafaga, prio, rng);
-        return p;
+        int prio   = randBetween(params.prioridadMin, params.prioridadMax);
+        return new Proceso(nextPid++, "P" + (nextPid - 1), tick, rafaga, prio, rng);
     }
 
-    // NUEVO: crear desde ProcesoSpec (semilla propia por proceso para que ambos sims sean idénticos)
     private Proceso crearProcesoDesdeSpec(ProcesoSpec s) {
         return new Proceso(s.pid(), s.nombre(), tick, s.rafaga(), s.prioridad(), new Random(s.seed()));
     }
 
     private int randBetween(int a, int b) {
-        if (a > b) {
-            int t = a;
-            a = b;
-            b = t;
-        }
+        if (a > b) { int t = a; a = b; b = t; }
         return a + rng.nextInt(b - a + 1);
     }
 
+    // Construye snapshot para la UI
     private VistaModelo construirSnapshot() {
         List<FilaProcesoVM> filas = new ArrayList<>();
         for (Proceso p : procesos) {
             if (p.getEstado() != EstadoProceso.TERMINATED) {
                 filas.add(new FilaProcesoVM(
-                        p.getPid(), p.getNombre(), p.getEstado().name(),
-                        p.getCpuUsage(), p.getMemoria(), p.getPrioridad(), p.getTiempoRestante()
+                        p.getPid(),
+                        p.getNombre(),
+                        p.getEstado().name(),
+                        p.getCpuUsage(),
+                        p.getMemoria(),
+                        p.getPrioridad(),
+                        p.getTiempoRestante()
                 ));
             }
         }
         return new VistaModelo(tick, filas.size(), filas);
     }
-
-    // NUEVO: acceso al último snapshot (útil para el comparador/UI)
-    public VistaModelo getUltimoSnapshot() {
-        return ultimoSnapshot;
-    }
-
 }

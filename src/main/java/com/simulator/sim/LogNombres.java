@@ -55,4 +55,15 @@ public final class LogNombres {
         return runDir(runId).resolve("sim-" + alg.name() + ".log");
     }
 
+    // --- CSV de métricas (10a) ---
+    public static Path metricsSinglePath(TipoAlgoritmo alg) {
+        String ts = LocalDateTime.now().format(FMT);
+        return Paths.get("logs", "metrics", "single-" + alg.name() + "-" + ts + ".csv");
+    }
+
+    public static Path metricsComparePath(String runId, TipoAlgoritmo alg) {
+        // Guardamos en el mismo subdir de comparación
+        return compareDir(runId).resolve("metrics-" + alg.name() + ".csv");
+    }
+
 }

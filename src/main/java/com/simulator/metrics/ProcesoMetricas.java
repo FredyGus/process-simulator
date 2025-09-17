@@ -2,45 +2,39 @@ package com.simulator.metrics;
 
 import com.simulator.core.Proceso;
 
-/**
- * Métricas por proceso terminado.
- *
- * respuesta = primeraEjecucion - llegada turnaround = finalizacion - llegada
- * espera = turnaround - rafagaTotal
- */
+/** Métricas calculadas para un proceso TERMINATED. */
 public record ProcesoMetricas(
         int pid,
-        String nombre,
         String algoritmo,
-        int llegada,
-        int primeraEjecucion,
-        int finalizacion,
+        int tickLlegada,
+        int tickPrimeraEjec,
+        int tickFin,
         int rafagaTotal,
-        int respuesta,
-        int espera,
-        int turnaround) {
-
+        int tiempoEjecucion,
+        int tiempoEspera,
+        // derivadas
+        Integer tiempoRespuesta,   // primeraEjec - llegada  (si corrió)
+        Integer turnaround         // fin - llegada          (si terminó)
+) {
+    /** Construye métricas a partir del Proceso terminado. */
     public static ProcesoMetricas from(Proceso p, String algoritmo) {
         int llegada = p.getTickLlegada();
-        int primera = p.getTickPrimeraEjecucion();
-        int fin = p.getTickFinalizacion();
-        int rafaga = p.getRafagaTotal();
-
-        int respuesta = (primera >= 0 && llegada >= 0) ? (primera - llegada) : -1;
-        int turnaround = (fin >= 0 && llegada >= 0) ? (fin - llegada) : -1;
-        int espera = (turnaround >= 0 && rafaga >= 0) ? (turnaround - rafaga) : -1;
+        int primera = p.getTickPrimeraEjecucion();     // -1 si nunca ejecutó
+        int fin = p.getTickFinalizacion();             // -1 si no tenemos el tick
+        Integer resp = (primera >= 0) ? (primera - llegada) : null;
+        Integer ta   = (fin >= 0)     ? (fin - llegada)     : null;
 
         return new ProcesoMetricas(
                 p.getPid(),
-                p.getNombre(),
                 algoritmo,
                 llegada,
                 primera,
                 fin,
-                rafaga,
-                respuesta,
-                espera,
-                turnaround
+                p.getRafagaTotal(),
+                p.getTiempoEjecucion(),
+                p.getTiempoEspera(),
+                resp,
+                ta
         );
     }
 }

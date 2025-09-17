@@ -74,6 +74,7 @@ public class CompareController {
     private Button btnPauseAmbos;
 
     private boolean paused = false;   // para el tick coordinado
+    private String runId;
 
     public void configurar(ParametrosSimulacion baseParams, TipoAlgoritmo a, TipoAlgoritmo b) {
         this.base = baseParams;
@@ -83,26 +84,28 @@ public class CompareController {
         lblAlgA.setText("A: " + a.name());
         lblAlgB.setText("B: " + b.name());
 
-        // Copias con algoritmos distintos
+        // Id de corrida compartido para esta comparación
+        this.runId = LogNombres.newRunId();
+
+        // Logs separados A/B dentro de la carpeta de la corrida
+        Path logA = LogNombres.comparePath(runId, a);
+        Path logB = LogNombres.comparePath(runId, b);
+
+        // Copias de parámetros, cada una con su algoritmo
         var paramsA = new ParametrosSimulacion(
                 base.tickMs, base.probNuevoProceso,
                 base.rafagaMin, base.rafagaMax,
                 base.prioridadMin, base.prioridadMax,
-                base.seed, a, a == TipoAlgoritmo.RR ? base.quantum : null
+                base.seed, a, (a == TipoAlgoritmo.RR ? base.quantum : null)
         );
         var paramsB = new ParametrosSimulacion(
                 base.tickMs, base.probNuevoProceso,
                 base.rafagaMin, base.rafagaMax,
                 base.prioridadMin, base.prioridadMax,
-                base.seed, b, b == TipoAlgoritmo.RR ? base.quantum : null
+                base.seed, b, (b == TipoAlgoritmo.RR ? base.quantum : null)
         );
 
-        // Rutas de log (reusamos nombres existentes)
-        String runId = LogNombres.newRunId();
-        Path logA = LogNombres.comparePath(runId, a);
-        Path logB = LogNombres.comparePath(runId, b);
-
-        // Simuladores en modo COORDINADO (no llaman iniciar(); los "tiqueamos" nosotros)
+        // Simuladores en modo coordinado (los tiqueamos nosotros)
         simA = new Simulador(paramsA, logA, Simulador.ModoGeneracion.COORDINADO);
         simB = new Simulador(paramsB, logB, Simulador.ModoGeneracion.COORDINADO);
 
@@ -110,8 +113,40 @@ public class CompareController {
         simA.setOyente(vm -> Platform.runLater(() -> actualizarTablaA(vm.getTick(), vm.getFilas())));
         simB.setOyente(vm -> Platform.runLater(() -> actualizarTablaB(vm.getTick(), vm.getFilas())));
 
-        // RNG de la coordinación (una sola fuente → mismas llegadas para A y B)
+        // RNG único para generar llegadas idénticas en A y B
         rng = new Random(base.seed);
+    }
+
+    @FXML
+    private void onExportA() {
+        try {
+            var lista = simA.getMetricasTerminadasSnapshot();
+            if (lista.isEmpty()) {
+                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en A.").showAndWait();
+                return;
+            }
+            var out = com.simulator.sim.LogNombres.metricsComparePath(runId, algA);
+            com.simulator.metrics.CsvMetricsWriter.write(out, lista);
+            new Alert(Alert.AlertType.INFORMATION, "CSV A exportado en:\n" + out).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error exportando A:\n" + ex.getMessage()).showAndWait();
+        }
+    }
+
+    @FXML
+    private void onExportB() {
+        try {
+            var lista = simB.getMetricasTerminadasSnapshot();
+            if (lista.isEmpty()) {
+                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en B.").showAndWait();
+                return;
+            }
+            var out = com.simulator.sim.LogNombres.metricsComparePath(runId, algB);
+            com.simulator.metrics.CsvMetricsWriter.write(out, lista);
+            new Alert(Alert.AlertType.INFORMATION, "CSV B exportado en:\n" + out).showAndWait();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Error exportando B:\n" + ex.getMessage()).showAndWait();
+        }
     }
 
     @FXML

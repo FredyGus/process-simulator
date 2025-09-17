@@ -1,0 +1,34 @@
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-09-17 00:33:20.718 | INICIO_SIMULACION  |      - | READY        |       - |         - | SJF          |        - | tickMs=500, probNuevo=0.3
+2025-09-17 00:33:22.677 | IDLE               |      - | IDLE         |       - |         - | SJF          |        - | sin procesos listos
+2025-09-17 00:33:23.176 | IDLE               |      - | IDLE         |       - |         - | SJF          |        - | sin procesos listos
+2025-09-17 00:33:23.679 | IDLE               |      - | IDLE         |       - |         - | SJF          |        - | sin procesos listos
+2025-09-17 00:33:24.177 | IDLE               |      - | IDLE         |       - |         - | SJF          |        - | sin procesos listos
+2025-09-17 00:33:24.690 | CREAR_PROCESO      |      1 | READY        |      0% |      93MB | SJF          |        - | rafaga=7, prioridad=3
+2025-09-17 00:33:24.691 | CAMBIO_ESTADO      |      1 | READY        |      0% |      93MB | SJF          |        - | NEW→READY
+2025-09-17 00:33:24.691 | CAMBIO_ESTADO      |      1 | RUNNING      |      0% |      93MB | SJF          |        - | READY→RUNNING
+2025-09-17 00:33:24.691 | EJECUTAR_TICK      |      1 | RUNNING      |     20% |     378MB | SJF          |        - | rafagaRestante=6
+2025-09-17 00:33:25.176 | EJECUTAR_TICK      |      1 | RUNNING      |     15% |     462MB | SJF          |        - | rafagaRestante=5
+2025-09-17 00:33:25.677 | CREAR_PROCESO      |      2 | READY        |      0% |     105MB | SJF          |        - | rafaga=11, prioridad=1
+2025-09-17 00:33:25.678 | CAMBIO_ESTADO      |      2 | READY        |      0% |     105MB | SJF          |        - | NEW→READY
+2025-09-17 00:33:25.678 | EJECUTAR_TICK      |      1 | RUNNING      |     38% |      58MB | SJF          |        - | rafagaRestante=4
+2025-09-17 00:33:26.182 | CREAR_PROCESO      |      3 | READY        |      0% |     116MB | SJF          |        - | rafaga=11, prioridad=2
+2025-09-17 00:33:26.183 | CAMBIO_ESTADO      |      3 | READY        |      0% |     116MB | SJF          |        - | NEW→READY
+2025-09-17 00:33:26.183 | EJECUTAR_TICK      |      1 | RUNNING      |     49% |     218MB | SJF          |        - | rafagaRestante=3
+2025-09-17 00:33:26.677 | EJECUTAR_TICK      |      1 | RUNNING      |     40% |     304MB | SJF          |        - | rafagaRestante=2
+2025-09-17 00:33:27.177 | EJECUTAR_TICK      |      1 | RUNNING      |     36% |     321MB | SJF          |        - | rafagaRestante=1
+2025-09-17 00:33:27.684 | EJECUTAR_TICK      |      1 | RUNNING      |      0% |       0MB | SJF          |        - | rafagaRestante=0
+2025-09-17 00:33:27.685 | CAMBIO_ESTADO      |      1 | TERMINATED   |      0% |       0MB | SJF          |        - | RUNNING→TERMINATED
+2025-09-17 00:33:27.686 | TERMINAR_PROCESO   |      1 | TERMINATED   |      0% |       0MB | SJF          |        - | fin_natural
+2025-09-17 00:33:28.177 | CAMBIO_ESTADO      |      2 | RUNNING      |      0% |     105MB | SJF          |        - | READY→RUNNING
+2025-09-17 00:33:28.179 | EJECUTAR_TICK      |      2 | RUNNING      |     44% |     142MB | SJF          |        - | rafagaRestante=10
+2025-09-17 00:33:28.679 | CREAR_PROCESO      |      4 | READY        |      0% |     197MB | SJF          |        - | rafaga=9, prioridad=4
+2025-09-17 00:33:28.680 | CAMBIO_ESTADO      |      4 | READY        |      0% |     197MB | SJF          |        - | NEW→READY
+2025-09-17 00:33:28.681 | CAMBIO_ESTADO      |      4 | RUNNING      |      0% |     197MB | SJF          |        - | READY→RUNNING
+2025-09-17 00:33:28.682 | EJECUTAR_TICK      |      4 | RUNNING      |     55% |     485MB | SJF          |        - | rafagaRestante=8
+2025-09-17 00:33:29.177 | EJECUTAR_TICK      |      4 | RUNNING      |     97% |     102MB | SJF          |        - | rafagaRestante=7
+2025-09-17 00:33:29.681 | CREAR_PROCESO      |      5 | READY        |      0% |     194MB | SJF          |        - | rafaga=7, prioridad=2
+2025-09-17 00:33:29.682 | CAMBIO_ESTADO      |      5 | READY        |      0% |     194MB | SJF          |        - | NEW→READY
+2025-09-17 00:33:29.683 | EJECUTAR_TICK      |      4 | RUNNING      |     44% |     158MB | SJF          |        - | rafagaRestante=6
+2025-09-17 00:33:29.890 | FIN_SIMULACION     |      - | -            |       - |         - | -            |        - | 
