@@ -28,7 +28,7 @@ public class ProcesoTest {
         assertEquals(EstadoProceso.TERMINATED, p.getEstado());
         assertEquals(0, p.getCpuUsage());
         assertEquals(0, p.getMemoria());
-        assertEquals(2, p.getTiempoFinalizacion());
+        assertEquals(2, p.getTickFinalizacion());
     }
     
     @Test

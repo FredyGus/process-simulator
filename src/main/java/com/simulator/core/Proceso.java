@@ -35,7 +35,7 @@ public final class Proceso {
     private final Random rng;
 
     // Rangos de simulación (ajústalos si quieres)
-    private static final int CPU_MIN = 5,  CPU_MAX = 100;
+    private static final int CPU_MIN = 5, CPU_MAX = 100;
     private static final int MEM_MIN = 10, MEM_MAX = 500;
 
     public Proceso(int pid, String nombre, int tiempoLlegada, int rafagaInicial, int prioridad, Random rng) {
@@ -54,7 +54,7 @@ public final class Proceso {
 
         // Valores iniciales
         this.cpuUsage = randBetween(CPU_MIN, 30); // 5..30% al inicio
-        this.memoria  = randBetween(MEM_MIN, 200); // 10..200 MB al inicio
+        this.memoria = randBetween(MEM_MIN, 200); // 10..200 MB al inicio
 
         // Instrumentación
         this.tickLlegada = tiempoLlegada;
@@ -62,8 +62,9 @@ public final class Proceso {
 
     // ---------- Ciclo de Simulación ----------
     /**
-     * Avanza un tick. El simulador debe llamar a este método para el proceso RUNNING
-     * y puede llamarlo también para READY/BLOCKED para acumular espera/estados.
+     * Avanza un tick. El simulador debe llamar a este método para el proceso
+     * RUNNING y puede llamarlo también para READY/BLOCKED para acumular
+     * espera/estados.
      */
     public void avanzarTick(int tickActual) {
         switch (estado) {
@@ -103,8 +104,9 @@ public final class Proceso {
     }
 
     /**
-     * Cambia el estado del proceso. El simulador controla las transiciones.
-     * (No marcamos primera ejecución aquí porque no recibimos tick; eso se hace en avanzarTick)
+     * Cambia el estado del proceso. El simulador controla las transiciones. (No
+     * marcamos primera ejecución aquí porque no recibimos tick; eso se hace en
+     * avanzarTick)
      */
     public void cambiarEstado(EstadoProceso nuevo) {
         this.estado = nuevo;
@@ -116,12 +118,14 @@ public final class Proceso {
     // Recalcula CPU/MEM de forma aleatoria (usado en RUNNING cada tick)
     private void actualizarConsumoAleatorio() {
         this.cpuUsage = clamp(randBetween(CPU_MIN, CPU_MAX), 0, 100);
-        this.memoria  = clamp(randBetween(MEM_MIN, MEM_MAX), 0, 2048);
+        this.memoria = clamp(randBetween(MEM_MIN, MEM_MAX), 0, 2048);
     }
 
     private int randBetween(int a, int b) {
         if (a > b) {
-            int t = a; a = b; b = t;
+            int t = a;
+            a = b;
+            b = t;
         }
         return a + rng.nextInt(b - a + 1);
     }
@@ -131,27 +135,76 @@ public final class Proceso {
     }
 
     // --------- Getters básicos ---------
-    public int getPid() { return pid; }
-    public String getNombre() { return nombre; }
-    public EstadoProceso getEstado() { return estado; }
-    public int getPrioridad() { return prioridad; }
-    public int getTiempoLlegada() { return tiempoLlegada; }
-    public int getTiempoRestante() { return tiempoRestante; }
-    public int getCpuUsage() { return cpuUsage; }
-    public int getMemoria() { return memoria; }
-    public int getTiempoEjecucion() { return tiempoEjecucion; }
-    public int getTiempoEspera() { return tiempoEspera; }
+    public int getPid() {
+        return pid;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public EstadoProceso getEstado() {
+        return estado;
+    }
+
+    public int getPrioridad() {
+        return prioridad;
+    }
+
+    public int getTiempoLlegada() {
+        return tiempoLlegada;
+    }
+
+    public int getTiempoRestante() {
+        return tiempoRestante;
+    }
+
+    public int getCpuUsage() {
+        return cpuUsage;
+    }
+
+    public int getMemoria() {
+        return memoria;
+    }
+
+    public int getTiempoEjecucion() {
+        return tiempoEjecucion;
+    }
+
+    public int getTiempoEspera() {
+        return tiempoEspera;
+    }
 
     // --------- Instrumentación (Fase 9a) ---------
-    public int getTickLlegada() { return tickLlegada; }
-    /** -1 si aún no ejecutó */
-    public int getTickPrimeraEjecucion() { return tickPrimeraEjecucion; }
-    /** -1 si aún no terminó */
-    public int getTickFinalizacion() { return tickFinalizacion; }
-    public int getRafagaTotal() { return rafagaTotal; }
+    public int getTickLlegada() {
+        return tickLlegada;
+    }
 
-    public boolean haComenzado() { return tickPrimeraEjecucion >= 0; }
-    public boolean haTerminado() { return tickFinalizacion >= 0; }
+    /**
+     * -1 si aún no ejecutó
+     */
+    public int getTickPrimeraEjecucion() {
+        return tickPrimeraEjecucion;
+    }
+
+    /**
+     * -1 si aún no terminó
+     */
+    public int getTickFinalizacion() {
+        return tickFinalizacion;
+    }
+
+    public int getRafagaTotal() {
+        return rafagaTotal;
+    }
+
+    public boolean haComenzado() {
+        return tickPrimeraEjecucion >= 0;
+    }
+
+    public boolean haTerminado() {
+        return tickFinalizacion >= 0;
+    }
 
     // ------- Utilidades para planificadores -------
     // SJF: tiempo restante
@@ -165,13 +218,22 @@ public final class Proceso {
     }
 
     /**
-     * Terminar forzadamente (acción de usuario). No marcamos tickFinalizacion aquí
-     * porque no recibimos el tick actual; el simulador puede completar ese dato si lo requiere.
+     * Terminar forzadamente (acción de usuario). No marcamos tickFinalizacion
+     * aquí porque no recibimos el tick actual; el simulador puede completar ese
+     * dato si lo requiere.
      */
-    public void forzarTerminar() {
+    // Forzado desde la UI indicando el tick actual
+    public void forzarTerminar(int tickActual) {
         this.estado = EstadoProceso.TERMINATED;
         this.tiempoRestante = 0;
         this.cpuUsage = 0;
         this.memoria = 0;
+        this.tickFinalizacion = tickActual; // <-- este es el que usamos
     }
+
+// Compatibilidad (si alguien lo llama sin tick)
+    public void forzarTerminar() {
+        forzarTerminar(-1);
+    }
+
 }

@@ -2,30 +2,45 @@ package com.simulator.metrics;
 
 import com.simulator.core.Proceso;
 
+/**
+ * Métricas por proceso terminado.
+ *
+ * respuesta = primeraEjecucion - llegada turnaround = finalizacion - llegada
+ * espera = turnaround - rafagaTotal
+ */
 public record ProcesoMetricas(
         int pid,
-        int tickLlegada,
-        int tickPrimeraEjec,
-        int tickFin,
+        String nombre,
+        String algoritmo,
+        int llegada,
+        int primeraEjecucion,
+        int finalizacion,
         int rafagaTotal,
-        int turnaround,   // tickFin - llegada
-        int espera,       // turnaround - rafagaTotal
-        int respuesta     // primeraEjec - llegada
-) {
-    public static ProcesoMetricas from(Proceso p) {
+        int respuesta,
+        int espera,
+        int turnaround) {
+
+    public static ProcesoMetricas from(Proceso p, String algoritmo) {
         int llegada = p.getTickLlegada();
-        int fin = p.getTickFinalizacion();
         int primera = p.getTickPrimeraEjecucion();
+        int fin = p.getTickFinalizacion();
         int rafaga = p.getRafagaTotal();
 
-        // En caso de que aún no haya algún valor, usamos 0 o -1 (según tu preferencia).
-        int turnaround = (fin >= 0) ? (fin - llegada) : -1;
-        int espera     = (turnaround >= 0) ? (turnaround - rafaga) : -1;
-        int respuesta  = (primera >= 0) ? (primera - llegada) : -1;
+        int respuesta = (primera >= 0 && llegada >= 0) ? (primera - llegada) : -1;
+        int turnaround = (fin >= 0 && llegada >= 0) ? (fin - llegada) : -1;
+        int espera = (turnaround >= 0 && rafaga >= 0) ? (turnaround - rafaga) : -1;
 
         return new ProcesoMetricas(
-                p.getPid(), llegada, primera, fin, rafaga,
-                turnaround, espera, respuesta
+                p.getPid(),
+                p.getNombre(),
+                algoritmo,
+                llegada,
+                primera,
+                fin,
+                rafaga,
+                respuesta,
+                espera,
+                turnaround
         );
     }
 }

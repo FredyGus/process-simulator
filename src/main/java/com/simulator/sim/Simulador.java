@@ -25,7 +25,8 @@ public final class Simulador {
     private final LoggerSistema logger;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private final java.util.List<com.simulator.metrics.ProcesoMetricas> metricasTerminados = new java.util.ArrayList<>();
+    private final java.util.List<com.simulator.metrics.ProcesoMetricas> metricasTerminadas
+            = new java.util.ArrayList<>();
 
     private final Random rng;
     private final List<Proceso> procesos = new ArrayList<>();
@@ -47,6 +48,10 @@ public final class Simulador {
     // Constructor sigle-run (AUTOGENERADO)
     public Simulador(ParametrosSimulacion params, Path logPath) {
         this(params, logPath, ModoGeneracion.AUTOGENERADO);
+    }
+
+    public java.util.List<com.simulator.metrics.ProcesoMetricas> getMetricasTerminadas() {
+        return java.util.List.copyOf(metricasTerminadas);
     }
 
     public Simulador(ParametrosSimulacion params, Path logPath, ModoGeneracion modo) {
@@ -200,6 +205,7 @@ public final class Simulador {
                             "rafagaRestante=" + seleccionado.getTiempoRestante()));
 
             // ¿Terminó naturalmente?
+            // ¿Terminó naturalmente?
             if (seleccionado.getEstado() == EstadoProceso.TERMINATED) {
                 logger.registrar(LogEvento.CAMBIO_ESTADO, LogNivel.INFO,
                         new LogDatos(seleccionado.getPid(), "TERMINATED", 0, 0,
@@ -209,6 +215,12 @@ public final class Simulador {
                         new LogDatos(seleccionado.getPid(), "TERMINATED", 0, 0,
                                 params.algoritmo.name(), params.quantum,
                                 "fin_natural"));
+
+                // ← NUEVO: guardar la métrica del proceso finalizado (fase 9b)
+                metricasTerminadas.add(
+                        com.simulator.metrics.ProcesoMetricas.from(seleccionado, params.algoritmo.name())
+                );
+
                 planificador.removerProceso(seleccionado);
 
                 // ← NUEVO: si no terminó y el planificador dice que hay que preemptar (RR: quantum agotado)
@@ -262,11 +274,20 @@ public final class Simulador {
     private void doTerminar(int pid) {
         for (Proceso p : procesos) {
             if (p.getPid() == pid && p.getEstado() != EstadoProceso.TERMINATED) {
-                p.forzarTerminar();
+
+                // si ya pasas el tick actual, usa p.forzarTerminar(tick);
+                p.forzarTerminar(tick);
+
                 logger.registrar(LogEvento.TERMINAR_PROCESO, LogNivel.WARN,
                         new LogDatos(p.getPid(), "TERMINATED", 0, 0,
                                 params.algoritmo.name(), params.quantum,
                                 "forzado_por_UI"));
+
+                // ← NUEVO: guardar métrica también en el caso forzado
+                metricasTerminadas.add(
+                        com.simulator.metrics.ProcesoMetricas.from(p, params.algoritmo.name())
+                );
+
                 planificador.removerProceso(p);
                 break;
             }
