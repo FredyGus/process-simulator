@@ -84,8 +84,8 @@ public class CompareController {
         this.algA = a;
         this.algB = b;
 
-        lblAlgA.setText("A: " + a.name());
-        lblAlgB.setText("B: " + b.name());
+        lblAlgA.setText(a.name());
+        lblAlgB.setText(b.name());
 
         // Id de corrida compartido para ambos
         this.runId = LogNombres.newRunId();

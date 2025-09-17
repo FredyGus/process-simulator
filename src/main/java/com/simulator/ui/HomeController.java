@@ -62,7 +62,7 @@ public class HomeController {
         }
         Stage stage = new Stage();
         stage.setTitle("Simulación (" + alg + ")");
-        stage.setScene(new Scene(root, 600, 600));
+        stage.setScene(new Scene(root, 672, 600));
         stage.show();
     }
 
@@ -117,7 +117,7 @@ public class HomeController {
 
             Stage stage = new Stage();
             stage.setTitle("Comparar: " + algA + " vs " + algB);
-            stage.setScene(new Scene(root, 1200, 620));
+            stage.setScene(new Scene(root, 1208, 620));
             stage.show();
 
         } catch (Exception ex) {
