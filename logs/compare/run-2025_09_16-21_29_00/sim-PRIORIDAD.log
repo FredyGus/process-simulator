@@ -1,0 +1,63 @@
+TIMESTAMP               | EVENTO             |    PID | ESTADO       |    CPU% |       MEM | ALGORITMO    |  QUANTUM | DETALLE
+------------------------+--------------------+--------+--------------+---------+-----------+--------------+----------+-----------------------------
+2025-09-16 21:29:00.845 | INICIO_SIMULACION  |      - | READY        |       - |         - | PRIORIDAD    |        - | tickMs=500, probNuevo=0.35
+2025-09-16 21:29:02.913 | IDLE               |      - | IDLE         |       - |         - | PRIORIDAD    |        - | sin procesos listos
+2025-09-16 21:29:03.413 | IDLE               |      - | IDLE         |       - |         - | PRIORIDAD    |        - | sin procesos listos
+2025-09-16 21:29:03.913 | IDLE               |      - | IDLE         |       - |         - | PRIORIDAD    |        - | sin procesos listos
+2025-09-16 21:29:04.420 | CREAR_PROCESO      |      1 | READY        |      0% |      24MB | PRIORIDAD    |        - | rafaga=6, prioridad=5
+2025-09-16 21:29:04.421 | CAMBIO_ESTADO      |      1 | READY        |      0% |      24MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:04.421 | CAMBIO_ESTADO      |      1 | RUNNING      |      0% |      24MB | PRIORIDAD    |        - | READY→RUNNING
+2025-09-16 21:29:04.423 | EJECUTAR_TICK      |      1 | RUNNING      |     30% |     296MB | PRIORIDAD    |        - | rafagaRestante=5
+2025-09-16 21:29:04.914 | EJECUTAR_TICK      |      1 | RUNNING      |     36% |     120MB | PRIORIDAD    |        - | rafagaRestante=4
+2025-09-16 21:29:05.413 | EJECUTAR_TICK      |      1 | RUNNING      |     29% |     402MB | PRIORIDAD    |        - | rafagaRestante=3
+2025-09-16 21:29:05.917 | CREAR_PROCESO      |      2 | READY        |      0% |     105MB | PRIORIDAD    |        - | rafaga=11, prioridad=1
+2025-09-16 21:29:05.918 | CAMBIO_ESTADO      |      2 | READY        |      0% |     105MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:05.919 | CAMBIO_ESTADO      |      2 | RUNNING      |      0% |     105MB | PRIORIDAD    |        - | READY→RUNNING
+2025-09-16 21:29:05.920 | EJECUTAR_TICK      |      2 | RUNNING      |     44% |     142MB | PRIORIDAD    |        - | rafagaRestante=10
+2025-09-16 21:29:06.416 | CREAR_PROCESO      |      3 | READY        |      0% |     116MB | PRIORIDAD    |        - | rafaga=11, prioridad=2
+2025-09-16 21:29:06.416 | CAMBIO_ESTADO      |      3 | READY        |      0% |     116MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:06.417 | EJECUTAR_TICK      |      2 | RUNNING      |     33% |      94MB | PRIORIDAD    |        - | rafagaRestante=9
+2025-09-16 21:29:06.918 | CREAR_PROCESO      |      4 | READY        |      0% |      25MB | PRIORIDAD    |        - | rafaga=10, prioridad=3
+2025-09-16 21:29:06.918 | CAMBIO_ESTADO      |      4 | READY        |      0% |      25MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:06.920 | EJECUTAR_TICK      |      2 | RUNNING      |     28% |     466MB | PRIORIDAD    |        - | rafagaRestante=8
+2025-09-16 21:29:07.414 | EJECUTAR_TICK      |      2 | RUNNING      |     82% |     175MB | PRIORIDAD    |        - | rafagaRestante=7
+2025-09-16 21:29:07.915 | CREAR_PROCESO      |      5 | READY        |      0% |     197MB | PRIORIDAD    |        - | rafaga=9, prioridad=4
+2025-09-16 21:29:07.916 | CAMBIO_ESTADO      |      5 | READY        |      0% |     197MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:07.917 | EJECUTAR_TICK      |      2 | RUNNING      |     10% |     154MB | PRIORIDAD    |        - | rafagaRestante=6
+2025-09-16 21:29:08.413 | EJECUTAR_TICK      |      2 | RUNNING      |     28% |     122MB | PRIORIDAD    |        - | rafagaRestante=5
+2025-09-16 21:29:08.917 | CREAR_PROCESO      |      6 | READY        |      0% |     194MB | PRIORIDAD    |        - | rafaga=7, prioridad=2
+2025-09-16 21:29:08.918 | CAMBIO_ESTADO      |      6 | READY        |      0% |     194MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:08.919 | EJECUTAR_TICK      |      2 | RUNNING      |     54% |     167MB | PRIORIDAD    |        - | rafagaRestante=4
+2025-09-16 21:29:09.415 | CREAR_PROCESO      |      7 | READY        |      0% |      16MB | PRIORIDAD    |        - | rafaga=6, prioridad=4
+2025-09-16 21:29:09.417 | CAMBIO_ESTADO      |      7 | READY        |      0% |      16MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:09.418 | EJECUTAR_TICK      |      2 | RUNNING      |     36% |     407MB | PRIORIDAD    |        - | rafagaRestante=3
+2025-09-16 21:29:09.915 | EJECUTAR_TICK      |      2 | RUNNING      |     74% |     196MB | PRIORIDAD    |        - | rafagaRestante=2
+2025-09-16 21:29:10.415 | CREAR_PROCESO      |      8 | READY        |      0% |     176MB | PRIORIDAD    |        - | rafaga=6, prioridad=3
+2025-09-16 21:29:10.416 | CAMBIO_ESTADO      |      8 | READY        |      0% |     176MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:10.418 | EJECUTAR_TICK      |      2 | RUNNING      |     99% |     264MB | PRIORIDAD    |        - | rafagaRestante=1
+2025-09-16 21:29:10.915 | CREAR_PROCESO      |      9 | READY        |      0% |      15MB | PRIORIDAD    |        - | rafaga=9, prioridad=4
+2025-09-16 21:29:10.915 | CAMBIO_ESTADO      |      9 | READY        |      0% |      15MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:10.915 | EJECUTAR_TICK      |      2 | RUNNING      |      0% |       0MB | PRIORIDAD    |        - | rafagaRestante=0
+2025-09-16 21:29:10.915 | CAMBIO_ESTADO      |      2 | TERMINATED   |      0% |       0MB | PRIORIDAD    |        - | RUNNING→TERMINATED
+2025-09-16 21:29:10.915 | TERMINAR_PROCESO   |      2 | TERMINATED   |      0% |       0MB | PRIORIDAD    |        - | fin_natural
+2025-09-16 21:29:11.413 | CAMBIO_ESTADO      |      3 | RUNNING      |      0% |     116MB | PRIORIDAD    |        - | READY→RUNNING
+2025-09-16 21:29:11.414 | EJECUTAR_TICK      |      3 | RUNNING      |     47% |     434MB | PRIORIDAD    |        - | rafagaRestante=10
+2025-09-16 21:29:11.913 | EJECUTAR_TICK      |      3 | RUNNING      |     61% |     403MB | PRIORIDAD    |        - | rafagaRestante=9
+2025-09-16 21:29:12.415 | EJECUTAR_TICK      |      3 | RUNNING      |     20% |     432MB | PRIORIDAD    |        - | rafagaRestante=8
+2025-09-16 21:29:12.916 | CREAR_PROCESO      |     10 | READY        |      0% |     127MB | PRIORIDAD    |        - | rafaga=6, prioridad=1
+2025-09-16 21:29:12.916 | CAMBIO_ESTADO      |     10 | READY        |      0% |     127MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:12.917 | CAMBIO_ESTADO      |     10 | RUNNING      |      0% |     127MB | PRIORIDAD    |        - | READY→RUNNING
+2025-09-16 21:29:12.918 | EJECUTAR_TICK      |     10 | RUNNING      |     52% |     352MB | PRIORIDAD    |        - | rafagaRestante=5
+2025-09-16 21:29:13.413 | EJECUTAR_TICK      |     10 | RUNNING      |     72% |     411MB | PRIORIDAD    |        - | rafagaRestante=4
+2025-09-16 21:29:19.412 | EJECUTAR_TICK      |     10 | RUNNING      |     29% |     316MB | PRIORIDAD    |        - | rafagaRestante=3
+2025-09-16 21:29:19.914 | EJECUTAR_TICK      |     10 | RUNNING      |     93% |     362MB | PRIORIDAD    |        - | rafagaRestante=2
+2025-09-16 21:29:20.414 | EJECUTAR_TICK      |     10 | RUNNING      |     37% |     186MB | PRIORIDAD    |        - | rafagaRestante=1
+2025-09-16 21:29:20.915 | EJECUTAR_TICK      |     10 | RUNNING      |      0% |       0MB | PRIORIDAD    |        - | rafagaRestante=0
+2025-09-16 21:29:20.916 | CAMBIO_ESTADO      |     10 | TERMINATED   |      0% |       0MB | PRIORIDAD    |        - | RUNNING→TERMINATED
+2025-09-16 21:29:20.917 | TERMINAR_PROCESO   |     10 | TERMINATED   |      0% |       0MB | PRIORIDAD    |        - | fin_natural
+2025-09-16 21:29:21.414 | CREAR_PROCESO      |     11 | READY        |      0% |     113MB | PRIORIDAD    |        - | rafaga=9, prioridad=2
+2025-09-16 21:29:21.414 | CAMBIO_ESTADO      |     11 | READY        |      0% |     113MB | PRIORIDAD    |        - | NEW→READY
+2025-09-16 21:29:21.415 | EJECUTAR_TICK      |      3 | RUNNING      |     44% |     387MB | PRIORIDAD    |        - | rafagaRestante=7
+2025-09-16 21:29:21.914 | EJECUTAR_TICK      |      3 | RUNNING      |     56% |     153MB | PRIORIDAD    |        - | rafagaRestante=6
+2025-09-16 21:29:22.414 | EJECUTAR_TICK      |      3 | RUNNING      |     56% |     286MB | PRIORIDAD    |        - | rafagaRestante=5
+2025-09-16 21:29:22.576 | FIN_SIMULACION     |      - | -            |       - |         - | -            |        - | 

@@ -23,7 +23,7 @@ public class SingleRunController {
     @FXML
     private Label lblTick, lblActivos;
     @FXML
-    private Button btnStart, btnStop;
+    private Button btnStart, btnStop, btnPause;
     @FXML
     private MenuItem miTerminar;
     @FXML
@@ -36,6 +36,62 @@ public class SingleRunController {
 
     private final ObservableList<ProcesoVM> datos = FXCollections.observableArrayList();
     private Simulador sim;
+
+    private boolean running = false;   // hay scheduler en Simulador
+    private boolean paused = false;   // corriendo=false pero no detenido
+
+    private void refreshButtons() {
+        btnStart.setDisable(running);          // no se puede iniciar 2 veces
+        btnPause.setDisable(!running);         // solo si está iniciado
+        btnStop.setDisable(!running);          // solo si está iniciado
+
+        // Texto Pausar/Reanudar
+        btnPause.setText(paused ? "Reanudar" : "Pausar");
+    }
+
+    @FXML
+    private void onStart() {
+        // El Simulador ya está creado en configurar(params)
+        if (sim == null) {
+            return;
+        }
+
+        sim.iniciar();
+        running = true;
+        paused = false;
+        refreshButtons();
+
+        // mientras corre, desactiva el menú contextual si quieres evitar acciones
+        // ctxMenu.setDisable(false); // o true si no quieres permitir acciones
+    }
+
+    @FXML
+    private void onPauseResume() {
+        if (!running || sim == null) {
+            return;
+        }
+
+        if (!paused) {
+            sim.pausar();
+            paused = true;
+        } else {
+            sim.continuar();
+            paused = false;
+        }
+        refreshButtons();
+    }
+
+    @FXML
+    private void onStop() {
+        if (!running || sim == null) {
+            return;
+        }
+
+        sim.detener();            // cierra logs y apaga scheduler
+        running = false;
+        paused = false;
+        refreshButtons();
+    }
 
     public void configurar(ParametrosSimulacion params) {
 
@@ -95,20 +151,8 @@ public class SingleRunController {
                 sim.reanudarProceso(pidMenu);
             }
         });
-    }
+        refreshButtons();
 
-    @FXML
-    private void onStart() {
-        btnStart.setDisable(true);
-        btnStop.setDisable(false);
-        sim.iniciar();
-    }
-
-    @FXML
-    private void onStop() {
-        btnStart.setDisable(false);
-        btnStop.setDisable(true);
-        sim.detener();
     }
 
     private void actualizarTabla(int tick, java.util.List<FilaProcesoVM> filas) {
@@ -128,13 +172,16 @@ public class SingleRunController {
                         f.rafagaRestante()))
                         .toList() // o .collect(Collectors.toList()) si lo prefieres
         );
-        
-        if (seleccionado != null){
+
+        if (seleccionado != null) {
             int idx = -1;
-            for (int i = 0; i < datos.size(); i++){
-                if (datos.get(i).pid.get() == seleccionado ){ idx = i; break;}
+            for (int i = 0; i < datos.size(); i++) {
+                if (datos.get(i).pid.get() == seleccionado) {
+                    idx = i;
+                    break;
+                }
             }
-            if (idx >= 0){
+            if (idx >= 0) {
                 tbl.getSelectionModel().select(idx);
                 tbl.scrollTo(idx);
             }

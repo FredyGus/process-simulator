@@ -70,6 +70,11 @@ public class CompareController {
     @FXML
     private Button btnStopAmbos;
 
+    @FXML
+    private Button btnPauseAmbos;
+
+    private boolean paused = false;   // para el tick coordinado
+
     public void configurar(ParametrosSimulacion baseParams, TipoAlgoritmo a, TipoAlgoritmo b) {
         this.base = baseParams;
         this.algA = a;
@@ -199,6 +204,8 @@ public class CompareController {
             }
         });
 
+        refreshButtonsAB();
+
     }
 
     @FXML
@@ -207,17 +214,18 @@ public class CompareController {
             return;
         }
         running = true;
+        paused = false;
         tick = 0;
         nextPid = 1;
+
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::tickCoordinado, 0, base.tickMs, TimeUnit.MILLISECONDS);
 
-        if (btnStartAmbos != null) {
-            btnStartAmbos.setDisable(true);
-        }
-        if (btnStopAmbos != null) {
-            btnStopAmbos.setDisable(false);
-        }
+        // Arrancan en "corriendo"
+        simA.continuar();
+        simB.continuar();
+
+        refreshButtonsAB();
     }
 
     @FXML
@@ -226,21 +234,49 @@ public class CompareController {
             return;
         }
         running = false;
+        paused = false;
+
         if (scheduler != null) {
             scheduler.shutdownNow();
+            scheduler = null;
         }
         simA.detener();
         simB.detener();
 
-        if (btnStartAmbos != null) {
-            btnStartAmbos.setDisable(false);
+        refreshButtonsAB();
+    }
+
+    @FXML
+    private void onPauseAmbos() {
+        if (!running) {
+            return;
         }
-        if (btnStopAmbos != null) {
-            btnStopAmbos.setDisable(true);
+
+        if (!paused) {
+            paused = true;
+            // pausar sims internos (por consistencia)
+            simA.pausar();
+            simB.pausar();
+        } else {
+            paused = false;
+            simA.continuar();
+            simB.continuar();
         }
+        refreshButtonsAB();
+    }
+
+    private void refreshButtonsAB() {
+        btnStartAmbos.setDisable(running);
+        btnPauseAmbos.setDisable(!running);
+        btnStopAmbos.setDisable(!running);
+
+        btnPauseAmbos.setText(paused ? "Reanudar ambos" : "Pausar ambos");
     }
 
     private void tickCoordinado() {
+        if (paused) {
+            return;
+        }
         tick++;
         // Generar llegadas idénticas para A y B
         List<ProcesoSpec> llegadas = new ArrayList<>();

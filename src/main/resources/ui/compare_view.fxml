@@ -14,9 +14,11 @@
             <Label fx:id="lblAlgB" text="B: -" />
             <Separator orientation="VERTICAL"/>
             <Button fx:id="btnStartAmbos" text="Iniciar ambos" onAction="#onStartAmbos"/>
+            <Button fx:id="btnPauseAmbos" text="Pausar ambos" onAction="#onPauseAmbos" disable="true"/>
             <Button fx:id="btnStopAmbos"  text="Detener ambos" onAction="#onStopAmbos" disable="true"/>
         </ToolBar>
     </top>
+
 
     <center>
         <SplitPane dividerPositions="0.5">

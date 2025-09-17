@@ -102,6 +102,21 @@ public final class Simulador {
         logger.finalizar();
     }
 
+    // Reanudar/continuar la simulación (el scheduler ya fue creado en iniciar())
+    public void continuar() {
+        corriendo = true;
+    }
+
+// Estado conveniente para la UI
+    public boolean isCorriendo() {
+        return corriendo;
+    }
+
+// Pausado = no corriendo pero con scheduler aún vivo
+    public boolean isPausado() {
+        return !corriendo && !scheduler.isShutdown();
+    }
+
     private void runTickSafe() {
         if (!corriendo) {
             return;

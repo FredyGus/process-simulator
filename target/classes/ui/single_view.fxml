@@ -21,13 +21,15 @@
 
     <top>
         <ToolBar>
-            <Button fx:id="btnStart" text="Iniciar"  onAction="#onStart"/>
-            <Button fx:id="btnStop"  text="Detener" onAction="#onStop" disable="true"/>
+            <Button fx:id="btnStart" text="Iniciar" onAction="#onStart"/>
+            <Button fx:id="btnPause" text="Pausar" onAction="#onPauseResume" disable="true"/>
+            <Button fx:id="btnStop" text="Detener" onAction="#onStop" disable="true"/>
             <Separator/>
-            <Label fx:id="lblTick"    text="Tick: 0"/>
+            <Label fx:id="lblTick" text="Tick: 0"/>
             <Label fx:id="lblActivos" text="Activos: 0" style="-fx-padding:0 0 0 16;"/>
         </ToolBar>
     </top>
+
 
     <center>
         <!-- 👇 La tabla referencia el menú por id -->
