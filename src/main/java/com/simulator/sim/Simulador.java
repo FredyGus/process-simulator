@@ -25,6 +25,8 @@ public final class Simulador {
     private final LoggerSistema logger;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final java.util.List<com.simulator.metrics.ProcesoMetricas> metricasTerminados = new java.util.ArrayList<>();
+
     private final Random rng;
     private final List<Proceso> procesos = new ArrayList<>();
 
