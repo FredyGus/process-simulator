@@ -14,6 +14,7 @@
             <Button fx:id="btnStop" text="Detener" onAction="#onStop"/>
             <Button fx:id="btnExport" text="Exportar métricas" onAction="#onExportMetrics"/>
             <Button text="Ver métricas" onAction="#onShowResumen"/>
+            <Button text="Exportar resumen" onAction="#onExportResumen"/>
         </ToolBar>
 
     </top>

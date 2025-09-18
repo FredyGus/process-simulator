@@ -479,4 +479,35 @@ public class CompareController {
             return valorB;
         }
     }
+
+    @FXML
+    private void onExportResumenAB() {
+        try {
+            var la = simA.getMetricasTerminadasSnapshot();
+            var lb = simB.getMetricasTerminadasSnapshot();
+
+            if (la.isEmpty() && lb.isEmpty()) {
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Aún no hay procesos terminados en A ni en B.").showAndWait();
+                return;
+            }
+
+            // Guardamos el resumen en la carpeta de comparación (misma que los CSV A/B)
+            java.nio.file.Path csvA = com.simulator.sim.LogNombres.metricsComparePath(runId, algA);
+            java.nio.file.Path dir = csvA.getParent();
+            java.nio.file.Path out = dir.resolve("summary-compare.csv");
+
+            com.simulator.metrics.CsvSummaryWriter.writeCompare(
+                    out, algA.name(), la, algB.name(), lb
+            );
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Resumen A/B exportado en:\n" + out.toString()).showAndWait();
+
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "No se pudo exportar el resumen A/B:\n" + ex.getMessage()).showAndWait();
+        }
+    }
+
 }

@@ -296,4 +296,31 @@ public class SingleRunController {
             return valor;
         }
     }
+
+    @FXML
+    private void onExportResumen() {
+        try {
+            var lista = sim.getMetricasTerminadasSnapshot();
+            if (lista.isEmpty()) {
+                new Alert(Alert.AlertType.INFORMATION,
+                        "Aún no hay procesos terminados para exportar.").showAndWait();
+                return;
+            }
+
+            // Usamos la misma carpeta del CSV de métricas
+            java.nio.file.Path metricsCsv = com.simulator.sim.LogNombres.metricsSinglePath(params.algoritmo);
+            java.nio.file.Path dir = metricsCsv.getParent();
+            java.nio.file.Path out = dir.resolve("summary-" + params.algoritmo.name() + ".csv");
+
+            com.simulator.metrics.CsvSummaryWriter.writeSingle(out, lista);
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Resumen exportado en:\n" + out.toString()).showAndWait();
+
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "No se pudo exportar el resumen:\n" + ex.getMessage()).showAndWait();
+        }
+    }
+
 }
