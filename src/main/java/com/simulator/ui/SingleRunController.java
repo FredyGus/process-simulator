@@ -218,6 +218,7 @@ public class SingleRunController {
         dlg.getDialogPane().setContent(tv);
         dlg.getDialogPane().setPrefSize(560, 360);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        com.simulator.ui.AppStyles.apply(dlg);
         dlg.showAndWait();
     }
 
@@ -295,6 +296,7 @@ public class SingleRunController {
         dlg.getDialogPane().setContent(chart);
         dlg.getDialogPane().setPrefSize(720, 420);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        com.simulator.ui.AppStyles.apply(dlg);
         dlg.showAndWait();
     }
 
@@ -389,6 +391,7 @@ public class SingleRunController {
         dlg.getDialogPane().setContent(node);
         dlg.getDialogPane().setPrefSize(720, 420);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        com.simulator.ui.AppStyles.apply(dlg);
         dlg.showAndWait();
     }
 

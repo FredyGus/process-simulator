@@ -270,6 +270,7 @@ public class CompareController {
         dlg.getDialogPane().setContent(chart);
         dlg.getDialogPane().setPrefSize(860, 480);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        com.simulator.ui.AppStyles.apply(dlg);
         dlg.showAndWait();
     }
 
@@ -494,6 +495,7 @@ public class CompareController {
         dlg.getDialogPane().setContent(tv);
         dlg.getDialogPane().setPrefSize(720, 380);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        com.simulator.ui.AppStyles.apply(dlg);
         dlg.showAndWait();
     }
 
@@ -608,7 +610,9 @@ public class CompareController {
         dlg.getDialogPane().setContent(node);
         dlg.getDialogPane().setPrefSize(860, 480);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        com.simulator.ui.AppStyles.apply(dlg);
         dlg.showAndWait();
+
     }
 
 }

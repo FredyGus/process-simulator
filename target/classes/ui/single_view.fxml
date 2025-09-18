@@ -5,10 +5,10 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.simulator.ui.SingleRunController">
+            fx:controller="com.simulator.ui.SingleRunController" styleClass="app-root">
 
     <top>
-        <ToolBar>
+        <ToolBar styleClass="toolbar-main">
             <Button fx:id="btnStart" text="Iniciar" onAction="#onStart"/>
             <Button fx:id="btnPause" text="Pausar" onAction="#onPauseResume"/>
             <Button fx:id="btnStop" text="Detener" onAction="#onStop"/>

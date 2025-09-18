@@ -1,5 +1,6 @@
 com\simulator\metrics\MetricsCompat.class
 com\simulator\ui\SingleRunController$RowMetric.class
 com\simulator\ui\CompareController$RowAB.class
+com\simulator\ui\AppStyles.class
 com\simulator\metrics\CsvSummaryWriter.class
 com\simulator\ui\charts\ChartsFactory.class

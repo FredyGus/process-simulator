@@ -5,11 +5,11 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.simulator.ui.CompareController">
+            fx:controller="com.simulator.ui.CompareController" styleClass="app-root">
 
     <top>
         <ToolBar>
-            <ToolBar>
+            <ToolBar styleClass="toolbar-main">
                 <Label text="A:"/>
                 <Label fx:id="lblAlgA"/>
                 <Label text="B:"/>

@@ -2,9 +2,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.simulator.ui.HomeController">
+            fx:controller="com.simulator.ui.HomeController" styleClass="app-root">
     <top>
-        <ToolBar>
+        <ToolBar styleClass="toolbar-main">
             <ComboBox fx:id="cboAlg" />
             <Spinner fx:id="spnTick"/>
             <Spinner fx:id="spnProb"/>

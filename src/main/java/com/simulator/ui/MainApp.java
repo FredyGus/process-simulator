@@ -11,6 +11,9 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxml = new FXMLLoader(getClass().getResource("/ui/home_view.fxml"));
         Scene scene = new Scene(fxml.load(), 1131, 640);
+
+        AppStyles.apply(scene);
+
         stage.setTitle("Process Simulator");
         stage.setScene(scene);
         stage.show();
