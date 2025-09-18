@@ -252,3 +252,11 @@
 .data2.chart-bar {
     -fx-bar-fill: #a78bfa;
 }
+
+.home-bg {
+  -fx-background-image: url("/ui/fondo.jpg");   /* ojo: empieza con / */
+  -fx-background-repeat: no-repeat;
+  -fx-background-position: center center;
+  -fx-background-size: cover;                   /* usa 'contain' si no quieres recorte */
+}
+

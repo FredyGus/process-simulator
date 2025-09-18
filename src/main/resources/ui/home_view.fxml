@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.simulator.ui.HomeController" styleClass="app-root">
     <top>
@@ -16,8 +17,9 @@
 
     </top>
     <center>
-        <StackPane>
-            <Label text="Selecciona parámetros y pulsa un botón arriba."/>
+        <StackPane styleClass="home-bg">
+            <!--  <Label text="Selecciona parámetros y pulsa un botón arriba."/> -->
+            
         </StackPane>
     </center>
 </BorderPane>
