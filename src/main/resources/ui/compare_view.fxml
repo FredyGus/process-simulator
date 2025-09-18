@@ -32,7 +32,7 @@
 
     <center>
         <SplitPane dividerPositions="0.5">
-            <TableView fx:id="tblA" contextMenu="$ctxA" prefHeight="400.0" prefWidth="600.0">
+            <TableView fx:id="tblA" prefHeight="400.0" prefWidth="600.0">
                 <columns>
                     <TableColumn fx:id="colPidA"    text="PID"        prefWidth="60"/>
                     <TableColumn fx:id="colNomA"    text="Nombre"     prefWidth="120"/>
@@ -44,7 +44,7 @@
                 </columns>
             </TableView>
 
-            <TableView fx:id="tblB" contextMenu="$ctxB" prefHeight="400.0" prefWidth="600.0">
+            <TableView fx:id="tblB" prefHeight="400.0" prefWidth="600.0">
                 <columns>
                     <TableColumn fx:id="colPidB"    text="PID"        prefWidth="60"/>
                     <TableColumn fx:id="colNomB"    text="Nombre"     prefWidth="120"/>

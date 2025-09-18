@@ -20,7 +20,6 @@ public class LoggerQuickDemo {
         logger.registrar(LogEvento.INICIO_SIMULACION, LogNivel.INFO,
                 new LogDatos(null, "READY", null, null, "FCFS", null, "tickMs=500, probNuevo=0.35"));
 
-        // --- Aquí reemplazamos las líneas fijas por un bucle con variación ---
         var rnd = new java.util.Random();
         for (int i = 0; i < 5; i++) {
             int cpu = 10 + rnd.nextInt(90);    // CPU entre 10 y 99

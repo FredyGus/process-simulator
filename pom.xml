@@ -49,9 +49,13 @@
             <artifactId>javafx-fxml</artifactId>
             <version>23.0.1</version>
         </dependency>
-
-
-    
+        <dependency>
+            <groupId>com.simulator</groupId>
+            <artifactId>process-simulator</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>

@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
-import javafx.scene.chart.XYChart;
+import javafx.beans.binding.Bindings;
 
 public class SingleRunController {
 
@@ -89,11 +89,21 @@ public class SingleRunController {
 
         tbl.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
+
+            // Seleccionar la fila bajo el cursor antes de abrir el menú
             row.setOnContextMenuRequested(ev -> {
                 if (!row.isEmpty()) {
                     tv.getSelectionModel().select(row.getIndex());
                 }
             });
+
+            // Mostrar menú SOLO en filas no vacías
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(ctxMenu)
+            );
+
             return row;
         });
 

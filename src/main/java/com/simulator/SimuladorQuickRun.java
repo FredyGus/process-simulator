@@ -10,7 +10,6 @@ public class SimuladorQuickRun {
         var sim = new Simulador(params, logPath);
         sim.iniciar();
         
-        // Dejalo correr 10 segundos
         Thread.sleep(10_000);
         
         sim.detener();

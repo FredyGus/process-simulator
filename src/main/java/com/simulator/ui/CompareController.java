@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.beans.binding.Bindings;
 
 import java.nio.file.Path;
 import java.text.DecimalFormat;
@@ -146,21 +147,33 @@ public class CompareController {
         tblB.getSortOrder().setAll(colCpuB);
         colCpuB.setSortType(TableColumn.SortType.DESCENDING);
 
-        // Context menu A
+        // ===== Context menu A por fila =====
         ctxA.setOnShowing(e -> {
             var vm = tblA.getSelectionModel().getSelectedItem();
             pidMenuA = (vm != null) ? vm.pid.get() : null;
         });
         ctxA.setOnHidden(e -> pidMenuA = null);
+
         tblA.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
+
+            // Seleccionar la fila bajo el cursor antes de abrir el menú
             row.setOnContextMenuRequested(ev -> {
                 if (!row.isEmpty()) {
                     tv.getSelectionModel().select(row.getIndex());
                 }
             });
+
+            // Mostrar menú solo en filas no vacías
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(ctxA)
+            );
+
             return row;
         });
+
         miTerminarA.setOnAction(e -> {
             if (pidMenuA != null) {
                 simA.terminarProceso(pidMenuA);
@@ -183,15 +196,25 @@ public class CompareController {
             pidMenuB = (vm != null) ? vm.pid.get() : null;
         });
         ctxB.setOnHidden(e -> pidMenuB = null);
+
         tblB.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
+
             row.setOnContextMenuRequested(ev -> {
                 if (!row.isEmpty()) {
                     tv.getSelectionModel().select(row.getIndex());
                 }
             });
+
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(ctxB)
+            );
+
             return row;
         });
+
         miTerminarB.setOnAction(e -> {
             if (pidMenuB != null) {
                 simB.terminarProceso(pidMenuB);
