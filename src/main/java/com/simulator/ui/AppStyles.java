@@ -1,6 +1,7 @@
 package com.simulator.ui;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Dialog;
 
 public final class AppStyles {
@@ -23,5 +24,23 @@ public final class AppStyles {
         if (!pane.getStyleClass().contains("app-root")) {
             pane.getStyleClass().add("app-root");
         }
+    }
+
+    public static void show(Alert.AlertType type, String text) {
+        Alert a = new Alert(type, text);
+        apply(a);
+        a.showAndWait();
+    }
+
+    public static void error(String text) {
+        show(Alert.AlertType.ERROR, text);
+    }
+
+    public static void warn(String text) {
+        show(Alert.AlertType.WARNING, text);
+    }
+
+    public static void info(String text) {
+        show(Alert.AlertType.INFORMATION, text);
     }
 }

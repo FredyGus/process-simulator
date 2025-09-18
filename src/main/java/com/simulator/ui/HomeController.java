@@ -53,14 +53,21 @@ public class HomeController {
 
         FXMLLoader fxml = new FXMLLoader(getClass().getResource("/ui/single_view.fxml"));
         Parent root = fxml.load();
+
         var ctl = fxml.getController();
         if (ctl instanceof SingleRunController c) {
             c.configurar(params);
         }
+
         Stage stage = new Stage();
         stage.setTitle("Simulación (" + alg + ")");
-        stage.setScene(new Scene(root, 672, 600));
+
+        Scene sc = new Scene(root, 672, 600);
+        AppStyles.apply(sc);
+        stage.setScene(sc);
+
         stage.show();
+
     }
 
     @FXML
@@ -103,16 +110,22 @@ public class HomeController {
 
             FXMLLoader fxml = new FXMLLoader(getClass().getResource("/ui/compare_view.fxml"));
             Parent root = fxml.load();
+
             CompareController ctl = fxml.getController();
             ctl.configurar(base, algA, algB);
 
             Stage stage = new Stage();
             stage.setTitle("Comparar: " + algA + " vs " + algB);
-            stage.setScene(new Scene(root, 1208, 620));
+
+            Scene sc = new Scene(root, 1208, 620);
+            AppStyles.apply(sc);
+            stage.setScene(sc);
+
             stage.show();
 
         } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, "No se pudo abrir el comparador:\n" + ex.getMessage()).showAndWait();
+            AppStyles.error("No se pudo abrir el comparador:\n" + ex.getMessage());
+            //new Alert(Alert.AlertType.ERROR, "No se pudo abrir el comparador:\n" + ex.getMessage()).showAndWait();
         }
     }
 }

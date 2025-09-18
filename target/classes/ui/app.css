@@ -158,7 +158,7 @@
 .dialog-pane {
     -fx-background-color: -color-elev;
     -fx-border-color: rgba(255,255,255,0.06);
-    -fx-border-radius: 12;
+    -fx-border-radius: 0;
     -fx-background-radius: 0;
     -fx-padding: 10;
 }
