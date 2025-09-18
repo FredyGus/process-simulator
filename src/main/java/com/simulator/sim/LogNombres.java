@@ -35,11 +35,8 @@ public final class LogNombres {
         return compareDir(runId).resolve("sim-" + alg.name() + ".log");
     }
 
-    /**
-     * Carpeta para single run: logs/run-<ts>
-     */
     public static Path runDir(String runId) {
-        Path dir = Paths.get("logs", runId); // runId ya trae el prefijo "run-..."
+        Path dir = Paths.get("logs", runId);
         try {
             Files.createDirectories(dir);
         } catch (IOException e) {
@@ -48,21 +45,16 @@ public final class LogNombres {
         return dir;
     }
 
-    /**
-     * Archivo de log dentro de la carpeta del single run
-     */
     public static Path runPath(String runId, TipoAlgoritmo alg) {
         return runDir(runId).resolve("sim-" + alg.name() + ".log");
     }
 
-    // --- CSV de métricas (10a) ---
     public static Path metricsSinglePath(TipoAlgoritmo alg) {
         String ts = LocalDateTime.now().format(FMT);
         return Paths.get("logs", "metrics", "single-" + alg.name() + "-" + ts + ".csv");
     }
 
     public static Path metricsComparePath(String runId, TipoAlgoritmo alg) {
-        // Guardamos en el mismo subdir de comparación
         return compareDir(runId).resolve("metrics-" + alg.name() + ".csv");
     }
 

@@ -1,6 +1,7 @@
 package com.simulator.logging.format;
 
 public final class TablaAnchos {
+
     public final int ts = 23;
     public final int evento = 18;
     public final int pid = 6;

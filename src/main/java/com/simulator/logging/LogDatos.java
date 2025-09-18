@@ -21,6 +21,8 @@ public final class LogDatos {
         this.detalle = detalle == null ? "" : detalle;
     }
 
-    public static LogDatos vacio() { return new LogDatos(null, null, null, null, null, null, ""); }
+    public static LogDatos vacio() {
+        return new LogDatos(null, null, null, null, null, null, "");
+    }
 
 }

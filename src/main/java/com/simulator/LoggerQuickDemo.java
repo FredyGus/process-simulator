@@ -8,6 +8,7 @@ import com.simulator.time.RelojDelSistema;
 import java.nio.file.Paths;
 
 public class LoggerQuickDemo {
+
     public static void main(String[] args) {
         var logger = new LoggerSistema();
         var config = LogConfig.basica(Paths.get("simulador.log"), new RotacionPorTamano(256 * 1024, 3));

@@ -24,7 +24,7 @@ public final class TablaFijaFormatter implements LogFormatter {
 
     @Override
     public String separador() {
-        return "-".repeat(w.ts+1) + "+" + "-".repeat(w.evento + 2) + "+"
+        return "-".repeat(w.ts + 1) + "+" + "-".repeat(w.evento + 2) + "+"
                 + "-".repeat(w.pid + 2) + "+" + "-".repeat(w.estado + 2) + "+"
                 + "-".repeat(w.cpu + 2) + "+" + "-".repeat(w.mem + 2) + "+"
                 + "-".repeat(w.alg + 2) + "+" + "-".repeat(w.q + 2) + "+"

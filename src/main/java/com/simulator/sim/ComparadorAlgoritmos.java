@@ -17,7 +17,7 @@ public final class ComparadorAlgoritmos {
         void onModeloActualizadoB(VistaModelo vmB);
     }
 
-    private final ParametrosSimulacion base; // Comparte tickMs, probNuevo, rangos, seed base
+    private final ParametrosSimulacion base;
     private final TipoAlgoritmo algA, algB;
     private final String runId;
     private final ScheduledExecutorService scheduler
@@ -48,7 +48,6 @@ public final class ComparadorAlgoritmos {
 
         }
 
-        // Construimos params para cada simulador (mismo todo, distinto algoritmo)
         var pA = new ParametrosSimulacion(base.tickMs, base.probNuevoProceso, base.rafagaMin,
                 base.rafagaMax, base.prioridadMin, base.prioridadMax, base.seed, algA, base.quantum);
 
@@ -86,21 +85,18 @@ public final class ComparadorAlgoritmos {
     }
 
     private void tick() {
-        // Generar llegadas PARA ESTE TICK (0 o 1 llegada, igual para A y B)
         List<ProcesoSpec> llegadas = new ArrayList<>();
         if (rng.nextDouble() < base.probNuevoProceso) {
             int pid = nextPid++;
             int rafaga = randBetween(base.rafagaMin, base.rafagaMax);
             int prioridad = randBetween(base.prioridadMin, base.prioridadMax);
-            long seedProc = (base.seed * 31L) ^ pid; // semilla determinística por PID
+            long seedProc = (base.seed * 31L) ^ pid;
             llegadas.add(new ProcesoSpec(pid, "P" + pid, rafaga, prioridad, seedProc));
         }
 
-        // Avanzar ambos simuladores con las mismas llegadas (orden sincronizado)
         simA.tickCoordinado(llegadas);
         simB.tickCoordinado(llegadas);
 
-        // Notificar snapshots (si hay oyente)
         if (oyente != null) {
             oyente.onModeloActualizadoA(simA.getUltimoSnapshot());
             oyente.onModeloActualizadoB(simB.getUltimoSnapshot());

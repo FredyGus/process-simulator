@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 public class CompareController {
 
-    // UI A
     @FXML
     private TableView<ProcesoVM> tblA;
     @FXML
@@ -35,7 +34,6 @@ public class CompareController {
     @FXML
     private Label lblTickA, lblActivosA, lblAlgA;
 
-    // UI B
     @FXML
     private TableView<ProcesoVM> tblB;
     @FXML
@@ -45,7 +43,6 @@ public class CompareController {
     @FXML
     private Label lblTickB, lblActivosB, lblAlgB;
 
-    // Menús contextuales
     @FXML
     private ContextMenu ctxA, ctxB;
     @FXML
@@ -54,18 +51,14 @@ public class CompareController {
     private MenuItem miTerminarB, miSuspenderB, miReanudarB;
     private Integer pidMenuA, pidMenuB;
 
-    // Botones control
     @FXML
     private Button btnStartAmbos, btnPauseAmbos, btnStopAmbos;
 
-    // Datos
     private final ObservableList<ProcesoVM> datosA = FXCollections.observableArrayList();
     private final ObservableList<ProcesoVM> datosB = FXCollections.observableArrayList();
 
-    // Simuladores
     private Simulador simA, simB;
 
-    // Coordinación
     private ScheduledExecutorService scheduler;
     private boolean running = false;
     private boolean paused = false;
@@ -75,14 +68,11 @@ public class CompareController {
     private int tick = 0;
     private int nextPid = 1;
 
-    // run/logs
     private String runId;
 
-    // --- Evolución coordinada: activos por tick en cada simulador ---
     private final java.util.List<Integer> serieActivosA = new java.util.ArrayList<>();
     private final java.util.List<Integer> serieActivosB = new java.util.ArrayList<>();
 
-    // =================== Configuración desde Home ===================
     public void configurar(ParametrosSimulacion baseParams, TipoAlgoritmo a, TipoAlgoritmo b) {
         this.base = baseParams;
         this.algA = a;
@@ -91,12 +81,10 @@ public class CompareController {
         lblAlgA.setText(a.name());
         lblAlgB.setText(b.name());
 
-        // Id de corrida compartido para ambos
         this.runId = LogNombres.newRunId();
         Path logA = LogNombres.comparePath(runId, a);
         Path logB = LogNombres.comparePath(runId, b);
 
-        // Copias de parámetros
         var paramsA = new ParametrosSimulacion(
                 base.tickMs, base.probNuevoProceso,
                 base.rafagaMin, base.rafagaMax,
@@ -108,22 +96,17 @@ public class CompareController {
                 base.prioridadMin, base.prioridadMax,
                 base.seed, b, (b == TipoAlgoritmo.RR ? base.quantum : null));
 
-        // Simuladores en modo COORDINADO (tick desde aquí)
         simA = new Simulador(paramsA, logA, Simulador.ModoGeneracion.COORDINADO);
         simB = new Simulador(paramsB, logB, Simulador.ModoGeneracion.COORDINADO);
 
-        // Oyentes para refrescar tablas
         simA.setOyente(vm -> Platform.runLater(() -> actualizarTablaA(vm.getTick(), vm.getFilas())));
         simB.setOyente(vm -> Platform.runLater(() -> actualizarTablaB(vm.getTick(), vm.getFilas())));
 
-        // RNG común para llegadas idénticas
         rng = new Random(base.seed);
     }
 
-    // =================== Inicialización UI ===================
     @FXML
     private void initialize() {
-        // A
         colPidA.setCellValueFactory(c -> c.getValue().pid);
         colNomA.setCellValueFactory(c -> c.getValue().nombre);
         colEstadoA.setCellValueFactory(c -> c.getValue().estado);
@@ -135,7 +118,6 @@ public class CompareController {
         tblA.getSortOrder().setAll(colCpuA);
         colCpuA.setSortType(TableColumn.SortType.DESCENDING);
 
-        // B
         colPidB.setCellValueFactory(c -> c.getValue().pid);
         colNomB.setCellValueFactory(c -> c.getValue().nombre);
         colEstadoB.setCellValueFactory(c -> c.getValue().estado);
@@ -147,7 +129,6 @@ public class CompareController {
         tblB.getSortOrder().setAll(colCpuB);
         colCpuB.setSortType(TableColumn.SortType.DESCENDING);
 
-        // ===== Context menu A por fila =====
         ctxA.setOnShowing(e -> {
             var vm = tblA.getSelectionModel().getSelectedItem();
             pidMenuA = (vm != null) ? vm.pid.get() : null;
@@ -157,14 +138,12 @@ public class CompareController {
         tblA.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
 
-            // Seleccionar la fila bajo el cursor antes de abrir el menú
             row.setOnContextMenuRequested(ev -> {
                 if (!row.isEmpty()) {
                     tv.getSelectionModel().select(row.getIndex());
                 }
             });
 
-            // Mostrar menú solo en filas no vacías
             row.contextMenuProperty().bind(
                     Bindings.when(row.emptyProperty())
                             .then((ContextMenu) null)
@@ -190,7 +169,6 @@ public class CompareController {
             }
         });
 
-        // Context menu B
         ctxB.setOnShowing(e -> {
             var vm = tblB.getSelectionModel().getSelectedItem();
             pidMenuB = (vm != null) ? vm.pid.get() : null;
@@ -234,7 +212,6 @@ public class CompareController {
         refreshButtonsAB();
     }
 
-    // =================== Botones de control ===================
     @FXML
     private void onStartAmbos() {
         if (running) {
@@ -257,7 +234,6 @@ public class CompareController {
         refreshButtonsAB();
     }
 
-    // VER EVOLUCION
     @FXML
     private void onShowEvolucionAB() {
         if (serieActivosA.isEmpty() && serieActivosB.isEmpty()) {
@@ -341,7 +317,6 @@ public class CompareController {
         btnPauseAmbos.setText(paused ? "Reanudar ambos" : "Pausar ambos");
     }
 
-    // =================== Ticks coordinados ===================
     private void tickCoordinado() {
         if (paused) {
             return;
@@ -349,7 +324,6 @@ public class CompareController {
 
         tick++;
 
-        // Llegadas idénticas en A y B
         List<ProcesoSpec> llegadas = new ArrayList<>();
         if (rng.nextDouble() < base.probNuevoProceso) {
             int pid = nextPid++;
@@ -372,7 +346,6 @@ public class CompareController {
         return a + rng.nextInt(b - a + 1);
     }
 
-    // =================== Exportación A/B ===================
     @FXML
     private void onExportA() {
         try {
@@ -405,7 +378,6 @@ public class CompareController {
         }
     }
 
-    // =================== Actualización de tablas ===================
     private void actualizarTablaA(int tk, List<FilaProcesoVM> filas) {
         lblTickA.setText("Tick A: " + tk);
         lblActivosA.setText("Activos A: " + filas.size());
@@ -427,7 +399,6 @@ public class CompareController {
                 }
             }
         }
-        // --- Evolución dinámica A ---
         if (serieActivosA.size() == tk - 1) {
             serieActivosA.add(filas.size());
         } else if (tk - 1 < serieActivosA.size()) {
@@ -458,7 +429,6 @@ public class CompareController {
             }
         }
 
-        // --- Evolución dinámica B ---
         if (serieActivosB.size() == tk - 1) {
             serieActivosB.add(filas.size());
         } else if (tk - 1 < serieActivosB.size()) {
@@ -467,7 +437,6 @@ public class CompareController {
 
     }
 
-    // =================== Resumen A/B (10c) ===================
     @FXML
     private void onShowResumenAB() {
         if (simA == null || simB == null) {
@@ -491,9 +460,7 @@ public class CompareController {
         cM.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getMetrica()));
         cA.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getValorA()));
         cB.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getValorB()));
-        //cM.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getMetrica()));
-        //cA.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorA()));
-        //cB.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValorB()));
+
         tv.getColumns().addAll(cM, cA, cB);
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
@@ -530,16 +497,12 @@ public class CompareController {
         dlg.showAndWait();
     }
 
-    // =================== Helpers ===================
     private static final DecimalFormat DF = new DecimalFormat("#,##0.##");
 
     private static String fmt(double v) {
         return DF.format(v);
     }
 
-    /**
-     * Fila para la tabla de resumen A/B.
-     */
     public static final class RowAB {
 
         private final String metrica, valorA, valorB;
@@ -575,7 +538,6 @@ public class CompareController {
                 return;
             }
 
-            // Guardamos el resumen en la carpeta de comparación (misma que los CSV A/B)
             java.nio.file.Path csvA = com.simulator.sim.LogNombres.metricsComparePath(runId, algA);
             java.nio.file.Path dir = csvA.getParent();
             java.nio.file.Path out = dir.resolve("summary-compare.csv");
@@ -607,14 +569,12 @@ public class CompareController {
             return;
         }
 
-        // Promedios A
         double aEspera = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
         double aResp = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
         double aTurn = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
         double aEjec = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.ejecucion(m)).average().orElse(0);
         double aRaf = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.rafagaTotal(m)).average().orElse(0);
 
-        // Promedios B
         double bEspera = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
         double bResp = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
         double bTurn = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);

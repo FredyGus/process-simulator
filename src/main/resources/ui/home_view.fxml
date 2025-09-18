@@ -5,7 +5,6 @@
             fx:controller="com.simulator.ui.HomeController">
     <top>
         <ToolBar>
-            <!-- ejemplo básico correcto -->
             <ComboBox fx:id="cboAlg" />
             <Spinner fx:id="spnTick"/>
             <Spinner fx:id="spnProb"/>

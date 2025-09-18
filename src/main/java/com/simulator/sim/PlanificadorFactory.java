@@ -13,7 +13,6 @@ public final class PlanificadorFactory{
         };
     }
     
-    // Sobrecarga existente, si la tienes
     public static Planificador crear(TipoAlgoritmo alg) {
         return crear(alg, null);
     }

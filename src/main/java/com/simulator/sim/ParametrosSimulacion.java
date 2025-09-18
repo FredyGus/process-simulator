@@ -3,12 +3,12 @@ package com.simulator.sim;
 public final class ParametrosSimulacion {
 
     public final int tickMs;
-    public final double probNuevoProceso; // 0..1 por tick
+    public final double probNuevoProceso;
     public final int rafagaMin, rafagaMax;
     public final int prioridadMin, prioridadMax;
     public final long seed;
     public final TipoAlgoritmo algoritmo;
-    public final Integer quantum; // Solo RR, sino NULL
+    public final Integer quantum;
 
     public ParametrosSimulacion(int tickMs, double probNuevoProceso, int rafagaMin, int rafagaMax, int prioridadMin,
             int prioridadMax, long seed, TipoAlgoritmo algoritmo, Integer quantum) {

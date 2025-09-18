@@ -5,6 +5,7 @@ import com.simulator.time.Reloj;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class LoggerSistema {
+
     private final ReentrantLock lock = new ReentrantLock();
     private LogWriter writer;
     private LogFormatter formatter;
@@ -12,12 +13,15 @@ public final class LoggerSistema {
     private Reloj reloj;
     private boolean iniciado = false;
 
-    public LoggerSistema() {}
+    public LoggerSistema() {
+    }
 
     public void iniciar(LogConfig config, LogWriter writer, LogFormatter formatter, Reloj reloj) {
         lock.lock();
         try {
-            if (iniciado) return;
+            if (iniciado) {
+                return;
+            }
             this.config = config;
             this.writer = writer;
             this.formatter = formatter;
@@ -37,7 +41,9 @@ public final class LoggerSistema {
     public void finalizar() {
         lock.lock();
         try {
-            if (!iniciado) return;
+            if (!iniciado) {
+                return;
+            }
             writer.cerrar();
         } catch (Exception e) {
             System.err.println("[LoggerSistema] Error al cerrar: " + e.getMessage());
@@ -50,8 +56,12 @@ public final class LoggerSistema {
     public void registrar(LogEvento evento, LogNivel nivel, LogDatos datos) {
         lock.lock();
         try {
-            if (!iniciado) return;
-            if (nivel.ordinal() < config.nivelMinimo.ordinal()) return;
+            if (!iniciado) {
+                return;
+            }
+            if (nivel.ordinal() < config.nivelMinimo.ordinal()) {
+                return;
+            }
             LogMeta meta = new LogMeta(reloj.ahora(), nivel, evento);
             String linea = formatter.formatear(meta, datos);
             writer.escribir(linea);

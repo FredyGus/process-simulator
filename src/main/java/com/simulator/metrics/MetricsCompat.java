@@ -9,7 +9,6 @@ public final class MetricsCompat {
     private MetricsCompat() {
     }
 
-    // ------ API pública que usan los controladores ------
     public static int espera(ProcesoMetricas m) {
         return readInt(m,
                 "getEspera", "espera", "getTiempoEspera", "tiempoEspera", "getWait", "wait", "waitingTime");
@@ -35,11 +34,9 @@ public final class MetricsCompat {
                 "getRafagaTotal", "rafagaTotal", "getRafaga", "rafaga", "getBurst", "burst", "burstTime", "service");
     }
 
-    // ------ Utilidad robusta: prueba métodos y, si falla, campos ------
     private static int readInt(Object bean, String... candidates) {
         Class<?> c = bean.getClass();
 
-        // Métodos sin parámetros
         for (String name : candidates) {
             try {
                 Method mt = c.getMethod(name);
@@ -54,7 +51,6 @@ public final class MetricsCompat {
             }
         }
 
-        // Campos públicos/privados
         for (String name : candidates) {
             try {
                 Field f = c.getDeclaredField(name);

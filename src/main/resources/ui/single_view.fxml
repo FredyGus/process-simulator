@@ -48,7 +48,6 @@
         </HBox>
     </bottom>
 
-    <!-- Definiciones no visuales (menú contextual) -->
     <fx:define>
         <ContextMenu fx:id="ctxMenu">
             <items>

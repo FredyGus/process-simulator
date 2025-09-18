@@ -7,17 +7,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Planificador por prioridad (no expropiativo).
- * Menor número = mayor prioridad. Desempate por PID.
- */
 public class PlanificadorPrioridad implements Planificador {
 
     private final List<Proceso> ready = new ArrayList<>();
 
-    private static final Comparator<Proceso> COMP =
-            Comparator.comparingInt(Proceso::getPrioridad)
-                      .thenComparingInt(Proceso::getPid);
+    private static final Comparator<Proceso> COMP
+            = Comparator.comparingInt(Proceso::getPrioridad)
+                    .thenComparingInt(Proceso::getPid);
 
     @Override
     public void agregarProceso(Proceso p) {
@@ -29,10 +25,12 @@ public class PlanificadorPrioridad implements Planificador {
 
     @Override
     public Proceso seleccionarProceso() {
-        if (ready.isEmpty()) return null;
+        if (ready.isEmpty()) {
+            return null;
+        }
         for (Proceso p : ready) {
             if (p.getEstado() != EstadoProceso.TERMINATED) {
-                return p; // el de mayor prioridad (número menor)
+                return p;
             }
         }
         return null;

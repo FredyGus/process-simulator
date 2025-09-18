@@ -70,7 +70,7 @@ public final class Proceso {
             }
             case READY -> {
                 tiempoEspera++;
-                cpuUsage = 0; 
+                cpuUsage = 0;
             }
             case BLOCKED -> {
                 cpuUsage = 0;
@@ -81,11 +81,10 @@ public final class Proceso {
         }
     }
 
-    
     public void cambiarEstado(EstadoProceso nuevo) {
         this.estado = nuevo;
         if (nuevo == EstadoProceso.READY) {
-            cpuUsage = 0; 
+            cpuUsage = 0;
         }
     }
 
@@ -151,7 +150,6 @@ public final class Proceso {
         return tickLlegada;
     }
 
-    
     public int getTickPrimeraEjecucion() {
         return tickPrimeraEjecucion;
     }

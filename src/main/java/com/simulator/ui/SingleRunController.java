@@ -18,7 +18,6 @@ import javafx.beans.binding.Bindings;
 
 public class SingleRunController {
 
-    // Tabla
     @FXML
     private TableView<ProcesoVM> tbl;
     @FXML
@@ -26,37 +25,29 @@ public class SingleRunController {
     @FXML
     private TableColumn<ProcesoVM, String> colNom, colEstado;
 
-    // Estado/acciones
     @FXML
     private Label lblTick, lblActivos;
     @FXML
     private Button btnStart, btnPause, btnStop, btnExport;
 
-    // Menú contextual
     @FXML
     private ContextMenu ctxMenu;
     @FXML
     private MenuItem miTerminar, miSuspender, miReanudar;
     private Integer pidMenu;
 
-    // Datos y simulador
     private final ObservableList<ProcesoVM> datos = FXCollections.observableArrayList();
     private Simulador sim;
 
-    // Guardamos los parámetros (para exportar)
     private ParametrosSimulacion params;
 
-    // Bande­ras de control
     private boolean running = false;
     private boolean paused = false;
-    // --- Evolución: guardamos Activos por tick para graficar ---
     private final java.util.List<Integer> serieActivos = new java.util.ArrayList<>();
 
-    // =================== Ciclo de vida / configuración ===================
     public void configurar(ParametrosSimulacion params) {
         this.params = params;
 
-        // carpeta por corrida de single-run
         String runId = LogNombres.newRunId();
         Path logPath = LogNombres.runPath(runId, params.algoritmo);
 
@@ -66,7 +57,6 @@ public class SingleRunController {
 
     @FXML
     private void initialize() {
-        // Columnas ↔ VM
         colPid.setCellValueFactory(c -> c.getValue().pid);
         colNom.setCellValueFactory(c -> c.getValue().nombre);
         colEstado.setCellValueFactory(c -> c.getValue().estado);
@@ -76,11 +66,9 @@ public class SingleRunController {
         colRaf.setCellValueFactory(c -> c.getValue().rafaga);
         tbl.setItems(datos);
 
-        // Orden por CPU desc (estilo Task Manager)
         tbl.getSortOrder().setAll(colCpu);
         colCpu.setSortType(TableColumn.SortType.DESCENDING);
 
-        // Menú contextual: capturamos el PID al abrirlo y forzamos selección de fila
         ctxMenu.setOnShowing(e -> {
             var vm = tbl.getSelectionModel().getSelectedItem();
             pidMenu = (vm != null) ? vm.pid.get() : null;
@@ -90,14 +78,12 @@ public class SingleRunController {
         tbl.setRowFactory(tv -> {
             TableRow<ProcesoVM> row = new TableRow<>();
 
-            // Seleccionar la fila bajo el cursor antes de abrir el menú
             row.setOnContextMenuRequested(ev -> {
                 if (!row.isEmpty()) {
                     tv.getSelectionModel().select(row.getIndex());
                 }
             });
 
-            // Mostrar menú SOLO en filas no vacías
             row.contextMenuProperty().bind(
                     Bindings.when(row.emptyProperty())
                             .then((ContextMenu) null)
@@ -107,7 +93,6 @@ public class SingleRunController {
             return row;
         });
 
-        // Acciones del menú
         miTerminar.setOnAction(e -> {
             if (pidMenu != null) {
                 sim.terminarProceso(pidMenu);
@@ -127,7 +112,6 @@ public class SingleRunController {
         refreshButtons();
     }
 
-    // =================== Botones (Start / Pause / Stop / Export) ===================
     @FXML
     private void onStart() {
         if (sim == null || running) {
@@ -162,9 +146,8 @@ public class SingleRunController {
             return;
         }
 
-        sim.detener();     // cierra logs y apaga scheduler interno
+        sim.detener();
         running = false;
-        // nada que persistir aquí; la serie queda para "Ver evolución" si quieres mostrarla tras detener
         paused = false;
         refreshButtons();
     }
@@ -189,7 +172,6 @@ public class SingleRunController {
         }
     }
 
-    // =================== Resumen (10c) ===================
     @FXML
     private void onShowResumen() {
         if (sim == null) {
@@ -217,8 +199,6 @@ public class SingleRunController {
 
         c1.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getNombre()));
         c2.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getValor()));
-        //c1.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNombre()));
-        //c2.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getValor()));
         tv.getColumns().addAll(c1, c2);
         tv.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
 
@@ -233,15 +213,14 @@ public class SingleRunController {
 
         Dialog<Void> dlg = new Dialog<>();
         dlg.setTitle("Resumen de métricas");
-        dlg.initOwner(btnStart.getScene().getWindow()); // <- owner
-        dlg.setResizable(true);                         // <- redimensionable
+        dlg.initOwner(btnStart.getScene().getWindow());
+        dlg.setResizable(true);
         dlg.getDialogPane().setContent(tv);
-        dlg.getDialogPane().setPrefSize(560, 360);      // <- tamaño del pane
+        dlg.getDialogPane().setPrefSize(560, 360);
         dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         dlg.showAndWait();
     }
 
-    // =================== Helpers UI ===================
     private void refreshButtons() {
         btnStart.setDisable(running);
         btnPause.setDisable(!running);
@@ -278,18 +257,14 @@ public class SingleRunController {
             }
         }
 
-        // --- Evolución dinámica: agregar/actualizar el valor de "activos" en este tick ---
         if (serieActivos.size() == tick - 1) {
-            // tick empieza en 1; usamos índice = tick-1
             serieActivos.add(filas.size());
         } else if (tick - 1 < serieActivos.size()) {
-            // por si llega un re-dibujo del mismo tick, actualiza
             serieActivos.set(tick - 1, filas.size());
         }
 
     }
 
-    // VER EVOLUCION
     @FXML
     private void onShowEvolucion() {
         if (serieActivos.isEmpty()) {
@@ -328,14 +303,12 @@ public class SingleRunController {
         return (vm == null) ? Optional.empty() : Optional.of(vm.pid.get());
     }
 
-    // =================== Util formateo ===================
     private static final DecimalFormat DF = new DecimalFormat("#,##0.##");
 
     private static String fmt(double v) {
         return DF.format(v);
     }
 
-    // =================== Fila para tabla de resumen ===================
     public static final class RowMetric {
 
         private final String nombre;
@@ -365,7 +338,6 @@ public class SingleRunController {
                 return;
             }
 
-            // Usamos la misma carpeta del CSV de métricas
             java.nio.file.Path metricsCsv = com.simulator.sim.LogNombres.metricsSinglePath(params.algoritmo);
             java.nio.file.Path dir = metricsCsv.getParent();
             java.nio.file.Path out = dir.resolve("summary-" + params.algoritmo.name() + ".csv");
@@ -394,7 +366,6 @@ public class SingleRunController {
             return;
         }
 
-        // Construimos promedios
         double espera = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
         double respuesta = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
         double turnaround = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
