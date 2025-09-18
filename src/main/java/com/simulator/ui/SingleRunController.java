@@ -323,4 +323,44 @@ public class SingleRunController {
         }
     }
 
+    @FXML
+    private void onShowChart() {
+        if (sim == null) {
+            return;
+        }
+
+        var lista = sim.getMetricasTerminadasSnapshot();
+        if (lista.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Aún no hay procesos terminados.").showAndWait();
+            return;
+        }
+
+        // Construimos promedios
+        double espera = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
+        double respuesta = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
+        double turnaround = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
+        double ejecucion = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.ejecucion(m)).average().orElse(0);
+        double rafaga = lista.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.rafagaTotal(m)).average().orElse(0);
+
+        var data = com.simulator.ui.charts.ChartsFactory.orderedMap();
+        data.put("Espera", espera);
+        data.put("Respuesta", respuesta);
+        data.put("Turnaround", turnaround);
+        data.put("Ejecución", ejecucion);
+        data.put("Ráfaga total", rafaga);
+
+        var node = com.simulator.ui.charts.ChartsFactory.barSingle(
+                "Promedios (" + params.algoritmo.name() + ")", data);
+
+        Dialog<Void> dlg = new Dialog<>();
+        dlg.setTitle("Gráfica de métricas");
+        dlg.initOwner(btnStart.getScene().getWindow());
+        dlg.setResizable(true);
+        dlg.getDialogPane().setContent(node);
+        dlg.getDialogPane().setPrefSize(720, 420);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.showAndWait();
+    }
+
 }

@@ -510,4 +510,62 @@ public class CompareController {
         }
     }
 
+    @FXML
+    private void onShowChartAB() {
+        if (simA == null || simB == null) {
+            return;
+        }
+
+        var la = simA.getMetricasTerminadasSnapshot();
+        var lb = simB.getMetricasTerminadasSnapshot();
+        if (la.isEmpty() && lb.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Aún no hay procesos terminados en A ni en B.").showAndWait();
+            return;
+        }
+
+        // Promedios A
+        double aEspera = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
+        double aResp = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
+        double aTurn = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
+        double aEjec = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.ejecucion(m)).average().orElse(0);
+        double aRaf = la.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.rafagaTotal(m)).average().orElse(0);
+
+        // Promedios B
+        double bEspera = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.espera(m)).average().orElse(0);
+        double bResp = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.respuesta(m)).average().orElse(0);
+        double bTurn = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.turnaround(m)).average().orElse(0);
+        double bEjec = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.ejecucion(m)).average().orElse(0);
+        double bRaf = lb.stream().mapToInt(m -> com.simulator.metrics.MetricsCompat.rafagaTotal(m)).average().orElse(0);
+
+        var mA = com.simulator.ui.charts.ChartsFactory.orderedMap();
+        mA.put("Espera", aEspera);
+        mA.put("Respuesta", aResp);
+        mA.put("Turnaround", aTurn);
+        mA.put("Ejecución", aEjec);
+        mA.put("Ráfaga total", aRaf);
+
+        var mB = com.simulator.ui.charts.ChartsFactory.orderedMap();
+        mB.put("Espera", bEspera);
+        mB.put("Respuesta", bResp);
+        mB.put("Turnaround", bTurn);
+        mB.put("Ejecución", bEjec);
+        mB.put("Ráfaga total", bRaf);
+
+        var node = com.simulator.ui.charts.ChartsFactory.barCompare(
+                "Promedios A/B",
+                "A (" + algA.name() + ")", mA,
+                "B (" + algB.name() + ")", mB
+        );
+
+        Dialog<Void> dlg = new Dialog<>();
+        dlg.setTitle("Gráfica de métricas A/B");
+        dlg.initOwner(btnStartAmbos.getScene().getWindow());
+        dlg.setResizable(true);
+        dlg.getDialogPane().setContent(node);
+        dlg.getDialogPane().setPrefSize(860, 480);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.showAndWait();
+    }
+
 }
