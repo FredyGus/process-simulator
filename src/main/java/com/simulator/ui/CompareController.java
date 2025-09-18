@@ -237,7 +237,8 @@ public class CompareController {
     @FXML
     private void onShowEvolucionAB() {
         if (serieActivosA.isEmpty() && serieActivosB.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION, "Aún no hay datos de evolución.").showAndWait();
+            AppStyles.info("Aún no hay datos de evolución.");
+            // new Alert(Alert.AlertType.INFORMATION, "Aún no hay datos de evolución.").showAndWait();
             return;
         }
 
@@ -352,14 +353,17 @@ public class CompareController {
         try {
             var lista = simA.getMetricasTerminadasSnapshot();
             if (lista.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en A.").showAndWait();
+                AppStyles.info("Aún no hay métricas en A.");
+                // new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en A.").showAndWait();
                 return;
             }
             var out = LogNombres.metricsComparePath(runId, algA);
             com.simulator.metrics.CsvMetricsWriter.write(out, lista);
-            new Alert(Alert.AlertType.INFORMATION, "CSV A exportado en:\n" + out).showAndWait();
+            AppStyles.info("CSV A exportado en:\n" + out);
+            // new Alert(Alert.AlertType.INFORMATION, "CSV A exportado en:\n" + out).showAndWait();
         } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, "Error exportando A:\n" + ex.getMessage()).showAndWait();
+            AppStyles.error("Error exportando en A:\n" + ex.getMessage());
+            // new Alert(Alert.AlertType.ERROR, "Error exportando A:\n" + ex.getMessage()).showAndWait();
         }
     }
 
@@ -368,14 +372,17 @@ public class CompareController {
         try {
             var lista = simB.getMetricasTerminadasSnapshot();
             if (lista.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en B.").showAndWait();
+                AppStyles.info("Aún no hay métricas en B.");
+                // new Alert(Alert.AlertType.INFORMATION, "Aún no hay métricas en B.").showAndWait();
                 return;
             }
             var out = LogNombres.metricsComparePath(runId, algB);
             com.simulator.metrics.CsvMetricsWriter.write(out, lista);
-            new Alert(Alert.AlertType.INFORMATION, "CSV B exportado en:\n" + out).showAndWait();
+            AppStyles.info("CSV B exportado en:\n" + out);
+            // new Alert(Alert.AlertType.INFORMATION, "CSV B exportado en:\n" + out).showAndWait();
         } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, "Error exportando B:\n" + ex.getMessage()).showAndWait();
+            AppStyles.error("Error exportando B:\n" + ex.getMessage());
+            // new Alert(Alert.AlertType.ERROR, "Error exportando B:\n" + ex.getMessage()).showAndWait();
         }
     }
 
@@ -448,8 +455,8 @@ public class CompareController {
         var lb = simB.getMetricasTerminadasSnapshot();
 
         if (la.isEmpty() && lb.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Aún no hay procesos terminados en A ni en B.").showAndWait();
+            AppStyles.info("Aún no hay procesos terminados en A ni en B.");
+            // new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados en A ni en B.").showAndWait();
             return;
         }
 
@@ -535,8 +542,8 @@ public class CompareController {
             var lb = simB.getMetricasTerminadasSnapshot();
 
             if (la.isEmpty() && lb.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Aún no hay procesos terminados en A ni en B.").showAndWait();
+                AppStyles.info("Aún no hay proceso terminados en A ni en B");
+                // new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados en A ni en B.").showAndWait();
                 return;
             }
 
@@ -548,12 +555,12 @@ public class CompareController {
                     out, algA.name(), la, algB.name(), lb
             );
 
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Resumen A/B exportado en:\n" + out.toString()).showAndWait();
+            AppStyles.info("Resumen A/B exportado en:\n" + out.toString());
+            // new Alert(Alert.AlertType.INFORMATION, "Resumen A/B exportado en:\n" + out.toString()).showAndWait();
 
         } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR,
-                    "No se pudo exportar el resumen A/B:\n" + ex.getMessage()).showAndWait();
+            AppStyles.error("No se pudo exportar el resumen A/B:\n"  + ex.getMessage());
+            // new Alert(Alert.AlertType.ERROR, "No se pudo exportar el resumen A/B:\n" + ex.getMessage()).showAndWait();
         }
     }
 
@@ -566,8 +573,8 @@ public class CompareController {
         var la = simA.getMetricasTerminadasSnapshot();
         var lb = simB.getMetricasTerminadasSnapshot();
         if (la.isEmpty() && lb.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Aún no hay procesos terminados en A ni en B.").showAndWait();
+            AppStyles.info("Aún no hay proceso terminados en A ni en B.");
+            // new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados en A ni en B.").showAndWait();
             return;
         }
 

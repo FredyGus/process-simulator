@@ -157,18 +157,18 @@ public class SingleRunController {
         try {
             var lista = sim.getMetricasTerminadasSnapshot();
             if (lista.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Aún no hay procesos terminados para exportar.").showAndWait();
+                AppStyles.info("Aún no hay procesos terminados para exportar.");
+                // new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados para exportar.").showAndWait();
                 return;
             }
             var out = LogNombres.metricsSinglePath(params.algoritmo);
             com.simulator.metrics.CsvMetricsWriter.write(out, lista);
 
-            new Alert(Alert.AlertType.INFORMATION,
-                    "CSV exportado en:\n" + out).showAndWait();
+            AppStyles.info("CSV exportando en:\n" + out);
+            // new Alert(Alert.AlertType.INFORMATION, "CSV exportado en:\n" + out).showAndWait();
         } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR,
-                    "No se pudo exportar CSV:\n" + ex.getMessage()).showAndWait();
+            AppStyles.error("No se pudo exportar CSV:\n" + ex.getMessage());
+            // new Alert(Alert.AlertType.ERROR, "No se pudo exportar CSV:\n" + ex.getMessage()).showAndWait();
         }
     }
 
@@ -180,8 +180,8 @@ public class SingleRunController {
 
         var lista = sim.getMetricasTerminadasSnapshot();
         if (lista.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Aún no hay procesos terminados.").showAndWait();
+            AppStyles.info("Aún no hay procesos terminados.");
+            //new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados.").showAndWait();
             return;
         }
 
@@ -269,7 +269,8 @@ public class SingleRunController {
     @FXML
     private void onShowEvolucion() {
         if (serieActivos.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION, "Aún no hay datos de evolución.").showAndWait();
+            AppStyles.info("Aún no hay datos de evolucion.");
+            // new Alert(Alert.AlertType.INFORMATION, "Aún no hay datos de evolución.").showAndWait();
             return;
         }
 
@@ -335,8 +336,8 @@ public class SingleRunController {
         try {
             var lista = sim.getMetricasTerminadasSnapshot();
             if (lista.isEmpty()) {
-                new Alert(Alert.AlertType.INFORMATION,
-                        "Aún no hay procesos terminados para exportar.").showAndWait();
+                AppStyles.info("Aún no hay procesos terminados para exportar.");
+                // new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados para exportar.").showAndWait();
                 return;
             }
 
@@ -346,12 +347,12 @@ public class SingleRunController {
 
             com.simulator.metrics.CsvSummaryWriter.writeSingle(out, lista);
 
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Resumen exportado en:\n" + out.toString()).showAndWait();
+            AppStyles.info("Resumen exportados en:\n" + out.toString());
+            // new Alert(Alert.AlertType.INFORMATION, "Resumen exportado en:\n" + out.toString()).showAndWait();
 
         } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR,
-                    "No se pudo exportar el resumen:\n" + ex.getMessage()).showAndWait();
+            AppStyles.error("No se pudo exportar el resumen:\n" + ex.getMessage());
+            // new Alert(Alert.AlertType.ERROR, "No se pudo exportar el resumen:\n" + ex.getMessage()).showAndWait();
         }
     }
 
@@ -363,8 +364,8 @@ public class SingleRunController {
 
         var lista = sim.getMetricasTerminadasSnapshot();
         if (lista.isEmpty()) {
-            new Alert(Alert.AlertType.INFORMATION,
-                    "Aún no hay procesos terminados.").showAndWait();
+            AppStyles.info("Aún no hay procesos terminados.");
+            // new Alert(Alert.AlertType.INFORMATION, "Aún no hay procesos terminados.").showAndWait();
             return;
         }
 

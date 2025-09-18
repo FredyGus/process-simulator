@@ -79,8 +79,8 @@ public class HomeController {
             opciones.remove(algA);
 
             if (opciones.isEmpty()) {
-                new Alert(Alert.AlertType.WARNING,
-                        "No hay otro algoritmo disponible para comparar con " + algA).showAndWait();
+                AppStyles.warn("No hay otro algoritmo disponible para conparar ccon " + algA);
+                // new Alert(Alert.AlertType.WARNING, "No hay otro algoritmo disponible para comparar con " + algA).showAndWait();
                 return;
             }
 
