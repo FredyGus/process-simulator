@@ -7,7 +7,6 @@ import com.simulator.sim.Simulador;
 import com.simulator.sim.TipoAlgoritmo;
 import com.simulator.sim.vm.FilaProcesoVM;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -77,6 +76,10 @@ public class CompareController {
 
     // run/logs
     private String runId;
+
+    // --- Evolución coordinada: activos por tick en cada simulador ---
+    private final java.util.List<Integer> serieActivosA = new java.util.ArrayList<>();
+    private final java.util.List<Integer> serieActivosB = new java.util.ArrayList<>();
 
     // =================== Configuración desde Home ===================
     public void configurar(ParametrosSimulacion baseParams, TipoAlgoritmo a, TipoAlgoritmo b) {
@@ -218,6 +221,8 @@ public class CompareController {
         paused = false;
         tick = 0;
         nextPid = 1;
+        serieActivosA.clear();
+        serieActivosB.clear();
 
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(this::tickCoordinado, 0, base.tickMs, TimeUnit.MILLISECONDS);
@@ -227,6 +232,46 @@ public class CompareController {
         simB.continuar();
 
         refreshButtonsAB();
+    }
+
+    // VER EVOLUCION
+    @FXML
+    private void onShowEvolucionAB() {
+        if (serieActivosA.isEmpty() && serieActivosB.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Aún no hay datos de evolución.").showAndWait();
+            return;
+        }
+
+        int maxTicks = Math.max(serieActivosA.size(), serieActivosB.size());
+        var x = new javafx.scene.chart.NumberAxis("Tick", 1, Math.max(maxTicks, 1), 1);
+        var y = new javafx.scene.chart.NumberAxis();
+        y.setLabel("Activos");
+
+        var chart = new javafx.scene.chart.LineChart<Number, Number>(x, y);
+        chart.setTitle("Evolución de activos (A/B)");
+
+        var sA = new javafx.scene.chart.XYChart.Series<Number, Number>();
+        sA.setName("A (" + algA.name() + ")");
+        for (int i = 0; i < serieActivosA.size(); i++) {
+            sA.getData().add(new javafx.scene.chart.XYChart.Data<>(i + 1, serieActivosA.get(i)));
+        }
+
+        var sB = new javafx.scene.chart.XYChart.Series<Number, Number>();
+        sB.setName("B (" + algB.name() + ")");
+        for (int i = 0; i < serieActivosB.size(); i++) {
+            sB.getData().add(new javafx.scene.chart.XYChart.Data<>(i + 1, serieActivosB.get(i)));
+        }
+
+        chart.getData().setAll(sA, sB);
+
+        var dlg = new Dialog<Void>();
+        dlg.setTitle("Evolución A/B");
+        dlg.initOwner(btnStartAmbos.getScene().getWindow());
+        dlg.setResizable(true);
+        dlg.getDialogPane().setContent(chart);
+        dlg.getDialogPane().setPrefSize(860, 480);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.showAndWait();
     }
 
     @FXML
@@ -359,6 +404,13 @@ public class CompareController {
                 }
             }
         }
+        // --- Evolución dinámica A ---
+        if (serieActivosA.size() == tk - 1) {
+            serieActivosA.add(filas.size());
+        } else if (tk - 1 < serieActivosA.size()) {
+            serieActivosA.set(tk - 1, filas.size());
+        }
+
     }
 
     private void actualizarTablaB(int tk, List<FilaProcesoVM> filas) {
@@ -382,6 +434,14 @@ public class CompareController {
                 }
             }
         }
+
+        // --- Evolución dinámica B ---
+        if (serieActivosB.size() == tk - 1) {
+            serieActivosB.add(filas.size());
+        } else if (tk - 1 < serieActivosB.size()) {
+            serieActivosB.set(tk - 1, filas.size());
+        }
+
     }
 
     // =================== Resumen A/B (10c) ===================

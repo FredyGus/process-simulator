@@ -16,6 +16,7 @@
             <Button text="Ver métricas" onAction="#onShowResumen"/>
             <Button text="Exportar resumen" onAction="#onExportResumen"/>
             <Button text="Ver gráfica" onAction="#onShowChart"/>
+            <Button text="Ver evolución" onAction="#onShowEvolucion"/>
         </ToolBar>
 
     </top>

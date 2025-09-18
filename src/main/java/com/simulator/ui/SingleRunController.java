@@ -5,7 +5,6 @@ import com.simulator.sim.ParametrosSimulacion;
 import com.simulator.sim.Simulador;
 import com.simulator.sim.vm.FilaProcesoVM;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +14,7 @@ import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
+import javafx.scene.chart.XYChart;
 
 public class SingleRunController {
 
@@ -49,6 +49,8 @@ public class SingleRunController {
     // Bande­ras de control
     private boolean running = false;
     private boolean paused = false;
+    // --- Evolución: guardamos Activos por tick para graficar ---
+    private final java.util.List<Integer> serieActivos = new java.util.ArrayList<>();
 
     // =================== Ciclo de vida / configuración ===================
     public void configurar(ParametrosSimulacion params) {
@@ -121,6 +123,7 @@ public class SingleRunController {
         if (sim == null || running) {
             return;
         }
+        serieActivos.clear();
         sim.iniciar();
         running = true;
         paused = false;
@@ -151,6 +154,7 @@ public class SingleRunController {
 
         sim.detener();     // cierra logs y apaga scheduler interno
         running = false;
+        // nada que persistir aquí; la serie queda para "Ver evolución" si quieres mostrarla tras detener
         paused = false;
         refreshButtons();
     }
@@ -263,6 +267,50 @@ public class SingleRunController {
                 }
             }
         }
+
+        // --- Evolución dinámica: agregar/actualizar el valor de "activos" en este tick ---
+        if (serieActivos.size() == tick - 1) {
+            // tick empieza en 1; usamos índice = tick-1
+            serieActivos.add(filas.size());
+        } else if (tick - 1 < serieActivos.size()) {
+            // por si llega un re-dibujo del mismo tick, actualiza
+            serieActivos.set(tick - 1, filas.size());
+        }
+
+    }
+
+    // VER EVOLUCION
+    @FXML
+    private void onShowEvolucion() {
+        if (serieActivos.isEmpty()) {
+            new Alert(Alert.AlertType.INFORMATION, "Aún no hay datos de evolución.").showAndWait();
+            return;
+        }
+
+        var x = new javafx.scene.chart.NumberAxis("Tick", 1, Math.max(serieActivos.size(), 1), 1);
+        var y = new javafx.scene.chart.NumberAxis();
+        y.setLabel("Activos");
+
+        var chart = new javafx.scene.chart.LineChart<Number, Number>(x, y);
+        chart.setTitle("Evolución de activos por tick");
+
+        var serie = new javafx.scene.chart.XYChart.Series<Number, Number>();
+
+        serie.setName("Activos");
+        for (int i = 0; i < serieActivos.size(); i++) {
+            int tick = i + 1;
+            serie.getData().add(new javafx.scene.chart.XYChart.Data<>(tick, serieActivos.get(i)));
+        }
+        chart.getData().add(serie);
+
+        var dlg = new Dialog<Void>();
+        dlg.setTitle("Evolución");
+        dlg.initOwner(btnStart.getScene().getWindow());
+        dlg.setResizable(true);
+        dlg.getDialogPane().setContent(chart);
+        dlg.getDialogPane().setPrefSize(720, 420);
+        dlg.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dlg.showAndWait();
     }
 
     private Optional<Integer> getSelectedPid() {

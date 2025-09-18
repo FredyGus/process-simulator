@@ -22,6 +22,7 @@
                 <Button text="Ver resumen A/B" onAction="#onShowResumenAB"/>
                 <Button text="Exportar resumen A/B" onAction="#onExportResumenAB"/>
                 <Button text="Ver gráfica A/B" onAction="#onShowChartAB"/>
+                <Button text="Ver evolución A/B" onAction="#onShowEvolucionAB"/>
             </ToolBar>
 
         </ToolBar>
